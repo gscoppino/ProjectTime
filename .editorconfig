@@ -1,0 +1,14 @@
+# Does not inherit from any parent configuration
+root = true
+
+# Instructs code editors on how to format source files.
+# These settings should be overridden for specific file types (as needed) on
+#   subsequent lines.
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+max_line_length = 80
+end_of_line = lf
+insert_final_newline = true
