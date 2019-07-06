@@ -1,0 +1,5 @@
+# Instruct Git on how to handle repository files.
+# By default, treats all files as text, with line feeds as the EOL delimiter.
+# This setting should be overridden for specific file types (as needed) on
+#   subsequent lines.
+* text=auto eol=lf
