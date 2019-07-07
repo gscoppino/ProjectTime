@@ -24,7 +24,7 @@ description:
 # In the commands section, list your runnable scripts, notebooks, and other code.
 # Use `anaconda-project add-command` to add commands.
 #
-commands: {}
+commands: {django-admin: {unix: django-admin, env_spec: default}}
 
 #
 # In the variables section, list any environment variables your code depends on.
