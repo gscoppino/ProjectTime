@@ -51,18 +51,7 @@ downloads: {}
 # before your code runs.
 # Use `anaconda-project add-packages` to add packages.
 #
-packages:
-- anaconda
-
-#
-# In the channels section, list any Conda channel URLs to be searched
-# for packages.
-#
-# For example,
-#
-# channels:
-#    - mychannel
-#
+packages: []
 channels: []
 
 #
