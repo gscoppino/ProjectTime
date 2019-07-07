@@ -25,7 +25,7 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {server: {unix: python manage.py migrate && python manage.py runserver,
-    env_spec: default}}
+    env_spec: default}, django-admin: {unix: django-admin, env_spec: default}}
 
 #
 # In the variables section, list any environment variables your code depends on.
