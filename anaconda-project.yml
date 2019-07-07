@@ -51,7 +51,7 @@ downloads: {}
 # before your code runs.
 # Use `anaconda-project add-packages` to add packages.
 #
-packages: []
+packages: [python=3.7, django=2.2]
 channels: []
 
 #
