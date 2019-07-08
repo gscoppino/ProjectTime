@@ -1,0 +1,6 @@
+############################################################################
+# This file is only here for Heroku to know how to deploy the application. #
+############################################################################
+Django==2.2
+django-heroku
+gunicorn
