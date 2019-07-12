@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
 
 # Create your models here.
 
@@ -23,14 +23,15 @@ class Charge(models.Model):
 
     @property
     def time_charged(self):
+        if not self.end_time:
+            return timedelta()
+
         start_datetime = datetime.combine(self.date, self.start_time)
-        end_datetime = datetime.combine(self.date, self.end_time or datetime.now(
-            timezone.utc).time())
+        end_datetime = datetime.combine(self.date, self.end_time)
 
         return end_datetime - start_datetime
 
     def __str__(self):
-
         return '%s on %s, %s - %s (%s minutes)' % (
             self.project.name,
             self.date,
