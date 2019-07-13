@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import datetime, timedelta
 
@@ -30,6 +31,12 @@ class Charge(models.Model):
         end_datetime = datetime.combine(self.date, self.end_time)
 
         return end_datetime - start_datetime
+
+    def clean(self):
+        if self.end_time and self.end_time < self.start_time:
+            raise ValidationError({
+                'end_time': 'The end time must not be before the start time.'
+            })
 
     def __str__(self):
         return '%s on %s, %s - %s (%s minutes)' % (
