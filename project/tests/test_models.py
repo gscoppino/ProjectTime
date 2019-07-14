@@ -9,6 +9,10 @@ from ..models import Project, Charge
 
 
 class ProjectTestCase(TestCase):
+    def test_project_name_field_display(self):
+        name_field = Project._meta.get_field('name')
+        self.assertEqual(name_field.verbose_name, 'name')
+
     def test_project_can_be_created(self):
         test_name = 'Test'
 
@@ -75,6 +79,22 @@ class ChargeTestCase(TestCase):
         cls.project = Project(name='Test')
         cls.project.full_clean()
         cls.project.save()
+
+    def test_charge_project_field_display(self):
+        project_field = Charge._meta.get_field('project')
+        self.assertEqual(project_field.verbose_name, 'project')
+
+    def test_charge_date_field_display(self):
+        date_field = Charge._meta.get_field('date')
+        self.assertEqual(date_field.verbose_name, 'date')
+
+    def test_charge_start_time_field_display(self):
+        start_time_field = Charge._meta.get_field('start_time')
+        self.assertEqual(start_time_field.verbose_name, 'start time')
+
+    def test_charge_end_time_field_display(self):
+        end_time_field = Charge._meta.get_field('end_time')
+        self.assertEqual(end_time_field.verbose_name, 'end time')
 
     def test_charge_can_be_created_today(self):
         today = datetime.today()
