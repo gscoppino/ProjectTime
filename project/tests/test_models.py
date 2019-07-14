@@ -69,25 +69,28 @@ class ProjectTestCase(TestCase):
 
 
 class ChargeTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.project = Project(name='Test')
+        cls.project.full_clean()
+        cls.project.save()
+
     def test_charge_can_be_created_today(self):
         today = datetime.today()
         todays_date = today.date()
         todays_current_time = today.time()
         timedelta_zero = timedelta()
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         charge = Charge(
-            project=project,
+            project=self.project,
             date=todays_date,
             start_time=todays_current_time
         )
         charge.full_clean()
         charge.save()
 
-        self.assertEqual(charge.project, project)
+        self.assertEqual(charge.project, self.project)
         self.assertEqual(charge.date, todays_date)
         self.assertEqual(charge.start_time, todays_current_time)
         self.assertEqual(charge.end_time, None)
@@ -101,13 +104,9 @@ class ChargeTestCase(TestCase):
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         with self.assertRaises(ValidationError) as cm:
             charge = Charge(
-                project=project,
+                project=self.project,
                 date=start_datetime.date(),
                 start_time=start_datetime.time(),
                 end_time=(start_datetime - timedelta(minutes=1)).time()
@@ -124,11 +123,9 @@ class ChargeTestCase(TestCase):
     def test_cannot_create_charge_with_end_time_before_start_time__db(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
 
-        project = Project.objects.create(name='Test')
-
         with self.assertRaises(IntegrityError):
             Charge.objects.create(
-                project=project,
+                project=self.project,
                 date=start_datetime.date(),
                 start_time=start_datetime.time(),
                 end_time=(start_datetime - timedelta(minutes=1)).time()
@@ -137,12 +134,8 @@ class ChargeTestCase(TestCase):
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         charge = Charge(
-            project=project,
+            project=self.project,
             date=start_datetime.date(),
             start_time=start_datetime.time()
         )
@@ -150,19 +143,15 @@ class ChargeTestCase(TestCase):
         charge.save()
 
         with self.assertRaises(ProtectedError):
-            project.delete()
+            self.project.delete()
 
     def test_time_charged_is_correct(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
         timedelta_zero = timedelta()
         added_time = timedelta(minutes=30)
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         charge = Charge(
-            project=project,
+            project=self.project,
             date=start_datetime.date(),
             start_time=start_datetime.time()
         )
@@ -180,12 +169,8 @@ class ChargeTestCase(TestCase):
     def test_charge_is_string_serializable(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         charge = Charge(
-            project=project,
+            project=self.project,
             date=start_datetime.date(),
             start_time=start_datetime.time()
         )
@@ -218,23 +203,23 @@ class ChargeTestCase(TestCase):
             str(charge), 'Test on 2019-01-01, 08:00:00 - 09:15:00 (1:15:00 hours)')
 
     def test_charges_are_ordered_by_charge_date_and_start_time(self):
-        ordered_charges = self.get_ordered_list_of_charges()
+        ordered_charges = self.get_ordered_test_charge_list()
 
         self.assertQuerysetEqual(Charge.objects.all(),
                                  ordered_charges,
                                  transform=lambda charge: charge)
 
     def test_get_earliest_charge(self):
-        ordered_charges = self.get_ordered_list_of_charges()
+        ordered_charges = self.get_ordered_test_charge_list()
         self.assertEqual(Charge.objects.earliest(), ordered_charges[0])
 
     def test_get_latest_charge(self):
-        ordered_charges = self.get_ordered_list_of_charges()
+        ordered_charges = self.get_ordered_test_charge_list()
         self.assertEqual(Charge.objects.latest(), ordered_charges[-1])
 
     ### Helper Methods ###
 
-    def get_ordered_list_of_charges(self):
+    def get_ordered_test_charge_list(self):
         baseline = datetime(2019, 1, 1, hour=8, minute=0, second=0)
         plus_one_hour = baseline + timedelta(hours=1)
         minus_one_hour = baseline - timedelta(hours=1)
@@ -245,13 +230,9 @@ class ChargeTestCase(TestCase):
                              baseline, plus_one_hour, plus_one_day,)
         ordered_charges = []
 
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
-
         for entry in ordered_datetimes:
             baseline_charge = Charge(
-                project=project,
+                project=self.project,
                 date=entry.date(),
                 start_time=entry.time()
             )
