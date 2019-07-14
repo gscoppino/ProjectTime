@@ -93,6 +93,11 @@ class ChargeTestCase(TestCase):
         self.assertEqual(charge.end_time, None)
         self.assertEqual(charge.time_charged, timedelta_zero)
 
+    def test_charge_end_time_is_not_required(self):
+        end_time_field = Charge._meta.get_field('end_time')
+        self.assertTrue(end_time_field.null, True)
+        self.assertTrue(end_time_field.blank, True)
+
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
 
