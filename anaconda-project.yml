@@ -24,9 +24,8 @@ description:
 # In the commands section, list your runnable scripts, notebooks, and other code.
 # Use `anaconda-project add-command` to add commands.
 #
-commands: {server: {unix: python manage.py migrate && python manage.py runserver,
-    env_spec: default}, django-admin: {unix: django-admin, env_spec: default}, test: {
-    unix: python -Wa manage.py test --parallel --failfast, env_spec: default}}
+commands: {server: {unix: sh scripts/serve.sh, env_spec: default}, django-admin: {
+    unix: django-admin, env_spec: default}, test: {unix: sh scripts/test.sh, env_spec: default}}
 
 #
 # In the variables section, list any environment variables your code depends on.
@@ -53,7 +52,8 @@ downloads: {}
 # before your code runs.
 # Use `anaconda-project add-packages` to add packages.
 #
-packages: [python=3.7, django=2.2, sqlparse, pytz, pylint, pep8, autopep8]
+packages: [python=3.7, django=2.2, sqlparse, pytz, pylint, pep8, autopep8, postgresql,
+  psycopg2]
 channels: []
 
 #
