@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
+from django.db.models import ProtectedError
 from django.test import TestCase
 from datetime import datetime, timedelta
 from ..models import Project, Charge
@@ -8,7 +9,6 @@ from ..models import Project, Charge
 
 
 class ProjectTestCase(TestCase):
-
     def test_project_can_be_created(self):
         test_name = 'Test'
 
@@ -69,7 +69,7 @@ class ProjectTestCase(TestCase):
 
 
 class ChargeTestCase(TestCase):
-    def test_charge_can_be_created_correctly_today(self):
+    def test_charge_can_be_created_today(self):
         today = datetime.today()
         todays_date = today.date()
         todays_current_time = today.time()
@@ -128,6 +128,24 @@ class ChargeTestCase(TestCase):
                 start_time=start_datetime.time(),
                 end_time=(start_datetime - timedelta(minutes=1)).time()
             )
+
+    def test_cannot_delete_project_with_associated_charge(self):
+        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+
+        project = Project(name='Test')
+        project.full_clean()
+        project.save()
+
+        charge = Charge(
+            project=project,
+            date=start_datetime.date(),
+            start_time=start_datetime.time()
+        )
+        charge.full_clean()
+        charge.save()
+
+        with self.assertRaises(ProtectedError):
+            project.delete()
 
     def test_time_charged_is_correct(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
@@ -193,3 +211,48 @@ class ChargeTestCase(TestCase):
 
         self.assertEqual(
             str(charge), 'Test on 2019-01-01, 08:00:00 - 09:15:00 (1:15:00 hours)')
+
+    def test_charges_are_ordered_by_charge_date_and_start_time(self):
+        ordered_charges = self.get_ordered_list_of_charges()
+
+        self.assertQuerysetEqual(Charge.objects.all(),
+                                 ordered_charges,
+                                 transform=lambda charge: charge)
+
+    def test_get_earliest_charge(self):
+        ordered_charges = self.get_ordered_list_of_charges()
+        self.assertEqual(Charge.objects.earliest(), ordered_charges[0])
+
+    def test_get_latest_charge(self):
+        ordered_charges = self.get_ordered_list_of_charges()
+        self.assertEqual(Charge.objects.latest(), ordered_charges[-1])
+
+    ### Helper Methods ###
+
+    def get_ordered_list_of_charges(self):
+        baseline = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        plus_one_hour = baseline + timedelta(hours=1)
+        minus_one_hour = baseline - timedelta(hours=1)
+        plus_one_day = baseline + timedelta(days=1)
+        minus_one_day = baseline - timedelta(days=1)
+
+        ordered_datetimes = (minus_one_day, minus_one_hour,
+                             baseline, plus_one_hour, plus_one_day,)
+        ordered_charges = []
+
+        project = Project(name='Test')
+        project.full_clean()
+        project.save()
+
+        for entry in ordered_datetimes:
+            baseline_charge = Charge(
+                project=project,
+                date=entry.date(),
+                start_time=entry.time()
+            )
+            baseline_charge.full_clean()
+            baseline_charge.save()
+
+            ordered_charges.append(baseline_charge)
+
+        return ordered_charges
