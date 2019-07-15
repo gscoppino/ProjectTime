@@ -8,7 +8,7 @@ from ..models import Project, Charge
 # Create your tests here.
 
 
-class ProjectTestCase(TestCase):
+class ProjectModelTestCase(TestCase):
     def test_project_name_field_display(self):
         name_field = Project._meta.get_field('name')
         self.assertEqual(name_field.verbose_name, 'name')
@@ -72,7 +72,7 @@ class ProjectTestCase(TestCase):
             Project.objects.create(name=test_name)
 
 
-class ChargeTestCase(TestCase):
+class ChargeModelTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
