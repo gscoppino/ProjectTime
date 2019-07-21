@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import datetime, timedelta
-
+from .querysets import ChargeQuerySet
 
 # Create your models here.
 
@@ -14,6 +14,8 @@ class Project(models.Model):
 
 
 class Charge(models.Model):
+    objects = ChargeQuerySet.as_manager()
+
     class Meta:
         ordering = ('date', 'start_time',)
         get_latest_by = ('date', 'start_time',)
@@ -49,11 +51,13 @@ class Charge(models.Model):
             })
 
     def __str__(self):
+        charged = self.time_charged
+
         return '%s on %s, %s - %s (%s %s)' % (
             self.project.name,
             self.date,
             self.start_time,
             self.end_time or '__:__:__',
-            self.time_charged,
-            'hours' if self.time_charged.total_seconds() >= 3600 else 'minutes'
+            charged,
+            'hours' if charged.total_seconds() >= 3600 else 'minutes'
         )

@@ -19,5 +19,5 @@ from project.views import TimezoneView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TimezoneView.as_view())
+    path('', TimezoneView.as_view(), name='select-timezone')
 ]
