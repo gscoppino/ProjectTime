@@ -24,8 +24,10 @@ description:
 # In the commands section, list your runnable scripts, notebooks, and other code.
 # Use `anaconda-project add-command` to add commands.
 #
-commands: {server: {unix: sh scripts/serve.sh, env_spec: default}, django-admin: {
-    unix: django-admin, env_spec: default}, test: {unix: sh scripts/test.sh, env_spec: default}}
+commands: {
+  django-admin: {unix: django-admin, env_spec: default},
+  manage.py: {unix: sh scripts/manage.sh, env_spec: default}
+}
 
 #
 # In the variables section, list any environment variables your code depends on.
@@ -52,8 +54,7 @@ downloads: {}
 # before your code runs.
 # Use `anaconda-project add-packages` to add packages.
 #
-packages: [python=3.7, django=2.2, sqlparse, pytz, pylint, pep8, autopep8, postgresql,
-  psycopg2]
+packages: []
 channels: []
 
 #
@@ -73,8 +74,18 @@ platforms:
 # Use `anaconda-project add-env-spec` to add environment specs.
 #
 env_specs:
+  python:
+    packages: [python=3.7]
+  database:
+    inherit_from: [python]
+    packages: [postgresql, psycopg2]
+  app:
+    inherit_from: [python, database]
+    packages: [django=2.2, pytz, sqlparse]
+  app_dev:
+    inherit_from: [app]
+    packages: [pylint, pep8, autopep8]
   default:
-    description: Default environment spec for running commands
+    description: Default environment spec for running commands.
     packages: []
-    channels: []
-    platforms: []
+    inherit_from: [app_dev]
