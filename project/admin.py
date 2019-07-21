@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Project, Charge
+from .querysets import ChargeQuerySet
 
 
 class ChargeInline(admin.TabularInline):
@@ -23,6 +24,8 @@ class ChargeAdmin(admin.ModelAdmin):
 
     def time_charged(self, obj):
         return obj.db__time_charged
+
+    time_charged.admin_order_field = ChargeQuerySet.get_time_charged_expr()
 
 
 class ProjectAdmin(admin.ModelAdmin):
