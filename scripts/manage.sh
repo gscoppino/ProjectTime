@@ -15,8 +15,10 @@ else
     pg_ctl -D ./db restart
 fi
 
-# Apply the latest schema / fixture to the database
-python manage.py migrate
+# Ensure the latest schema / fixtures are loaded into to the database.
+if [ $1 != "migrate" ]; then
+    python -Wa manage.py migrate
+fi
 
-# Start the web server
-python manage.py runserver
+# Execute the provided command
+python -Wa manage.py $@
