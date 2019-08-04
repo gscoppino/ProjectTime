@@ -1,6 +1,14 @@
 from django.contrib import admin
-from .models import Project, Charge
+from .models import Project, Task, Charge
 from .querysets import ChargeQuerySet
+
+
+class TaskInline(admin.TabularInline):
+    model = Task
+    extra = 1
+
+    def get_queryset(self, request):
+        return Task.objects.none()
 
 
 class ChargeInline(admin.TabularInline):
@@ -29,9 +37,17 @@ class ChargeAdmin(admin.ModelAdmin):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = (ChargeInline,)
+    inlines = (TaskInline, ChargeInline,)
+
+
+class TaskAdmin(admin.ModelAdmin):
+    date_hierarchy = 'date'
+    list_display = ('project', 'date', 'title', 'done',)
+    list_editable = ('date', 'title', 'done',)
+    list_filter = ('project', 'date', 'done',)
 
 
 # Register your models here.
 admin.site.register(Project, ProjectAdmin)
+admin.site.register(Task, TaskAdmin)
 admin.site.register(Charge, ChargeAdmin)
