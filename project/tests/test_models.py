@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.db.models import ProtectedError
 from django.test import TestCase
-from datetime import datetime, timedelta
-from ..models import Project, Charge
+from datetime import datetime, date, timedelta
+from ..models import Project, Task, Charge
 
 # Create your tests here.
 
@@ -72,6 +72,146 @@ class ProjectModelTestCase(TestCase):
             Project.objects.create(name=test_name)
 
 
+class TaskModelTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.project = Project(name='Test')
+        cls.project.full_clean()
+        cls.project.save()
+
+    def test_task_project_field_display(self):
+        project_field = Task._meta.get_field('project')
+        self.assertEqual(project_field.verbose_name, 'project')
+
+    def test_task_title_field_display(self):
+        title_field = Task._meta.get_field('title')
+        self.assertEqual(title_field.verbose_name, 'title')
+
+    def test_task_date_field_display(self):
+        date_field = Task._meta.get_field('date')
+        self.assertEqual(date_field.verbose_name, 'date')
+
+    def test_task_done_field_display(self):
+        done_field = Task._meta.get_field('done')
+        self.assertEqual(done_field.verbose_name, 'done')
+
+    def test_task_can_be_created_today(self):
+        today = datetime.today()
+        todays_date = today.date()
+        test_title = 'Test'
+
+        task = Task(project=self.project, date=todays_date, title=test_title)
+        task.full_clean()
+        task.save()
+
+        self.assertEqual(task.project, self.project)
+        self.assertEqual(task.date, todays_date)
+        self.assertEqual(task.title, test_title)
+        self.assertEqual(task.done, False)
+
+    def test_task_is_string_serializable(self):
+        test_title = 'Do things'
+        test_date = date(2019, 1, 1)
+
+        task = Task(project=self.project, date=test_date, title=test_title)
+        task.full_clean()
+        task.save()
+
+        self.assertEqual(str(task), 'Test on 2019-01-01: Do things')
+
+        task.done = True
+        task.full_clean()
+        task.save()
+
+        self.assertEqual(
+            str(task), 'Test on 2019-01-01: Do things (Completed)')
+
+    def test_task_done_status_is_not_required(self):
+        done_field = Task._meta.get_field('done')
+        self.assertEqual(done_field.blank, True)
+
+    def test_task_done_status_is_not_nullable(self):
+        done_field = Task._meta.get_field('done')
+        self.assertEqual(done_field.null, False)
+
+    def test_task_done_status_is_false_by_default(self):
+        done_field = Task._meta.get_field('done')
+        self.assertEqual(done_field.default, False)
+
+    def test_cannot_delete_project_with_associated_task(self):
+        test_title = 'Test'
+        test_date = date(2019, 1, 1)
+
+        task = Task(
+            project=self.project,
+            date=test_date,
+            title=test_title
+        )
+        task.full_clean()
+        task.save()
+
+        with self.assertRaises(ProtectedError):
+            self.project.delete()
+
+    def test_task_title_must_not_exceed_255_characters(self):
+        task = Task(project=self.project,
+                    date=date(2019, 1, 1),
+                    title=''.zfill(256))
+
+        with self.assertRaises(ValidationError) as cm:
+            task.full_clean()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['title']), 1)
+        self.assertEqual(error_dict['title'][0].code, 'max_length')
+
+    def test_project_name_must_not_exceed_255_characters__db(self):
+        with self.assertRaises(DataError):
+            Task.objects.create(project=self.project,
+                                date=date(2019, 1, 1),
+                                title=''.zfill(256))
+
+    def test_task_are_ordered_by_task_date_and_done_status(self):
+        ordered_tasks = self.get_ordered_test_task_list()
+
+        self.assertQuerysetEqual(Task.objects.all(),
+                                 ordered_tasks,
+                                 transform=lambda task: task)
+
+    ### Helper Methods ###
+    def get_ordered_test_task_list(self):
+        baseline = date(2019, 1, 1)
+        plus_one_day = baseline + timedelta(days=1)
+        minus_one_day = baseline - timedelta(days=1)
+
+        ordered_dates = (minus_one_day, baseline, plus_one_day,)
+        ordered_tasks = []
+
+        for entry in ordered_dates:
+            incomplete_task = Task(
+                project=self.project,
+                date=entry,
+                title='Test',
+                done=False
+            )
+            incomplete_task.full_clean()
+            incomplete_task.save()
+            ordered_tasks.append(incomplete_task)
+
+            completed_task = Task(
+                project=self.project,
+                date=entry,
+                title='Test',
+                done=True
+            )
+            completed_task.full_clean()
+            completed_task.save()
+            ordered_tasks.append(completed_task)
+
+        return ordered_tasks
+
+
 class ChargeModelTestCase(TestCase):
 
     @classmethod
@@ -118,8 +258,11 @@ class ChargeModelTestCase(TestCase):
 
     def test_charge_end_time_is_not_required(self):
         end_time_field = Charge._meta.get_field('end_time')
-        self.assertTrue(end_time_field.null, True)
         self.assertTrue(end_time_field.blank, True)
+
+    def test_charge_end_time_is_nullable(self):
+        end_time_field = Charge._meta.get_field('end_time')
+        self.assertTrue(end_time_field.null, True)
 
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
@@ -251,14 +394,14 @@ class ChargeModelTestCase(TestCase):
         ordered_charges = []
 
         for entry in ordered_datetimes:
-            baseline_charge = Charge(
+            charge = Charge(
                 project=self.project,
                 date=entry.date(),
                 start_time=entry.time()
             )
-            baseline_charge.full_clean()
-            baseline_charge.save()
+            charge.full_clean()
+            charge.save()
 
-            ordered_charges.append(baseline_charge)
+            ordered_charges.append(charge)
 
         return ordered_charges

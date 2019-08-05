@@ -15,10 +15,17 @@ else
     pg_ctl -D ./db restart
 fi
 
-# Ensure the latest schema / fixtures are loaded into to the database.
-if [ $1 != "migrate" ]; then
+if [ $1 == "makemigrations" ] || [ $1 == "squashmigrations" ]; then
+    # Create the migration, then ensure the latest schema / fixtures are loaded
+    # into the database
+    python -Wa manage.py $@
     python -Wa manage.py migrate
+elif [ $1 == "migrate" ] || [ $1 == "test" ]; then
+    # Run the given management command
+    python -Wa manage.py $@
+else
+    # Ensure the latest schema / fixtures are loaded into the database,
+    # then run the given management command.
+    python -Wa manage.py migrate
+    python -Wa manage.py $@
 fi
-
-# Execute the provided command
-python -Wa manage.py $@

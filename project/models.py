@@ -13,6 +13,23 @@ class Project(models.Model):
         return '%s' % (self.name)
 
 
+class Task(models.Model):
+    class Meta:
+        ordering = ('date', 'done',)
+
+    project = models.ForeignKey(Project, on_delete=models.PROTECT)
+    title = models.CharField(max_length=255)
+    date = models.DateField()
+    done = models.BooleanField(blank=True, default=False)
+
+    def __str__(self):
+        return '%s on %s: %s' % (
+            self.project.name,
+            self.date,
+            self.title + ' (Completed)' if self.done else self.title
+        )
+
+
 class Charge(models.Model):
     objects = ChargeQuerySet.as_manager()
 
