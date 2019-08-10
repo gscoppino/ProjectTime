@@ -3,22 +3,7 @@ from .models import Project, Task, Charge
 from .querysets import ChargeQuerySet
 
 
-class TaskInline(admin.TabularInline):
-    model = Task
-    extra = 1
-
-    def get_queryset(self, request):
-        return Task.objects.none()
-
-
-class ChargeInline(admin.TabularInline):
-    model = Charge
-    extra = 1
-
-    def get_queryset(self, request):
-        return Charge.objects.none()
-
-
+@admin.register(Charge)
 class ChargeAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     list_display = ('project', 'date', 'start_time',
@@ -36,18 +21,14 @@ class ChargeAdmin(admin.ModelAdmin):
     time_charged.admin_order_field = ChargeQuerySet.get_time_charged_expr()
 
 
+@admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    inlines = (TaskInline, ChargeInline,)
+    pass
 
 
+@admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     list_display = ('project', 'date', 'title', 'done',)
     list_editable = ('date', 'title', 'done',)
     list_filter = ('project', 'date', 'done',)
-
-
-# Register your models here.
-admin.site.register(Project, ProjectAdmin)
-admin.site.register(Task, TaskAdmin)
-admin.site.register(Charge, ChargeAdmin)
