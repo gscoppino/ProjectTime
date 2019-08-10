@@ -380,7 +380,51 @@ class ChargeModelTestCase(TestCase):
         ordered_charges = self.get_ordered_test_charge_list()
         self.assertEqual(Charge.objects.latest(), ordered_charges[-1])
 
+    def test_get_annotated_charge_list(self):
+        charge_timedeltas = (
+            timedelta(seconds=30),
+            timedelta(minutes=15),
+            timedelta(hours=1),
+        )
+
+        self.create_test_charges(charge_timedeltas)
+        self.assertQuerysetEqual(
+            Charge.objects.annotate_time_charged(),
+            charge_timedeltas,
+            transform=lambda charge: charge.db__time_charged
+        )
+
+    def test_get_charge_list_aggregate_time(self):
+        charge_timedeltas = (
+            timedelta(seconds=30),
+            timedelta(minutes=15),
+            timedelta(hours=1),
+        )
+
+        self.create_test_charges(charge_timedeltas)
+        self.assertEqual(Charge.objects.aggregate_time_charged(),
+                         sum(charge_timedeltas, timedelta()))
+
     ### Helper Methods ###
+
+    def create_test_charges(self, charge_timedeltas):
+        next_charge_start_datetime = datetime(
+            2019, 1, 1, hour=0, minute=0, second=0)
+        charges = []
+
+        for charge_time in charge_timedeltas:
+            charge_end_time = next_charge_start_datetime + charge_time
+            charge = Charge(
+                project=self.project,
+                date=next_charge_start_datetime.date(),
+                start_time=next_charge_start_datetime.time(),
+                end_time=charge_end_time
+            )
+            charge.full_clean()
+            charge.save()
+            charges.append(charge)
+
+            next_charge_start_datetime = charge_end_time
 
     def get_ordered_test_charge_list(self):
         baseline = datetime(2019, 1, 1, hour=8, minute=0, second=0)
