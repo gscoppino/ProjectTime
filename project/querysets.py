@@ -5,7 +5,7 @@ class ProjectQuerySet(models.QuerySet):
     def annotate_open_task_count(self):
         return self.annotate(
             db__open_task_count=models.Count(
-                'task', filter=models.Q(task__done=False)
+                'task', filter=models.Q(task__done=False), distinct=True
             )
         )
 
