@@ -1,12 +1,17 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import datetime, timedelta
-from .querysets import ChargeQuerySet
+from .querysets import ProjectQuerySet, ChargeQuerySet
 
 # Create your models here.
 
 
 class Project(models.Model):
+    objects = ProjectQuerySet.as_manager()
+
+    class Meta:
+        ordering = ('name',)
+
     name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):
