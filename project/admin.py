@@ -7,7 +7,6 @@ class ChargeAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     list_display = ('project', 'date', 'start_time',
                     'end_time', 'time_charged',)
-    list_editable = ('date', 'start_time', 'end_time',)
     list_filter = ('project', 'date',)
     change_list_template = 'charge_change_list.html'
 
