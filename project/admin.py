@@ -1,14 +1,62 @@
+import datetime
 from django.contrib import admin
+from django.urls import reverse
+from django.utils import timezone
 from .models import Project, Task, Charge
 
 
-@admin.register(Charge)
+class ProjectTimeAdminSite(admin.AdminSite):
+    site_title = 'ProjectTime'
+    site_header = 'ProjectTime'
+    index_title = 'ProjectTime Administration'
+
+    @staticmethod
+    def update_admin_url(app_list, app_label, model_name, url):
+        for app in app_list:
+            if app['app_label'] == app_label:
+                for model in app['models']:
+                    if model['name'] == model_name:
+                        model['admin_url'] = url
+                        break
+
+    def index(self, request, extra_context=None):
+        response = super().index(request, extra_context)
+
+        ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+
+        return response
+
+    def app_index(self, request, app_label, extra_context=None):
+        response = super().app_index(request, app_label, extra_context)
+
+        ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+
+        return response
+
+
+admin_site = ProjectTimeAdminSite()
+
+
+@admin.register(Charge, site=admin_site)
 class ChargeAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     list_display = ('project', 'date', 'start_time',
                     'end_time', 'time_charged',)
     list_filter = ('project', 'date',)
     change_list_template = 'charge_change_list.html'
+
+    @staticmethod
+    def get_default_changelist_url():
+        today = timezone.localtime(timezone.now()).date()
+        tomorrow = today + datetime.timedelta(days=1)
+
+        qs = '?date__gte={today}&date__lt={tomorrow}'.format(
+            today=str(today),
+            tomorrow=str(tomorrow))
+
+        return reverse('admin:project_charge_changelist') + qs
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
@@ -19,7 +67,7 @@ class ChargeAdmin(admin.ModelAdmin):
     time_charged.admin_order_field = 'db__time_charged'
 
 
-@admin.register(Project)
+@admin.register(Project, site=admin_site)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'open_tasks',)
 
@@ -36,7 +84,7 @@ class ProjectAdmin(admin.ModelAdmin):
     open_tasks.admin_order_field = 'db__open_task_count'
 
 
-@admin.register(Task)
+@admin.register(Task, site=admin_site)
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
     list_display = ('project', 'date', 'title', 'done',)
