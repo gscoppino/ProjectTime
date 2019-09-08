@@ -115,20 +115,34 @@ class TaskModelTestCase(TestCase):
             datetime(2019, 1, 1, hour=0, minute=0, second=0))
 
         task = Task(project=self.project,
-                    deadline=test_deadline,
                     title=test_title)
         task.full_clean()
         task.save()
 
         self.assertEqual(
-            str(task), 'Test on 2019-01-01 00:00:00+00:00: Do things')
+            str(task), 'Test: Do things')
+
+        task.deadline = test_deadline
+        task.full_clean()
+        task.save()
+
+        self.assertEqual(
+            str(task), 'Test: Do things (due on 2019-01-01 00:00:00+00:00)')
 
         task.done = True
         task.full_clean()
         task.save()
 
         self.assertEqual(
-            str(task), 'Test on 2019-01-01 00:00:00+00:00: Do things (Completed)')
+            str(task), 'Test: Do things (Completed)')
+
+    def test_task_deadline_is_not_required(self):
+        deadline_field = Task._meta.get_field('deadline')
+        self.assertEqual(deadline_field.blank, True)
+
+    def test_task_deadline_is_nullable(self):
+        deadline_field = Task._meta.get_field('deadline')
+        self.assertEqual(deadline_field.null, True)
 
     def test_task_done_status_is_not_required(self):
         done_field = Task._meta.get_field('done')

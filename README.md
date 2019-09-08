@@ -16,11 +16,16 @@ A tool that can be used to keep track of time spent on projects.
    within the base environment:
 
    `conda install anaconda-project`
-4. Start the tool:
+
+4. Start the database:
+
+    `anaconda-project run pg_ctl start`
+
+5. Start the tool:
 
    `anaconda-project run manage.py runserver`
 
-5. Run tests:
+6. Run tests:
 
    `anaconda-project run manage.py test --parallel --failsafe`
 
@@ -51,10 +56,16 @@ And to create a new Django app:
 
 `anaconda-project run django-admin startapp APP_NAME`
 
-The `anaconda-project` commands take care of ensuring that the PostgreSQL
-database exists and is running at all times, in addition to ensuring the
-latest database migrations are applied. All Python is run with deprecation
-warnings enabled.
+In addition, the `pg_ctl` script is aliased as an `anaconda-project` command.
+
+For example, to start the database server:
+
+`anaconda-project run pg_ctl start`
+
+The `anaconda-project run pg_ctl` commands take care of ensuring a database
+always exists, while the `anaconda-project run manage.py` commands take care of
+ensuring that the latest database migrations are always applied. In addition,
+all Python scripts are run with deprecation warnings enabled.
 
 ## Testing
 
