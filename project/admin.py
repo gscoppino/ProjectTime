@@ -25,6 +25,8 @@ class ProjectTimeAdminSite(admin.AdminSite):
 
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+        ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Tasks', TaskAdmin.get_default_changelist_url())
 
         return response
 
@@ -33,6 +35,8 @@ class ProjectTimeAdminSite(admin.AdminSite):
 
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+        ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Tasks', TaskAdmin.get_default_changelist_url())
 
         return response
 
@@ -97,3 +101,18 @@ class TaskAdmin(admin.ModelAdmin):
     list_display = ('project', 'deadline', 'title', 'done',)
     list_editable = ('deadline', 'title', 'done',)
     list_filter = ('project', 'deadline', 'done',)
+
+    @staticmethod
+    def get_default_changelist_url():
+        today = timezone.localtime(timezone.now()).replace(
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0)
+
+        tomorrow = today + datetime.timedelta(days=1)
+
+        return reverse('admin:project_task_changelist') + '?' + urlencode({
+            'deadline__gte': today,
+            'deadline__lt': tomorrow
+        })
