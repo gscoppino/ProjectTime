@@ -3,14 +3,16 @@
 DB_DIRECTORY="./db"
 DB_LOCK_FILE="postmaster.pid"
 
-# Create a database cluster if one does not exist
+# Ensure the database exists
 if [ ! -d "$DB_DIRECTORY" ]; then
-    pg_ctl -D ./db initdb
+    echo "The database does not exist."
+    exit 1
 fi
 
-# (Re)start the database server
+# Ensure the database is running
 if [ ! -e "$DB_DIRECTORY/$DB_LOCK_FILE" ]; then
-    pg_ctl -D ./db start
+    echo "The database is not running."
+    exit 1
 fi
 
 if [ $1 == "makemigrations" ] || [ $1 == "squashmigrations" ]; then
@@ -27,5 +29,3 @@ else
     python -Wa manage.py migrate
     python -Wa manage.py $@
 fi
-
-pg_ctl -D ./db stop

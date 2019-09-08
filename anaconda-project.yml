@@ -25,6 +25,7 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {
+  pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: default},
   django-admin: {unix: django-admin, env_spec: default},
   manage.py: {unix: sh scripts/manage.sh, env_spec: default}
 }
