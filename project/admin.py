@@ -2,6 +2,7 @@ import datetime
 from django.contrib import admin
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import urlencode
 from .models import Project, Task, Charge
 
 
@@ -41,22 +42,25 @@ admin_site = ProjectTimeAdminSite()
 
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(admin.ModelAdmin):
-    date_hierarchy = 'date'
-    list_display = ('project', 'date', 'start_time',
-                    'end_time', 'time_charged',)
-    list_filter = ('project', 'date',)
+    date_hierarchy = 'start_time'
+    list_display = ('project', 'start_time', 'end_time', 'time_charged',)
+    list_filter = ('project', 'start_time',)
     change_list_template = 'charge_change_list.html'
 
     @staticmethod
     def get_default_changelist_url():
-        today = timezone.localtime(timezone.now()).date()
+        today = timezone.localtime(timezone.now()).replace(
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0)
+
         tomorrow = today + datetime.timedelta(days=1)
 
-        qs = '?date__gte={today}&date__lt={tomorrow}'.format(
-            today=str(today),
-            tomorrow=str(tomorrow))
-
-        return reverse('admin:project_charge_changelist') + qs
+        return reverse('admin:project_charge_changelist') + '?' + urlencode({
+            'start_time__gte': today,
+            'start_time__lt': tomorrow
+        })
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
@@ -75,7 +79,10 @@ class ProjectAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate_open_task_count().annotate_latest_charge()
 
     def latest_charge(self, obj):
-        return obj.db__latest_charge
+        if not obj.db__latest_charge:
+            return None
+
+        return timezone.localtime(obj.db__latest_charge).date()
 
     def open_tasks(self, obj):
         return obj.db__open_task_count

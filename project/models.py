@@ -40,8 +40,8 @@ class Charge(models.Model):
     objects = ChargeQuerySet.as_manager()
 
     class Meta:
-        ordering = ('date', 'start_time',)
-        get_latest_by = ('date', 'start_time',)
+        ordering = ('start_time',)
+        get_latest_by = ('start_time',)
         constraints = (
             models.CheckConstraint(
                 name='end_time_must_be_on_or_after_start_time',
@@ -50,19 +50,15 @@ class Charge(models.Model):
         )
 
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
-    date = models.DateField()
-    start_time = models.TimeField()
-    end_time = models.TimeField(null=True, blank=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField(null=True, blank=True)
 
     @property
     def time_charged(self):
         if not self.end_time:
             return timedelta()
 
-        start_datetime = datetime.combine(self.date, self.start_time)
-        end_datetime = datetime.combine(self.date, self.end_time)
-
-        return end_datetime - start_datetime
+        return self.end_time - self.start_time
 
     def clean(self):
         if self.end_time and self.end_time < self.start_time:
@@ -76,11 +72,10 @@ class Charge(models.Model):
     def __str__(self):
         charged = self.time_charged
 
-        return '%s on %s, %s - %s (%s %s)' % (
+        return '%s, %s - %s (%s %s)' % (
             self.project.name,
-            self.date,
-            self.start_time,
-            self.end_time or '__:__:__',
+            timezone.localtime(self.start_time),
+            timezone.localtime(self.end_time) if self.end_time else '__:__:__',
             charged,
             'hours' if charged.total_seconds() >= 3600 else 'minutes'
         )

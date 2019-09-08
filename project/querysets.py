@@ -11,7 +11,7 @@ class ProjectQuerySet(models.QuerySet):
 
     def annotate_latest_charge(self):
         return self.annotate(
-            db__latest_charge=models.Max('charge__date')
+            db__latest_charge=models.Max('charge__end_time')
         )
 
 
