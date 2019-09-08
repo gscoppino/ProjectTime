@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.db.models import ProtectedError
 from django.test import TestCase
+from django.utils import timezone
 from datetime import datetime, date, timedelta
 from ..models import Project, Task, Charge
 
@@ -87,44 +88,47 @@ class TaskModelTestCase(TestCase):
         title_field = Task._meta.get_field('title')
         self.assertEqual(title_field.verbose_name, 'title')
 
-    def test_task_date_field_display(self):
-        date_field = Task._meta.get_field('date')
-        self.assertEqual(date_field.verbose_name, 'date')
+    def test_task_deadline_field_display(self):
+        deadline_field = Task._meta.get_field('deadline')
+        self.assertEqual(deadline_field.verbose_name, 'deadline')
 
     def test_task_done_field_display(self):
         done_field = Task._meta.get_field('done')
         self.assertEqual(done_field.verbose_name, 'done')
 
     def test_task_can_be_created_today(self):
-        today = datetime.today()
-        todays_date = today.date()
+        today = timezone.now().replace(hour=0, minute=0, second=0)
         test_title = 'Test'
 
-        task = Task(project=self.project, date=todays_date, title=test_title)
+        task = Task(project=self.project, deadline=today, title=test_title)
         task.full_clean()
         task.save()
 
         self.assertEqual(task.project, self.project)
-        self.assertEqual(task.date, todays_date)
+        self.assertEqual(task.deadline, today)
         self.assertEqual(task.title, test_title)
         self.assertEqual(task.done, False)
 
     def test_task_is_string_serializable(self):
         test_title = 'Do things'
-        test_date = date(2019, 1, 1)
+        test_deadline = timezone.make_aware(
+            datetime(2019, 1, 1, hour=0, minute=0, second=0))
 
-        task = Task(project=self.project, date=test_date, title=test_title)
+        task = Task(project=self.project,
+                    deadline=test_deadline,
+                    title=test_title)
         task.full_clean()
         task.save()
 
-        self.assertEqual(str(task), 'Test on 2019-01-01: Do things')
+        self.assertEqual(
+            str(task), 'Test on 2019-01-01 00:00:00+00:00: Do things')
 
         task.done = True
         task.full_clean()
         task.save()
 
         self.assertEqual(
-            str(task), 'Test on 2019-01-01: Do things (Completed)')
+            str(task), 'Test on 2019-01-01 00:00:00+00:00: Do things (Completed)')
 
     def test_task_done_status_is_not_required(self):
         done_field = Task._meta.get_field('done')
@@ -140,11 +144,12 @@ class TaskModelTestCase(TestCase):
 
     def test_cannot_delete_project_with_associated_task(self):
         test_title = 'Test'
-        test_date = date(2019, 1, 1)
+        test_deadline = timezone.make_aware(
+            datetime(2019, 1, 1, hour=0, minute=0, second=0))
 
         task = Task(
             project=self.project,
-            date=test_date,
+            deadline=test_deadline,
             title=test_title
         )
         task.full_clean()
@@ -155,7 +160,8 @@ class TaskModelTestCase(TestCase):
 
     def test_task_title_must_not_exceed_255_characters(self):
         task = Task(project=self.project,
-                    date=date(2019, 1, 1),
+                    deadline=timezone.make_aware(
+                        datetime(2019, 1, 1, hour=0, minute=0, second=0)),
                     title=''.zfill(256))
 
         with self.assertRaises(ValidationError) as cm:
@@ -169,7 +175,8 @@ class TaskModelTestCase(TestCase):
     def test_project_name_must_not_exceed_255_characters__db(self):
         with self.assertRaises(DataError):
             Task.objects.create(project=self.project,
-                                date=date(2019, 1, 1),
+                                deadline=timezone.make_aware(
+                                    datetime(2019, 1, 1, hour=0, minute=0, second=0)),
                                 title=''.zfill(256))
 
     def test_task_are_ordered_by_task_date_and_done_status(self):
@@ -181,7 +188,8 @@ class TaskModelTestCase(TestCase):
 
     ### Helper Methods ###
     def get_ordered_test_task_list(self):
-        baseline = date(2019, 1, 1)
+        baseline = timezone.make_aware(
+            datetime(2019, 1, 1, hour=0, minute=0, second=0))
         plus_one_day = baseline + timedelta(days=1)
         minus_one_day = baseline - timedelta(days=1)
 
@@ -191,7 +199,7 @@ class TaskModelTestCase(TestCase):
         for entry in ordered_dates:
             incomplete_task = Task(
                 project=self.project,
-                date=entry,
+                deadline=entry,
                 title='Test',
                 done=False
             )
@@ -201,7 +209,7 @@ class TaskModelTestCase(TestCase):
 
             completed_task = Task(
                 project=self.project,
-                date=entry,
+                deadline=entry,
                 title='Test',
                 done=True
             )
@@ -224,10 +232,6 @@ class ChargeModelTestCase(TestCase):
         project_field = Charge._meta.get_field('project')
         self.assertEqual(project_field.verbose_name, 'project')
 
-    def test_charge_date_field_display(self):
-        date_field = Charge._meta.get_field('date')
-        self.assertEqual(date_field.verbose_name, 'date')
-
     def test_charge_start_time_field_display(self):
         start_time_field = Charge._meta.get_field('start_time')
         self.assertEqual(start_time_field.verbose_name, 'start time')
@@ -237,22 +241,18 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(end_time_field.verbose_name, 'end time')
 
     def test_charge_can_be_created_today(self):
-        today = datetime.today()
-        todays_date = today.date()
-        todays_current_time = today.time()
+        today = timezone.now().replace(hour=0, minute=0, second=0)
         timedelta_zero = timedelta()
 
         charge = Charge(
             project=self.project,
-            date=todays_date,
-            start_time=todays_current_time
+            start_time=today
         )
         charge.full_clean()
         charge.save()
 
         self.assertEqual(charge.project, self.project)
-        self.assertEqual(charge.date, todays_date)
-        self.assertEqual(charge.start_time, todays_current_time)
+        self.assertEqual(charge.start_time, today)
         self.assertEqual(charge.end_time, None)
         self.assertEqual(charge.time_charged, timedelta_zero)
 
@@ -265,14 +265,14 @@ class ChargeModelTestCase(TestCase):
         self.assertTrue(end_time_field.null, True)
 
     def test_cannot_create_charge_with_end_time_before_start_time(self):
-        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         with self.assertRaises(ValidationError) as cm:
             charge = Charge(
                 project=self.project,
-                date=start_datetime.date(),
-                start_time=start_datetime.time(),
-                end_time=(start_datetime - timedelta(minutes=1)).time()
+                start_time=start_datetime,
+                end_time=start_datetime - timedelta(minutes=1)
             )
             charge.full_clean()
             charge.save()
@@ -284,23 +284,23 @@ class ChargeModelTestCase(TestCase):
                          'end_time_must_be_on_or_after_start_time')
 
     def test_cannot_create_charge_with_end_time_before_start_time__db(self):
-        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         with self.assertRaises(IntegrityError):
             Charge.objects.create(
                 project=self.project,
-                date=start_datetime.date(),
-                start_time=start_datetime.time(),
-                end_time=(start_datetime - timedelta(minutes=1)).time()
+                start_time=start_datetime,
+                end_time=start_datetime - timedelta(minutes=1)
             )
 
     def test_cannot_delete_project_with_associated_charge(self):
-        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         charge = Charge(
             project=self.project,
-            date=start_datetime.date(),
-            start_time=start_datetime.time()
+            start_time=start_datetime
         )
         charge.full_clean()
         charge.save()
@@ -309,61 +309,60 @@ class ChargeModelTestCase(TestCase):
             self.project.delete()
 
     def test_time_charged_is_correct(self):
-        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
         timedelta_zero = timedelta()
         added_time = timedelta(minutes=30)
 
         charge = Charge(
             project=self.project,
-            date=start_datetime.date(),
-            start_time=start_datetime.time()
+            start_time=start_datetime
         )
         charge.full_clean()
         charge.save()
 
         self.assertEqual(charge.time_charged, timedelta_zero)
 
-        charge.end_time = (start_datetime + added_time).time()
+        charge.end_time = start_datetime + added_time
         charge.full_clean()
         charge.save()
 
         self.assertEqual(charge.time_charged, added_time)
 
     def test_charge_is_string_serializable(self):
-        start_datetime = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         charge = Charge(
             project=self.project,
-            date=start_datetime.date(),
-            start_time=start_datetime.time()
+            start_time=start_datetime
         )
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test on 2019-01-01, 08:00:00 - __:__:__ (0:00:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes)')
 
-        charge.end_time = (start_datetime + timedelta(minutes=30)).time()
+        charge.end_time = start_datetime + timedelta(minutes=30)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test on 2019-01-01, 08:00:00 - 08:30:00 (0:30:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes)')
 
-        charge.end_time = (start_datetime + timedelta(hours=1)).time()
+        charge.end_time = start_datetime + timedelta(hours=1)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test on 2019-01-01, 08:00:00 - 09:00:00 (1:00:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours)')
 
-        charge.end_time = (
-            start_datetime + timedelta(hours=1, minutes=15)).time()
+        charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test on 2019-01-01, 08:00:00 - 09:15:00 (1:15:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours)')
 
     def test_charges_are_ordered_by_charge_date_and_start_time(self):
         ordered_charges = self.get_ordered_test_charge_list()
@@ -408,26 +407,26 @@ class ChargeModelTestCase(TestCase):
     ### Helper Methods ###
 
     def create_test_charges(self, charge_timedeltas):
-        next_charge_start_datetime = datetime(
-            2019, 1, 1, hour=0, minute=0, second=0)
+        next_charge_start_datetime = timezone.make_aware(datetime(
+            2019, 1, 1, hour=0, minute=0, second=0))
         charges = []
 
         for charge_time in charge_timedeltas:
-            charge_end_time = next_charge_start_datetime + charge_time
+            charge_end_datetime = next_charge_start_datetime + charge_time
             charge = Charge(
                 project=self.project,
-                date=next_charge_start_datetime.date(),
-                start_time=next_charge_start_datetime.time(),
-                end_time=charge_end_time
+                start_time=next_charge_start_datetime,
+                end_time=charge_end_datetime
             )
             charge.full_clean()
             charge.save()
             charges.append(charge)
 
-            next_charge_start_datetime = charge_end_time
+            next_charge_start_datetime = charge_end_datetime
 
     def get_ordered_test_charge_list(self):
-        baseline = datetime(2019, 1, 1, hour=8, minute=0, second=0)
+        baseline = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
         plus_one_hour = baseline + timedelta(hours=1)
         minus_one_hour = baseline - timedelta(hours=1)
         plus_one_day = baseline + timedelta(days=1)
@@ -440,8 +439,7 @@ class ChargeModelTestCase(TestCase):
         for entry in ordered_datetimes:
             charge = Charge(
                 project=self.project,
-                date=entry.date(),
-                start_time=entry.time()
+                start_time=entry
             )
             charge.full_clean()
             charge.save()
