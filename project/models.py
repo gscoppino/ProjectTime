@@ -25,14 +25,15 @@ class Task(models.Model):
 
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
-    deadline = models.DateTimeField()
+    deadline = models.DateTimeField(null=True, blank=True)
     done = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
-        return '%s on %s: %s' % (
-            self.project.name,
-            timezone.localtime(self.deadline),
-            self.title + ' (Completed)' if self.done else self.title
+        return '{project}: {task}{task_status}'.format(
+            project=self.project.name,
+            task=self.title,
+            task_status=' (Completed)' if self.done else ' (due on %s)' % (
+                timezone.localtime(self.deadline)) if self.deadline else ''
         )
 
 
