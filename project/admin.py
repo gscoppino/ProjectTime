@@ -86,7 +86,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Task, site=admin_site)
 class TaskAdmin(admin.ModelAdmin):
-    date_hierarchy = 'date'
-    list_display = ('project', 'date', 'title', 'done',)
-    list_editable = ('date', 'title', 'done',)
-    list_filter = ('project', 'date', 'done',)
+    date_hierarchy = 'deadline'
+    list_display = ('project', 'deadline', 'title', 'done',)
+    list_editable = ('deadline', 'title', 'done',)
+    list_filter = ('project', 'deadline', 'done',)

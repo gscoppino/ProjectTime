@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from datetime import datetime, timedelta
 from .querysets import ProjectQuerySet, ChargeQuerySet
 
@@ -20,17 +21,17 @@ class Project(models.Model):
 
 class Task(models.Model):
     class Meta:
-        ordering = ('date', 'done',)
+        ordering = ('deadline', 'done',)
 
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     title = models.CharField(max_length=255)
-    date = models.DateField()
+    deadline = models.DateTimeField()
     done = models.BooleanField(blank=True, default=False)
 
     def __str__(self):
         return '%s on %s: %s' % (
             self.project.name,
-            self.date,
+            timezone.localtime(self.deadline),
             self.title + ' (Completed)' if self.done else self.title
         )
 
