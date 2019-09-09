@@ -99,7 +99,6 @@ class ProjectAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'deadline'
     list_display = ('project', 'deadline', 'title', 'done',)
-    list_editable = ('deadline', 'title', 'done',)
     list_filter = ('project', 'deadline', 'done',)
 
     @staticmethod
