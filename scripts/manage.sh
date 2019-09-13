@@ -15,17 +15,10 @@ if [ ! -e "$DB_DIRECTORY/$DB_LOCK_FILE" ]; then
     exit 1
 fi
 
-if [ $1 == "makemigrations" ] || [ $1 == "squashmigrations" ]; then
-    # Create the migration, then ensure the latest schema / fixtures are loaded
-    # into the database
-    python -Wa manage.py $@
+if [ "$1" == "runserver" ]; then
+    # Ensure the latest schema / fixtures are loaded into the database
     python -Wa manage.py migrate
-elif [ $1 == "migrate" ] || [ $1 == "test" ]; then
-    # Run the given management command
-    python -Wa manage.py $@
-else
-    # Ensure the latest schema / fixtures are loaded into the database,
-    # then run the given management command.
-    python -Wa manage.py migrate
-    python -Wa manage.py $@
 fi
+
+# Run the given management command
+python -Wa manage.py $@
