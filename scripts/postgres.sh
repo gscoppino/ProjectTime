@@ -8,8 +8,8 @@ if [ ! -d "$DB_DIRECTORY" ]; then
     pg_ctl -D ./db initdb
 fi
 
-if [ $1 == "initdb" ]; then
+if [ "$1" == "initdb" ]; then
     exit 0
 else
-    pg_ctl -D ./db $@
+    postgres -D ./db $@
 fi

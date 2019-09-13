@@ -19,7 +19,7 @@ A tool that can be used to keep track of time spent on projects.
 
 4. Start the database:
 
-    `anaconda-project run pg_ctl start`
+    `anaconda-project run postgres start`
 
 5. Start the tool:
 
@@ -56,13 +56,13 @@ And to create a new Django app:
 
 `anaconda-project run django-admin startapp APP_NAME`
 
-In addition, the `pg_ctl` script is aliased as an `anaconda-project` command.
+In addition, the `postgres` script is aliased as an `anaconda-project` command.
 
 For example, to start the database server:
 
-`anaconda-project run pg_ctl start`
+`anaconda-project run postgres`
 
-The `anaconda-project run pg_ctl` commands take care of ensuring a database
+The `anaconda-project run postgres` command takes care of ensuring a database
 always exists, while the `anaconda-project run manage.py` commands take care of
 ensuring that the latest database migrations are always applied. In addition,
 all Python scripts are run with deprecation warnings enabled.
