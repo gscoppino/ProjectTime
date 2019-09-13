@@ -64,8 +64,8 @@ For example, to start the database server:
 
 The `anaconda-project run postgres` command takes care of ensuring a database
 always exists, while the `anaconda-project run manage.py` commands take care of
-ensuring that the latest database migrations are always applied. In addition,
-all Python scripts are run with deprecation warnings enabled.
+ensuring that the latest database migrations are always applied before the server
+is started. In addition, all Python scripts are run with deprecation warnings enabled.
 
 ## Testing
 
