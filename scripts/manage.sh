@@ -16,6 +16,13 @@ if [ ! -e "$DB_DIRECTORY/$DB_LOCK_FILE" ]; then
 fi
 
 if [ "$1" == "runserver" ]; then
+    # Ensure there are no Django model changes that require a database migration
+    python -Wa manage.py makemigrations --check
+
+    if [ "$?" != 0 ]; then
+        exit 1
+    fi
+
     # Ensure the latest schema / fixtures are loaded into the database
     python -Wa manage.py migrate
 fi
