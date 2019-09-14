@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.urls import path
 from project.admin import admin_site
-from project.views import TimezoneView
+from timezone.views import TimezoneView
 
 urlpatterns = [
     path('admin/', admin_site.urls),

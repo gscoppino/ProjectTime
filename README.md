@@ -19,7 +19,7 @@ A tool that can be used to keep track of time spent on projects.
 
 4. Start the database:
 
-    `anaconda-project run pg_ctl start`
+    `anaconda-project run postgres start`
 
 5. Start the tool:
 
@@ -40,8 +40,13 @@ The tool can be set up to run manually without a conda environment.
 
 ## Development
 
-Development workflow is the typical workflow Django project. Django's
-`django-admin` and the project `manage.py` script are aliased as
+Run `anaconda-project run setup` to build a Conda environment with extra
+development tools such as a linter, code formatter, and interactive execution
+environment. To take advantage of these, configure your editor or IDE to use
+the `development` environment in the `envs` folder.
+
+Development workflow is the typical workflow Django project.
+Django's `django-admin` and the project `manage.py` script are aliased as
 `anaconda-project` commands.
 
 For example, to start the server:
@@ -56,16 +61,22 @@ And to create a new Django app:
 
 `anaconda-project run django-admin startapp APP_NAME`
 
-In addition, the `pg_ctl` script is aliased as an `anaconda-project` command.
+In addition, the `postgres` script is aliased as an `anaconda-project` command.
 
 For example, to start the database server:
 
-`anaconda-project run pg_ctl start`
+`anaconda-project run postgres`
 
-The `anaconda-project run pg_ctl` commands take care of ensuring a database
+The `anaconda-project run postgres` command takes care of ensuring a database
 always exists, while the `anaconda-project run manage.py` commands take care of
-ensuring that the latest database migrations are always applied. In addition,
-all Python scripts are run with deprecation warnings enabled.
+ensuring that the latest database migrations are always applied before the server
+is started. In addition, all Python scripts are run with deprecation warnings enabled.
+
+The development Conda environment created by `anaconda-project run setup` prepares
+a IPython kernel that can be loaded into a Jupyter Notebook, allowing for execution
+of code in the `development` environment in an interactive notebook. Run
+`anaconda-project run jupyter notebook development.ipynb` to load a notebook that
+is templated with code to load the Django project.
 
 ## Testing
 

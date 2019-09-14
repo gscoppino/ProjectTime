@@ -25,9 +25,11 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {
-  pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: default},
-  django-admin: {unix: django-admin, env_spec: default},
-  manage.py: {unix: sh scripts/manage.sh, env_spec: default}
+  setup: {unix: sh scripts/setup.sh, env_spec: development },
+  postgres: {unix: sh scripts/postgres.sh, env_spec: database},
+  django-admin: {unix: django-admin, env_spec: app},
+  manage.py: {unix: sh scripts/manage.sh, env_spec: app},
+  jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
 }
 
 #
@@ -75,18 +77,15 @@ platforms:
 # Use `anaconda-project add-env-spec` to add environment specs.
 #
 env_specs:
-  python:
-    packages: [python=3.7]
   database:
-    inherit_from: [python]
-    packages: [postgresql, psycopg2]
+    inherit_from: []
+    packages: [postgresql]
   app:
-    inherit_from: [python, database]
-    packages: [django=2.2, pytz, sqlparse]
-  app_dev:
+    inherit_from: [database]
+    packages: [python=3.7, django=2.2, pytz, sqlparse, psycopg2]
+  development:
     inherit_from: [app]
-    packages: [pylint, pep8, autopep8]
-  default:
-    description: Default environment spec for running commands.
-    packages: []
-    inherit_from: [app_dev]
+    packages: [ipykernel, pylint, pep8, autopep8]
+  notebook:
+    inherit_from: []
+    packages: [python=3.7, jupyterlab]

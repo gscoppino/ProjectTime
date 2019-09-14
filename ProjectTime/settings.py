@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'project.apps.ProjectAdminConfig',
     'project.apps.ProjectAppConfig',
-    'project.apps.ProjectAdminConfig'
+    'timezone.apps.TimezoneConfig'
 ]
 
 MIDDLEWARE = [
@@ -49,7 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ProjectTime.middleware.TimezoneMiddleware'
+    'timezone.middleware.TimezoneMiddleware'
 ]
 
 ROOT_URLCONF = 'ProjectTime.urls'

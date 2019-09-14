@@ -1,6 +1,6 @@
 from django.shortcuts import reverse
 from django.test import TestCase
-from ..forms import TimezoneForm
+from timezone.forms import TimezoneForm
 
 # Create your tests here.
 
