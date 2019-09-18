@@ -103,15 +103,6 @@ class TaskAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_default_changelist_url():
-        today = timezone.localtime(timezone.now()).replace(
-            hour=0,
-            minute=0,
-            second=0,
-            microsecond=0)
-
-        tomorrow = today + datetime.timedelta(days=1)
-
         return reverse('admin:project_task_changelist') + '?' + urlencode({
-            'deadline__gte': today,
-            'deadline__lt': tomorrow
+            'done__exact': 0
         })
