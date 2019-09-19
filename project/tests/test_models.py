@@ -138,23 +138,23 @@ class TaskModelTestCase(TestCase):
 
     def test_task_deadline_is_not_required(self):
         deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.blank, True)
+        self.assertTrue(deadline_field.blank)
 
     def test_task_deadline_is_nullable(self):
         deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.null, True)
+        self.assertTrue(deadline_field.null)
 
     def test_task_done_status_is_not_required(self):
         done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.blank, True)
+        self.assertTrue(done_field.blank)
 
     def test_task_done_status_is_not_nullable(self):
         done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.null, False)
+        self.assertFalse(done_field.null)
 
     def test_task_done_status_is_false_by_default(self):
         done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.default, False)
+        self.assertFalse(done_field.default)
 
     def test_cannot_delete_project_with_associated_task(self):
         test_title = 'Test'
@@ -254,6 +254,10 @@ class ChargeModelTestCase(TestCase):
         end_time_field = Charge._meta.get_field('end_time')
         self.assertEqual(end_time_field.verbose_name, 'end time')
 
+    def test_charge_closed_field_display(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertEqual(closed_field.verbose_name, 'closed')
+
     def test_charge_can_be_created_today(self):
         today = timezone.now().replace(hour=0, minute=0, second=0)
         timedelta_zero = timedelta()
@@ -272,16 +276,29 @@ class ChargeModelTestCase(TestCase):
 
     def test_charge_end_time_is_not_required(self):
         end_time_field = Charge._meta.get_field('end_time')
-        self.assertTrue(end_time_field.blank, True)
+        self.assertTrue(end_time_field.blank)
 
     def test_charge_end_time_is_nullable(self):
         end_time_field = Charge._meta.get_field('end_time')
-        self.assertTrue(end_time_field.null, True)
+        self.assertTrue(end_time_field.null)
+
+    def test_charge_closed_is_not_required(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertTrue(closed_field.blank)
+
+    def test_charge_closed_is_not_nullable(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertFalse(closed_field.null)
+
+    def test_charge_closed_is_false_by_default(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertFalse(closed_field.default)
 
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
+        # Should raise a keyed validation error
         with self.assertRaises(ValidationError) as cm:
             charge = Charge(
                 project=self.project,
@@ -297,6 +314,23 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(error_dict['end_time'][0].code,
                          'end_time_must_be_on_or_after_start_time')
 
+        # Should raise a generic validation error if the end time field
+        # is excluded
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                end_time=start_datetime - timedelta(minutes=1)
+            )
+            charge.full_clean(exclude=('end_time',))
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'end_time_must_be_on_or_after_start_time')
+
     def test_cannot_create_charge_with_end_time_before_start_time__db(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
@@ -307,6 +341,43 @@ class ChargeModelTestCase(TestCase):
                 start_time=start_datetime,
                 end_time=start_datetime - timedelta(minutes=1)
             )
+
+    def test_cannot_close_charge_without_end_time(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        # Should raise a keyed validation error
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                closed=True
+            )
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['closed']), 1)
+        self.assertEqual(error_dict['closed'][0].code,
+                         'cannot_close_without_end_time')
+
+        # Should raise a generic validation error if the end time field
+        # is excluded
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                closed=True
+            )
+            charge.full_clean(exclude=('closed',))
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_close_without_end_time')
 
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = timezone.make_aware(
@@ -355,28 +426,35 @@ class ChargeModelTestCase(TestCase):
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(minutes=30)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Open]')
+
+        charge.closed = True
+        charge.full_clean()
+        charge.save()
+
+        self.assertEqual(
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Closed]')
 
     def test_charges_are_ordered_by_charge_date_and_start_time(self):
         ordered_charges = self.get_ordered_test_charge_list()

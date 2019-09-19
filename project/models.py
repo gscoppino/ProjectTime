@@ -53,6 +53,7 @@ class Charge(models.Model):
     project = models.ForeignKey(Project, on_delete=models.PROTECT)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True, blank=True)
+    closed = models.BooleanField(blank=True, default=False)
 
     @property
     def time_charged(self):
@@ -61,22 +62,40 @@ class Charge(models.Model):
 
         return self.end_time - self.start_time
 
-    def clean(self):
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+
         if self.end_time and self.end_time < self.start_time:
-            raise ValidationError({
-                'end_time': ValidationError(
-                    'The end time must not be before the start time.',
-                    code='end_time_must_be_on_or_after_start_time'
-                )
-            })
+            error = ValidationError(
+                'The end time must not be before the start time.',
+                code='end_time_must_be_on_or_after_start_time'
+            )
+
+            if exclude and 'end_time' in exclude:
+                raise error
+            else:
+                raise ValidationError({'end_time': error})
+
+        if self.closed and not self.end_time:
+            error = ValidationError(
+                'Cannot mark as closed without end time specified.',
+                code='cannot_close_without_end_time'
+            )
+
+            if exclude and 'closed' in exclude:
+                raise error
+            else:
+                raise ValidationError({'closed': error})
 
     def __str__(self):
         charged = self.time_charged
 
-        return '%s, %s - %s (%s %s)' % (
-            self.project.name,
-            timezone.localtime(self.start_time),
-            timezone.localtime(self.end_time) if self.end_time else '__:__:__',
-            charged,
-            'hours' if charged.total_seconds() >= 3600 else 'minutes'
+        return '{project}, {start_time} - {end_time} ({time_charged} {units}) [{status}]'.format(
+            project=self.project.name,
+            start_time=timezone.localtime(self.start_time),
+            end_time=timezone.localtime(
+                self.end_time) if self.end_time else '__:__:__',
+            time_charged=charged,
+            units='hours' if charged.total_seconds() >= 3600 else 'minutes',
+            status='Closed' if self.closed else 'Open'
         )

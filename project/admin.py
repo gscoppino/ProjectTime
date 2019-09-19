@@ -1,4 +1,3 @@
-import datetime
 from django.contrib import admin
 from django.urls import reverse
 from django.utils import timezone
@@ -47,23 +46,14 @@ admin_site = ProjectTimeAdminSite()
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_time'
-    list_display = ('project', 'start_time', 'end_time', 'time_charged',)
-    list_filter = ('project', 'start_time',)
+    list_display = ('project', 'start_time', 'end_time', 'time_charged', 'closed',)
+    list_filter = ('project', 'start_time', 'closed',)
     change_list_template = 'charge_change_list.html'
 
     @staticmethod
     def get_default_changelist_url():
-        today = timezone.localtime(timezone.now()).replace(
-            hour=0,
-            minute=0,
-            second=0,
-            microsecond=0)
-
-        tomorrow = today + datetime.timedelta(days=1)
-
         return reverse('admin:project_charge_changelist') + '?' + urlencode({
-            'start_time__gte': today,
-            'start_time__lt': tomorrow
+            'closed__exact': 0
         })
 
     def get_queryset(self, request):
