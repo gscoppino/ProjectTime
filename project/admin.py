@@ -63,10 +63,16 @@ class ChargeAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate_time_charged()
 
     def get_readonly_fields(self, request, obj=None):
-        if obj is None or not obj.closed:
+        if obj is None:
             return ()
-
-        return ('project', 'start_time', 'end_time',)
+        elif obj.closed and not obj.project.active:
+            return ('start_time', 'end_time',)
+        elif obj.closed:
+            return ('project', 'start_time', 'end_time',)
+        elif not obj.project.active:
+            return ('start_time', 'end_time', 'closed',)
+        else:
+            return ()
 
     def time_charged(self, obj):
         return obj.db__time_charged

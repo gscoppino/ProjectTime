@@ -181,6 +181,30 @@ class ChargeModelTestCase(TestCase):
         closed_field = Charge._meta.get_field('closed')
         self.assertFalse(closed_field.default)
 
+    def test_cannot_save_with_inactive_project(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        inactive_project = Project(name='Test 2', active=False)
+        inactive_project.full_clean()
+        inactive_project.save()
+
+        # Should raise a keyed validation error
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=inactive_project,
+                start_time=start_datetime,
+                end_time=start_datetime + timedelta(hours=1)
+            )
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['project']), 1)
+        self.assertEqual(error_dict['project'][0].code,
+                         'project_must_be_active')
+
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))

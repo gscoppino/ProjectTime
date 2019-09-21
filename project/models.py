@@ -85,6 +85,14 @@ class Charge(models.Model):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
 
+        if not self.project.active:
+            raise ValidationError({
+                'project': ValidationError(
+                    'The project must be active.',
+                    code='project_must_be_active'
+                )
+            })
+
         if self.pk:
             previously_closed = (Charge.objects.values_list('closed', flat=True)
                                  .get(pk=self.pk))
