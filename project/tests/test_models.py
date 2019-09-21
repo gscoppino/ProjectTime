@@ -15,6 +15,11 @@ class ProjectModelTestCase(TestCase):
         self.assertEqual(name_field.verbose_name, 'name')
         self.assertGreater(len(name_field.help_text), 0)
 
+    def test_project_active_field_display(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.verbose_name, 'active')
+        self.assertGreater(len(active_field.help_text), 0)
+
     def test_project_can_be_created(self):
         test_name = 'Test'
 
@@ -23,15 +28,20 @@ class ProjectModelTestCase(TestCase):
         project.save()
 
         self.assertEqual(project.name, test_name)
+        self.assertEqual(project.active, True)
 
     def test_project_is_string_serializable(self):
-        test_name = 'Test'
-
-        project = Project(name=test_name)
+        project = Project(name='Test')
         project.full_clean()
         project.save()
 
-        self.assertEqual(str(project), test_name)
+        self.assertEqual(str(project), 'Test (Active)')
+
+        project.active = False
+        project.full_clean()
+        project.save()
+
+        self.assertEqual(str(project), 'Test (Inactive)')
 
     def test_project_name_must_not_exceed_255_characters(self):
         project = Project(name=''.zfill(256))
@@ -72,6 +82,38 @@ class ProjectModelTestCase(TestCase):
 
         with self.assertRaises(IntegrityError):
             Project.objects.create(name=test_name)
+
+    def test_project_active_is_not_required(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.blank, True)
+
+    def test_project_active_is_true_by_default(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.default, True)
+
+    def test_cannot_modify_project_when_inactive(self):
+        project = Project(name='Test', active=False)
+        project.full_clean()
+        project.save()
+
+        # Should raise a generic validation error if attempting to
+        # save on a inactive project
+        with self.assertRaises(ValidationError) as cm:
+            project.full_clean()
+            project.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_modify_when_inactive')
+
+        # But should be able to save the change if it is
+        # re-opening the project
+        project.active = True
+        project.full_clean()
+        project.save()
+        self.assertEqual(project.active, True)
 
 
 class TaskModelTestCase(TestCase):

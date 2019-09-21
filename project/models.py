@@ -18,8 +18,30 @@ class Project(models.Model):
         max_length=255,
         help_text='*Required: Enter a unique name for the project (255 characters max).')
 
+    active = models.BooleanField(
+        blank=True,
+        default=True,
+        help_text='An inactive project is disabled for modification.'
+    )
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+
+        if self.pk:
+            previously_active = (Project.objects.values_list('active', flat=True)
+                                 .get(pk=self.pk))
+            currently_active = self.active
+
+            if not previously_active and not currently_active:
+                raise ValidationError(
+                    'Cannot modify when marked as inactive.',
+                    code='cannot_modify_when_inactive'
+                )
+
     def __str__(self):
-        return '%s' % (self.name)
+        return '{name} ({status})'.format(
+            name=self.name,
+            status='Active' if self.active else 'Inactive')
 
 
 class Task(models.Model):

@@ -23,6 +23,8 @@ class ProjectTimeAdminSite(admin.AdminSite):
         response = super().index(request, extra_context)
 
         ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
+        ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Tasks', TaskAdmin.get_default_changelist_url())
@@ -32,6 +34,8 @@ class ProjectTimeAdminSite(admin.AdminSite):
     def app_index(self, request, app_label, extra_context=None):
         response = super().app_index(request, app_label, extra_context)
 
+        ProjectTimeAdminSite.update_admin_url(
+            response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
         ProjectTimeAdminSite.update_admin_url(
@@ -75,10 +79,22 @@ class ChargeAdmin(admin.ModelAdmin):
 
 @admin.register(Project, site=admin_site)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'latest_charge', 'open_tasks',)
+    list_display = ('name', 'latest_charge', 'open_tasks', 'active',)
+
+    @staticmethod
+    def get_default_changelist_url():
+        return reverse('admin:project_project_changelist') + '?' + urlencode({
+            'active__exact': 1
+        })
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_open_task_count().annotate_latest_charge()
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None or obj.active:
+            return ()
+
+        return ('name',)
 
     def latest_charge(self, obj):
         if not obj.db__latest_charge:
