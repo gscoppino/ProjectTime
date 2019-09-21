@@ -39,9 +39,9 @@ class Project(models.Model):
                 )
 
     def __str__(self):
-        return '{name} ({status})'.format(
+        return '{name}{status}'.format(
             name=self.name,
-            status='Active' if self.active else 'Inactive')
+            status='' if self.active else ' (Inactive)')
 
 
 class Task(models.Model):

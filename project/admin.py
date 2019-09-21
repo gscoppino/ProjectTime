@@ -58,9 +58,10 @@ class ChargeAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_default_changelist_url():
-        return reverse('admin:project_charge_changelist') + '?' + urlencode({
-            'closed__exact': 0
-        })
+        return '{path}?{query}'.format(
+            path=reverse('admin:project_charge_changelist'),
+            query=urlencode({'closed__exact': 0})
+        )
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
@@ -83,9 +84,10 @@ class ProjectAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_default_changelist_url():
-        return reverse('admin:project_project_changelist') + '?' + urlencode({
-            'active__exact': 1
-        })
+        return '{path}?{query}'.format(
+            path=reverse('admin:project_project_changelist'),
+            query=urlencode({'active__exact': 1})
+        )
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_open_task_count().annotate_latest_charge()
@@ -118,9 +120,10 @@ class TaskAdmin(admin.ModelAdmin):
 
     @staticmethod
     def get_default_changelist_url():
-        return reverse('admin:project_task_changelist') + '?' + urlencode({
-            'done__exact': 0
-        })
+        return '{path}?{query}'.format(
+            path=reverse('admin:project_task_changelist'),
+            query=urlencode({'done__exact': 0})
+        )
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or not obj.done:
