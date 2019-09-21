@@ -68,7 +68,7 @@ class ChargeAdmin(admin.ModelAdmin):
         elif obj.closed and not obj.project.active:
             return ('start_time', 'end_time',)
         elif obj.closed:
-            return ('project', 'start_time', 'end_time',)
+            return ('start_time', 'end_time', 'project',)
         elif not obj.project.active:
             return ('start_time', 'end_time', 'closed',)
         else:
