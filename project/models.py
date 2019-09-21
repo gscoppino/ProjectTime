@@ -93,17 +93,6 @@ class Charge(models.Model):
                 )
             })
 
-        if self.pk:
-            previously_closed = (Charge.objects.values_list('closed', flat=True)
-                                 .get(pk=self.pk))
-            currently_closed = self.closed
-
-            if previously_closed and currently_closed:
-                raise ValidationError(
-                    'Cannot modify when closed for modification.',
-                    code='cannot_modify_when_closed'
-                )
-
         if self.end_time and self.end_time < self.start_time:
             error = ValidationError(
                 'The end time must not be before the start time.',
@@ -125,6 +114,17 @@ class Charge(models.Model):
                 raise error
             else:
                 raise ValidationError({'closed': error})
+
+        if self.pk:
+            previously_closed = (Charge.objects.values_list('closed', flat=True)
+                                 .get(pk=self.pk))
+            currently_closed = self.closed
+
+            if previously_closed and currently_closed:
+                raise ValidationError(
+                    'Cannot modify when closed for modification.',
+                    code='cannot_modify_when_closed'
+                )
 
     def __str__(self):
         charged = self.time_charged
