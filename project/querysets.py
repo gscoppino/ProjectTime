@@ -2,13 +2,6 @@ from django.db import models
 
 
 class ProjectQuerySet(models.QuerySet):
-    def annotate_open_task_count(self):
-        return self.annotate(
-            db__open_task_count=models.Count(
-                'task', filter=models.Q(task__done=False), distinct=True
-            )
-        )
-
     def annotate_latest_charge(self):
         return self.annotate(
             db__latest_charge=models.Max('charge__end_time')

@@ -4,7 +4,7 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime, date, timedelta
-from ..models import Project, Task, Charge
+from ..models import Project, Charge
 
 # Create your tests here.
 
@@ -13,6 +13,12 @@ class ProjectModelTestCase(TestCase):
     def test_project_name_field_display(self):
         name_field = Project._meta.get_field('name')
         self.assertEqual(name_field.verbose_name, 'name')
+        self.assertGreater(len(name_field.help_text), 0)
+
+    def test_project_active_field_display(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.verbose_name, 'active')
+        self.assertGreater(len(active_field.help_text), 0)
 
     def test_project_can_be_created(self):
         test_name = 'Test'
@@ -22,15 +28,20 @@ class ProjectModelTestCase(TestCase):
         project.save()
 
         self.assertEqual(project.name, test_name)
+        self.assertEqual(project.active, True)
 
     def test_project_is_string_serializable(self):
-        test_name = 'Test'
-
-        project = Project(name=test_name)
+        project = Project(name='Test')
         project.full_clean()
         project.save()
 
-        self.assertEqual(str(project), test_name)
+        self.assertEqual(str(project), 'Test')
+
+        project.active = False
+        project.full_clean()
+        project.save()
+
+        self.assertEqual(str(project), 'Test (Inactive)')
 
     def test_project_name_must_not_exceed_255_characters(self):
         project = Project(name=''.zfill(256))
@@ -72,166 +83,37 @@ class ProjectModelTestCase(TestCase):
         with self.assertRaises(IntegrityError):
             Project.objects.create(name=test_name)
 
+    def test_project_active_is_not_required(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.blank, True)
 
-class TaskModelTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.project = Project(name='Test')
-        cls.project.full_clean()
-        cls.project.save()
+    def test_project_active_is_true_by_default(self):
+        active_field = Project._meta.get_field('active')
+        self.assertEqual(active_field.default, True)
 
-    def test_task_project_field_display(self):
-        project_field = Task._meta.get_field('project')
-        self.assertEqual(project_field.verbose_name, 'project')
+    def test_cannot_modify_project_when_inactive(self):
+        project = Project(name='Test', active=False)
+        project.full_clean()
+        project.save()
 
-    def test_task_title_field_display(self):
-        title_field = Task._meta.get_field('title')
-        self.assertEqual(title_field.verbose_name, 'title')
-
-    def test_task_deadline_field_display(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.verbose_name, 'deadline')
-
-    def test_task_done_field_display(self):
-        done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.verbose_name, 'done')
-
-    def test_task_can_be_created_today(self):
-        today = timezone.now().replace(hour=0, minute=0, second=0)
-        test_title = 'Test'
-
-        task = Task(project=self.project, deadline=today, title=test_title)
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(task.project, self.project)
-        self.assertEqual(task.deadline, today)
-        self.assertEqual(task.title, test_title)
-        self.assertEqual(task.done, False)
-
-    def test_task_is_string_serializable(self):
-        test_title = 'Do things'
-        test_deadline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-
-        task = Task(project=self.project,
-                    title=test_title)
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things')
-
-        task.deadline = test_deadline
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things (due on 2019-01-01 00:00:00+00:00)')
-
-        task.done = True
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things (Completed)')
-
-    def test_task_deadline_is_not_required(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.blank, True)
-
-    def test_task_deadline_is_nullable(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.null, True)
-
-    def test_task_done_status_is_not_required(self):
-        done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.blank, True)
-
-    def test_task_done_status_is_not_nullable(self):
-        done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.null, False)
-
-    def test_task_done_status_is_false_by_default(self):
-        done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.default, False)
-
-    def test_cannot_delete_project_with_associated_task(self):
-        test_title = 'Test'
-        test_deadline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-
-        task = Task(
-            project=self.project,
-            deadline=test_deadline,
-            title=test_title
-        )
-        task.full_clean()
-        task.save()
-
-        with self.assertRaises(ProtectedError):
-            self.project.delete()
-
-    def test_task_title_must_not_exceed_255_characters(self):
-        task = Task(project=self.project,
-                    deadline=timezone.make_aware(
-                        datetime(2019, 1, 1, hour=0, minute=0, second=0)),
-                    title=''.zfill(256))
-
+        # Should raise a generic validation error if attempting to
+        # save on a inactive project
         with self.assertRaises(ValidationError) as cm:
-            task.full_clean()
+            project.full_clean()
+            project.save()
 
         error_dict = cm.exception.error_dict
         self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['title']), 1)
-        self.assertEqual(error_dict['title'][0].code, 'max_length')
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_modify_when_inactive')
 
-    def test_project_name_must_not_exceed_255_characters__db(self):
-        with self.assertRaises(DataError):
-            Task.objects.create(project=self.project,
-                                deadline=timezone.make_aware(
-                                    datetime(2019, 1, 1, hour=0, minute=0, second=0)),
-                                title=''.zfill(256))
-
-    def test_task_are_ordered_by_task_date_and_done_status(self):
-        ordered_tasks = self.get_ordered_test_task_list()
-
-        self.assertQuerysetEqual(Task.objects.all(),
-                                 ordered_tasks,
-                                 transform=lambda task: task)
-
-    ### Helper Methods ###
-    def get_ordered_test_task_list(self):
-        baseline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-        plus_one_day = baseline + timedelta(days=1)
-        minus_one_day = baseline - timedelta(days=1)
-
-        ordered_dates = (minus_one_day, baseline, plus_one_day,)
-        ordered_tasks = []
-
-        for entry in ordered_dates:
-            incomplete_task = Task(
-                project=self.project,
-                deadline=entry,
-                title='Test',
-                done=False
-            )
-            incomplete_task.full_clean()
-            incomplete_task.save()
-            ordered_tasks.append(incomplete_task)
-
-            completed_task = Task(
-                project=self.project,
-                deadline=entry,
-                title='Test',
-                done=True
-            )
-            completed_task.full_clean()
-            completed_task.save()
-            ordered_tasks.append(completed_task)
-
-        return ordered_tasks
+        # But should be able to save the change if it is
+        # re-opening the project
+        project.active = True
+        project.full_clean()
+        project.save()
+        self.assertEqual(project.active, True)
 
 
 class ChargeModelTestCase(TestCase):
@@ -245,14 +127,22 @@ class ChargeModelTestCase(TestCase):
     def test_charge_project_field_display(self):
         project_field = Charge._meta.get_field('project')
         self.assertEqual(project_field.verbose_name, 'project')
+        self.assertGreater(len(project_field.help_text), 0)
 
     def test_charge_start_time_field_display(self):
         start_time_field = Charge._meta.get_field('start_time')
         self.assertEqual(start_time_field.verbose_name, 'start time')
+        self.assertGreater(len(start_time_field.help_text), 0)
 
     def test_charge_end_time_field_display(self):
         end_time_field = Charge._meta.get_field('end_time')
         self.assertEqual(end_time_field.verbose_name, 'end time')
+        self.assertGreater(len(end_time_field.help_text), 0)
+
+    def test_charge_closed_field_display(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertEqual(closed_field.verbose_name, 'closed')
+        self.assertGreater(len(closed_field.help_text), 0)
 
     def test_charge_can_be_created_today(self):
         today = timezone.now().replace(hour=0, minute=0, second=0)
@@ -269,19 +159,57 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(charge.start_time, today)
         self.assertEqual(charge.end_time, None)
         self.assertEqual(charge.time_charged, timedelta_zero)
+        self.assertEqual(charge.closed, False)
 
     def test_charge_end_time_is_not_required(self):
         end_time_field = Charge._meta.get_field('end_time')
-        self.assertTrue(end_time_field.blank, True)
+        self.assertTrue(end_time_field.blank)
 
     def test_charge_end_time_is_nullable(self):
         end_time_field = Charge._meta.get_field('end_time')
-        self.assertTrue(end_time_field.null, True)
+        self.assertTrue(end_time_field.null)
+
+    def test_charge_closed_is_not_required(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertTrue(closed_field.blank)
+
+    def test_charge_closed_is_not_nullable(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertFalse(closed_field.null)
+
+    def test_charge_closed_is_false_by_default(self):
+        closed_field = Charge._meta.get_field('closed')
+        self.assertFalse(closed_field.default)
+
+    def test_cannot_save_with_inactive_project(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        inactive_project = Project(name='Test 2', active=False)
+        inactive_project.full_clean()
+        inactive_project.save()
+
+        # Should raise a keyed validation error
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=inactive_project,
+                start_time=start_datetime,
+                end_time=start_datetime + timedelta(hours=1)
+            )
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['project']), 1)
+        self.assertEqual(error_dict['project'][0].code,
+                         'project_must_be_active')
 
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
+        # Should raise a keyed validation error
         with self.assertRaises(ValidationError) as cm:
             charge = Charge(
                 project=self.project,
@@ -297,6 +225,23 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(error_dict['end_time'][0].code,
                          'end_time_must_be_on_or_after_start_time')
 
+        # Should raise a generic validation error if the end time field
+        # is excluded
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                end_time=start_datetime - timedelta(minutes=1)
+            )
+            charge.full_clean(exclude=('end_time',))
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'end_time_must_be_on_or_after_start_time')
+
     def test_cannot_create_charge_with_end_time_before_start_time__db(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
@@ -307,6 +252,76 @@ class ChargeModelTestCase(TestCase):
                 start_time=start_datetime,
                 end_time=start_datetime - timedelta(minutes=1)
             )
+
+    def test_cannot_close_charge_without_end_time(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        # Should raise a keyed validation error
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                closed=True
+            )
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['closed']), 1)
+        self.assertEqual(error_dict['closed'][0].code,
+                         'cannot_close_without_end_time')
+
+        # Should raise a generic validation error if the end time field
+        # is excluded
+        with self.assertRaises(ValidationError) as cm:
+            charge = Charge(
+                project=self.project,
+                start_time=start_datetime,
+                closed=True
+            )
+            charge.full_clean(exclude=('closed',))
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_close_without_end_time')
+
+    def test_cannot_modify_charge_when_closed(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        charge = Charge(
+            project=self.project,
+            start_time=start_datetime,
+            end_time=start_datetime + timedelta(hours=1),
+            closed=True
+        )
+
+        charge.full_clean()
+        charge.save()
+
+        # Should raise a generic validation error if attempting to
+        # save on a closed charge
+        with self.assertRaises(ValidationError) as cm:
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_modify_when_closed')
+
+        # But should be able to save the change if it is
+        # re-opening the charge
+        charge.closed = False
+        charge.full_clean()
+        charge.save()
+        self.assertEqual(charge.closed, False)
 
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = timezone.make_aware(
@@ -355,28 +370,35 @@ class ChargeModelTestCase(TestCase):
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(minutes=30)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
         charge.full_clean()
         charge.save()
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours)')
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Open]')
+
+        charge.closed = True
+        charge.full_clean()
+        charge.save()
+
+        self.assertEqual(
+            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Closed]')
 
     def test_charges_are_ordered_by_charge_date_and_start_time(self):
         ordered_charges = self.get_ordered_test_charge_list()
