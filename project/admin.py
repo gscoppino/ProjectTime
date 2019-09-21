@@ -77,6 +77,8 @@ class ChargeAdmin(admin.ModelAdmin):
 @admin.register(Project, site=admin_site)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'active',)
+    list_editable = ('active',)
+    list_filter = ('active',)
 
     @staticmethod
     def get_default_changelist_url():
