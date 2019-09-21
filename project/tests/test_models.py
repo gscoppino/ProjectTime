@@ -4,7 +4,7 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime, date, timedelta
-from ..models import Project, Task, Charge
+from ..models import Project, Charge
 
 # Create your tests here.
 
@@ -35,7 +35,7 @@ class ProjectModelTestCase(TestCase):
         project.full_clean()
         project.save()
 
-        self.assertEqual(str(project), 'Test (Active)')
+        self.assertEqual(str(project), 'Test')
 
         project.active = False
         project.full_clean()
@@ -114,199 +114,6 @@ class ProjectModelTestCase(TestCase):
         project.full_clean()
         project.save()
         self.assertEqual(project.active, True)
-
-
-class TaskModelTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.project = Project(name='Test')
-        cls.project.full_clean()
-        cls.project.save()
-
-    def test_task_project_field_display(self):
-        project_field = Task._meta.get_field('project')
-        self.assertEqual(project_field.verbose_name, 'project')
-        self.assertGreater(len(project_field.help_text), 0)
-
-    def test_task_title_field_display(self):
-        title_field = Task._meta.get_field('title')
-        self.assertEqual(title_field.verbose_name, 'title')
-        self.assertGreater(len(title_field.help_text), 0)
-
-    def test_task_deadline_field_display(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertEqual(deadline_field.verbose_name, 'deadline')
-        self.assertGreater(len(deadline_field.help_text), 0)
-
-    def test_task_done_field_display(self):
-        done_field = Task._meta.get_field('done')
-        self.assertEqual(done_field.verbose_name, 'done')
-        self.assertGreater(len(done_field.help_text), 0)
-
-    def test_task_can_be_created_today(self):
-        today = timezone.now().replace(hour=0, minute=0, second=0)
-        test_title = 'Test'
-
-        task = Task(project=self.project, deadline=today, title=test_title)
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(task.project, self.project)
-        self.assertEqual(task.deadline, today)
-        self.assertEqual(task.title, test_title)
-        self.assertEqual(task.done, False)
-
-    def test_task_is_string_serializable(self):
-        test_title = 'Do things'
-        test_deadline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-
-        task = Task(project=self.project,
-                    title=test_title)
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things')
-
-        task.deadline = test_deadline
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things (due on 2019-01-01 00:00:00+00:00)')
-
-        task.done = True
-        task.full_clean()
-        task.save()
-
-        self.assertEqual(
-            str(task), 'Test: Do things (Completed)')
-
-    def test_task_deadline_is_not_required(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertTrue(deadline_field.blank)
-
-    def test_task_deadline_is_nullable(self):
-        deadline_field = Task._meta.get_field('deadline')
-        self.assertTrue(deadline_field.null)
-
-    def test_task_done_status_is_not_required(self):
-        done_field = Task._meta.get_field('done')
-        self.assertTrue(done_field.blank)
-
-    def test_task_done_status_is_not_nullable(self):
-        done_field = Task._meta.get_field('done')
-        self.assertFalse(done_field.null)
-
-    def test_task_done_status_is_false_by_default(self):
-        done_field = Task._meta.get_field('done')
-        self.assertFalse(done_field.default)
-
-    def test_cannot_delete_project_with_associated_task(self):
-        test_title = 'Test'
-        test_deadline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-
-        task = Task(
-            project=self.project,
-            deadline=test_deadline,
-            title=test_title
-        )
-        task.full_clean()
-        task.save()
-
-        with self.assertRaises(ProtectedError):
-            self.project.delete()
-
-    def test_task_title_must_not_exceed_255_characters(self):
-        task = Task(project=self.project,
-                    deadline=timezone.make_aware(
-                        datetime(2019, 1, 1, hour=0, minute=0, second=0)),
-                    title=''.zfill(256))
-
-        with self.assertRaises(ValidationError) as cm:
-            task.full_clean()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['title']), 1)
-        self.assertEqual(error_dict['title'][0].code, 'max_length')
-
-    def test_project_name_must_not_exceed_255_characters__db(self):
-        with self.assertRaises(DataError):
-            Task.objects.create(project=self.project,
-                                deadline=timezone.make_aware(
-                                    datetime(2019, 1, 1, hour=0, minute=0, second=0)),
-                                title=''.zfill(256))
-
-    def test_cannot_modify_task_when_done(self):
-        task = Task(project=self.project,
-                    deadline=timezone.now().replace(hour=0, minute=0, second=0),
-                    title='Test',
-                    done=True)
-
-        task.full_clean()
-        task.save()
-
-        # Should raise a generic validation error if attempting to
-        # save on a closed task
-        with self.assertRaises(ValidationError) as cm:
-            task.full_clean()
-            task.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['__all__']), 1)
-        self.assertEqual(error_dict['__all__'][0].code,
-                         'cannot_modify_when_done')
-
-        # But should be able to save the change if it is
-        # re-opening the task
-        task.done = False
-        task.full_clean()
-        task.save()
-        self.assertEqual(task.done, False)
-
-    def test_task_are_ordered_by_task_date_and_done_status(self):
-        ordered_tasks = self.get_ordered_test_task_list()
-
-        self.assertQuerysetEqual(Task.objects.all(),
-                                 ordered_tasks,
-                                 transform=lambda task: task)
-
-    ### Helper Methods ###
-    def get_ordered_test_task_list(self):
-        baseline = timezone.make_aware(
-            datetime(2019, 1, 1, hour=0, minute=0, second=0))
-        plus_one_day = baseline + timedelta(days=1)
-        minus_one_day = baseline - timedelta(days=1)
-
-        ordered_dates = (minus_one_day, baseline, plus_one_day,)
-        ordered_tasks = []
-
-        for entry in ordered_dates:
-            incomplete_task = Task(
-                project=self.project,
-                deadline=entry,
-                title='Test',
-                done=False
-            )
-            incomplete_task.full_clean()
-            incomplete_task.save()
-            ordered_tasks.append(incomplete_task)
-
-            completed_task = Task(
-                project=self.project,
-                deadline=entry,
-                title='Test',
-                done=True
-            )
-            completed_task.full_clean()
-            completed_task.save()
-            ordered_tasks.append(completed_task)
-
-        return ordered_tasks
 
 
 class ChargeModelTestCase(TestCase):

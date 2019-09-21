@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import urlencode
-from .models import Project, Task, Charge
+from .models import Project, Charge
 
 
 class ProjectTimeAdminSite(admin.AdminSite):
@@ -26,8 +26,6 @@ class ProjectTimeAdminSite(admin.AdminSite):
             response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Tasks', TaskAdmin.get_default_changelist_url())
 
         return response
 
@@ -38,8 +36,6 @@ class ProjectTimeAdminSite(admin.AdminSite):
             response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
         ProjectTimeAdminSite.update_admin_url(
             response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Tasks', TaskAdmin.get_default_changelist_url())
 
         return response
 
@@ -80,7 +76,7 @@ class ChargeAdmin(admin.ModelAdmin):
 
 @admin.register(Project, site=admin_site)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'latest_charge', 'open_tasks', 'active',)
+    list_display = ('name', 'latest_charge', 'active',)
 
     @staticmethod
     def get_default_changelist_url():
@@ -90,7 +86,7 @@ class ProjectAdmin(admin.ModelAdmin):
         )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).annotate_open_task_count().annotate_latest_charge()
+        return super().get_queryset(request).annotate_latest_charge()
 
     def get_readonly_fields(self, request, obj=None):
         if obj is None or obj.active:
@@ -104,29 +100,4 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return timezone.localtime(obj.db__latest_charge).date()
 
-    def open_tasks(self, obj):
-        return obj.db__open_task_count
-
     latest_charge.admin_order_field = 'db__latest_charge'
-    open_tasks.admin_order_field = 'db__open_task_count'
-
-
-@admin.register(Task, site=admin_site)
-class TaskAdmin(admin.ModelAdmin):
-    date_hierarchy = 'deadline'
-    list_display = ('project', 'deadline', 'title', 'done',)
-    list_editable = ('done',)
-    list_filter = ('project', 'deadline', 'done',)
-
-    @staticmethod
-    def get_default_changelist_url():
-        return '{path}?{query}'.format(
-            path=reverse('admin:project_task_changelist'),
-            query=urlencode({'done__exact': 0})
-        )
-
-    def get_readonly_fields(self, request, obj=None):
-        if obj is None or not obj.done:
-            return ()
-
-        return ('project', 'deadline', 'title',)

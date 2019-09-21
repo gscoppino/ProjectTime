@@ -44,52 +44,6 @@ class Project(models.Model):
             status='' if self.active else ' (Inactive)')
 
 
-class Task(models.Model):
-    class Meta:
-        ordering = ('deadline', 'done',)
-
-    project = models.ForeignKey(
-        Project,
-        on_delete=models.PROTECT,
-        help_text='*Required: Select the project this task will be associated with.')
-
-    title = models.CharField(
-        max_length=255,
-        help_text='*Required: Enter the task that is to be done (255 characters max).')
-
-    deadline = models.DateTimeField(
-        null=True,
-        blank=True,
-        help_text='Enter the date and time at which the task is to be done.')
-
-    done = models.BooleanField(
-        blank=True,
-        default=False,
-        help_text='A completed task is disabled for modification.')
-
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-
-        if self.pk:
-            previously_done = (Task.objects.values_list('done', flat=True)
-                               .get(pk=self.pk))
-            currently_done = self.done
-
-            if previously_done and currently_done:
-                raise ValidationError(
-                    'Cannot modify when marked as done.',
-                    code='cannot_modify_when_done'
-                )
-
-    def __str__(self):
-        return '{project}: {task}{task_status}'.format(
-            project=self.project.name,
-            task=self.title,
-            task_status=' (Completed)' if self.done else ' (due on %s)' % (
-                timezone.localtime(self.deadline)) if self.deadline else ''
-        )
-
-
 class Charge(models.Model):
     objects = ChargeQuerySet.as_manager()
 
