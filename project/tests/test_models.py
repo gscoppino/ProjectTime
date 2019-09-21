@@ -198,6 +198,34 @@ class TaskModelTestCase(TestCase):
                                     datetime(2019, 1, 1, hour=0, minute=0, second=0)),
                                 title=''.zfill(256))
 
+    def test_cannot_modify_task_when_done(self):
+        task = Task(project=self.project,
+                    deadline=timezone.now().replace(hour=0, minute=0, second=0),
+                    title='Test',
+                    done=True)
+
+        task.full_clean()
+        task.save()
+
+        # Should raise a generic validation error if attempting to
+        # save on a closed task
+        with self.assertRaises(ValidationError) as cm:
+            task.full_clean()
+            task.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_modify_when_done')
+
+        # But should be able to save the change if it is
+        # re-opening the task
+        task.done = False
+        task.full_clean()
+        task.save()
+        self.assertEqual(task.done, False)
+
     def test_task_are_ordered_by_task_date_and_done_status(self):
         ordered_tasks = self.get_ordered_test_task_list()
 
@@ -282,6 +310,7 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(charge.start_time, today)
         self.assertEqual(charge.end_time, None)
         self.assertEqual(charge.time_charged, timedelta_zero)
+        self.assertEqual(charge.closed, False)
 
     def test_charge_end_time_is_not_required(self):
         end_time_field = Charge._meta.get_field('end_time')
@@ -387,6 +416,39 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(len(error_dict['__all__']), 1)
         self.assertEqual(error_dict['__all__'][0].code,
                          'cannot_close_without_end_time')
+
+    def test_cannot_modify_charge_when_closed(self):
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        charge = Charge(
+            project=self.project,
+            start_time=start_datetime,
+            end_time=start_datetime + timedelta(hours=1),
+            closed=True
+        )
+
+        charge.full_clean()
+        charge.save()
+
+        # Should raise a generic validation error if attempting to
+        # save on a closed charge
+        with self.assertRaises(ValidationError) as cm:
+            charge.full_clean()
+            charge.save()
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict['__all__']), 1)
+        self.assertEqual(error_dict['__all__'][0].code,
+                         'cannot_modify_when_closed')
+
+        # But should be able to save the change if it is
+        # re-opening the charge
+        charge.closed = False
+        charge.full_clean()
+        charge.save()
+        self.assertEqual(charge.closed, False)
 
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = timezone.make_aware(

@@ -61,6 +61,12 @@ class ChargeAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None or not obj.closed:
+            return ()
+
+        return ('project', 'start_time', 'end_time',)
+
     def time_charged(self, obj):
         return obj.db__time_charged
 
@@ -99,3 +105,9 @@ class TaskAdmin(admin.ModelAdmin):
         return reverse('admin:project_task_changelist') + '?' + urlencode({
             'done__exact': 0
         })
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is None or not obj.done:
+            return ()
+
+        return ('project', 'deadline', 'title',)

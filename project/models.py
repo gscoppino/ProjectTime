@@ -45,6 +45,20 @@ class Task(models.Model):
         default=False,
         help_text='A completed task is disabled for modification.')
 
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+
+        if self.pk:
+            previously_done = (Task.objects.values_list('done', flat=True)
+                               .get(pk=self.pk))
+            currently_done = self.done
+
+            if previously_done and currently_done:
+                raise ValidationError(
+                    'Cannot modify when marked as done.',
+                    code='cannot_modify_when_done'
+                )
+
     def __str__(self):
         return '{project}: {task}{task_status}'.format(
             project=self.project.name,
@@ -94,6 +108,17 @@ class Charge(models.Model):
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
+
+        if self.pk:
+            previously_closed = (Charge.objects.values_list('closed', flat=True)
+                                 .get(pk=self.pk))
+            currently_closed = self.closed
+
+            if previously_closed and currently_closed:
+                raise ValidationError(
+                    'Cannot modify when closed for modification.',
+                    code='cannot_modify_when_closed'
+                )
 
         if self.end_time and self.end_time < self.start_time:
             error = ValidationError(
