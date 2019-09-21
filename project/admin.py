@@ -46,7 +46,9 @@ admin_site = ProjectTimeAdminSite()
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(admin.ModelAdmin):
     date_hierarchy = 'start_time'
-    list_display = ('project', 'start_time', 'end_time', 'time_charged', 'closed',)
+    list_display = ('project', 'start_time', 'end_time',
+                    'time_charged', 'closed',)
+    list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
     change_list_template = 'charge_change_list.html'
 
@@ -89,6 +91,7 @@ class ProjectAdmin(admin.ModelAdmin):
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'deadline'
     list_display = ('project', 'deadline', 'title', 'done',)
+    list_editable = ('done',)
     list_filter = ('project', 'deadline', 'done',)
 
     @staticmethod
