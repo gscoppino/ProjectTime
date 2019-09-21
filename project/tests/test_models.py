@@ -13,6 +13,7 @@ class ProjectModelTestCase(TestCase):
     def test_project_name_field_display(self):
         name_field = Project._meta.get_field('name')
         self.assertEqual(name_field.verbose_name, 'name')
+        self.assertGreater(len(name_field.help_text), 0)
 
     def test_project_can_be_created(self):
         test_name = 'Test'
@@ -83,18 +84,22 @@ class TaskModelTestCase(TestCase):
     def test_task_project_field_display(self):
         project_field = Task._meta.get_field('project')
         self.assertEqual(project_field.verbose_name, 'project')
+        self.assertGreater(len(project_field.help_text), 0)
 
     def test_task_title_field_display(self):
         title_field = Task._meta.get_field('title')
         self.assertEqual(title_field.verbose_name, 'title')
+        self.assertGreater(len(title_field.help_text), 0)
 
     def test_task_deadline_field_display(self):
         deadline_field = Task._meta.get_field('deadline')
         self.assertEqual(deadline_field.verbose_name, 'deadline')
+        self.assertGreater(len(deadline_field.help_text), 0)
 
     def test_task_done_field_display(self):
         done_field = Task._meta.get_field('done')
         self.assertEqual(done_field.verbose_name, 'done')
+        self.assertGreater(len(done_field.help_text), 0)
 
     def test_task_can_be_created_today(self):
         today = timezone.now().replace(hour=0, minute=0, second=0)
@@ -245,18 +250,22 @@ class ChargeModelTestCase(TestCase):
     def test_charge_project_field_display(self):
         project_field = Charge._meta.get_field('project')
         self.assertEqual(project_field.verbose_name, 'project')
+        self.assertGreater(len(project_field.help_text), 0)
 
     def test_charge_start_time_field_display(self):
         start_time_field = Charge._meta.get_field('start_time')
         self.assertEqual(start_time_field.verbose_name, 'start time')
+        self.assertGreater(len(start_time_field.help_text), 0)
 
     def test_charge_end_time_field_display(self):
         end_time_field = Charge._meta.get_field('end_time')
         self.assertEqual(end_time_field.verbose_name, 'end time')
+        self.assertGreater(len(end_time_field.help_text), 0)
 
     def test_charge_closed_field_display(self):
         closed_field = Charge._meta.get_field('closed')
         self.assertEqual(closed_field.verbose_name, 'closed')
+        self.assertGreater(len(closed_field.help_text), 0)
 
     def test_charge_can_be_created_today(self):
         today = timezone.now().replace(hour=0, minute=0, second=0)
