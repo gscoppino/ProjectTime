@@ -5,20 +5,13 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime, date, timedelta
 from ..models import Project, Charge
+from .utils import validate_and_save
 
 # Create your tests here.
 
 
 def get_model_field(model_class, field_name):
     return model_class._meta.get_field(field_name)
-
-
-def validate_and_save(model_instance, clean_kwargs={}, save_kwargs={}):
-    # NOTE: This method is generic and useful enough that it could moved out into an application utility library.
-    model_instance.full_clean(**clean_kwargs)
-    model_instance.save(**save_kwargs)
-
-    return model_instance
 
 
 class ModelTestCase(TestCase):
