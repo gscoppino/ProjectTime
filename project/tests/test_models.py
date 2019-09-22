@@ -9,151 +9,149 @@ from ..models import Project, Charge
 # Create your tests here.
 
 
-class ProjectModelTestCase(TestCase):
+def get_model_field(model_class, field_name):
+    return model_class._meta.get_field(field_name)
+
+
+def validate_and_save(model_instance, clean_kwargs={}, save_kwargs={}):
+    # NOTE: This method is generic and useful enough that it could moved out into an application utility library.
+    model_instance.full_clean(**clean_kwargs)
+    model_instance.save(**save_kwargs)
+
+    return model_instance
+
+
+class ModelTestCase(TestCase):
+    def assertFailsDatabaseConstraint(self, model_class, **kwargs):
+        with self.assertRaises(IntegrityError):
+            model_class.objects.create(**kwargs)
+
+    def assertFailsDatabaseMaxLengthRestriction(self, model_class, **kwargs):
+        with self.assertRaises(DataError):
+            model_class.objects.create(**kwargs)
+
+    def assertValidationErrorOnSave(self, instance=None, field=None, error_code=None, clean_kwargs={}, save_kwargs={}):
+        with self.assertRaises(ValidationError) as cm:
+            validate_and_save(instance,
+                              clean_kwargs=clean_kwargs,
+                              save_kwargs=save_kwargs)
+
+        error_dict = cm.exception.error_dict
+        self.assertEqual(len(error_dict.keys()), 1)
+        self.assertEqual(len(error_dict[field]), 1)
+        self.assertEqual(error_dict[field][0].code, error_code)
+
+
+class ProjectModelTestCase(ModelTestCase):
     def test_project_name_field_display(self):
-        name_field = Project._meta.get_field('name')
-        self.assertEqual(name_field.verbose_name, 'name')
-        self.assertGreater(len(name_field.help_text), 0)
+        field = get_model_field(Project, 'name')
+        self.assertEqual(field.verbose_name, 'name')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_project_active_field_display(self):
-        active_field = Project._meta.get_field('active')
-        self.assertEqual(active_field.verbose_name, 'active')
-        self.assertGreater(len(active_field.help_text), 0)
+        field = get_model_field(Project, 'active')
+        self.assertEqual(field.verbose_name, 'active')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_project_can_be_created(self):
         test_name = 'Test'
-
-        project = Project(name=test_name)
-        project.full_clean()
-        project.save()
+        project = validate_and_save(Project(name=test_name))
 
         self.assertEqual(project.name, test_name)
         self.assertEqual(project.active, True)
 
     def test_project_is_string_serializable(self):
-        project = Project(name='Test')
-        project.full_clean()
-        project.save()
+        project = validate_and_save(Project(name='Test'))
 
         self.assertEqual(str(project), 'Test')
 
         project.active = False
-        project.full_clean()
-        project.save()
+        validate_and_save(project)
 
         self.assertEqual(str(project), 'Test (Inactive)')
 
     def test_project_name_must_not_exceed_255_characters(self):
-        project = Project(name=''.zfill(256))
-
-        with self.assertRaises(ValidationError) as cm:
-            project.full_clean()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['name']), 1)
-        self.assertEqual(error_dict['name'][0].code, 'max_length')
+        self.assertValidationErrorOnSave(instance=Project(name=''.zfill(256)),
+                                         field='name',
+                                         error_code='max_length')
 
     def test_project_name_must_not_exceed_255_characters__db(self):
-        with self.assertRaises(DataError):
-            Project.objects.create(name=''.zfill(256))
+        self.assertFailsDatabaseMaxLengthRestriction(
+            Project,
+            name=''.zfill(256))
 
     def test_project_name_must_be_unique(self):
         test_name = 'Test'
 
-        project1 = Project(name=test_name)
-        project1.full_clean()
-        project1.save()
-
-        with self.assertRaises(ValidationError) as cm:
-            project2 = Project(name=test_name)
-            project2.full_clean()
-            project2.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['name']), 1)
-        self.assertEqual(error_dict['name'][0].code, 'unique')
+        validate_and_save(Project(name=test_name))
+        self.assertValidationErrorOnSave(instance=Project(name=test_name),
+                                         field='name',
+                                         error_code='unique')
 
     def test_project_name_must_be_unique__db(self):
         test_name = 'Test'
 
-        Project.objects.create(name=test_name)
-
-        with self.assertRaises(IntegrityError):
-            Project.objects.create(name=test_name)
+        validate_and_save(Project(name=test_name))
+        self.assertFailsDatabaseConstraint(Project, name=test_name)
 
     def test_project_active_is_not_required(self):
-        active_field = Project._meta.get_field('active')
+        active_field = get_model_field(Project, 'active')
         self.assertEqual(active_field.blank, True)
 
     def test_project_active_is_true_by_default(self):
-        active_field = Project._meta.get_field('active')
+        active_field = get_model_field(Project, 'active')
         self.assertEqual(active_field.default, True)
 
     def test_cannot_modify_project_when_inactive(self):
-        project = Project(name='Test', active=False)
-        project.full_clean()
-        project.save()
+        project = validate_and_save(Project(name='Test', active=False))
 
         # Should raise a generic validation error if attempting to
         # save on a inactive project
-        with self.assertRaises(ValidationError) as cm:
-            project.full_clean()
-            project.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['__all__']), 1)
-        self.assertEqual(error_dict['__all__'][0].code,
-                         'cannot_modify_when_inactive')
+        self.assertValidationErrorOnSave(instance=project,
+                                         field='__all__',
+                                         error_code='cannot_modify_when_inactive')
 
         # But should be able to save the change if it is
         # re-opening the project
         project.active = True
-        project.full_clean()
-        project.save()
+        validate_and_save(project)
         self.assertEqual(project.active, True)
 
 
-class ChargeModelTestCase(TestCase):
+class ChargeModelTestCase(ModelTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.project = Project(name='Test')
-        cls.project.full_clean()
-        cls.project.save()
+        cls.project = validate_and_save(Project(name='Test'))
 
     def test_charge_project_field_display(self):
-        project_field = Charge._meta.get_field('project')
-        self.assertEqual(project_field.verbose_name, 'project')
-        self.assertGreater(len(project_field.help_text), 0)
+        field = get_model_field(Charge, 'project')
+        self.assertEqual(field.verbose_name, 'project')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_charge_start_time_field_display(self):
-        start_time_field = Charge._meta.get_field('start_time')
-        self.assertEqual(start_time_field.verbose_name, 'start time')
-        self.assertGreater(len(start_time_field.help_text), 0)
+        field = get_model_field(Charge, 'start_time')
+        self.assertEqual(field.verbose_name, 'start time')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_charge_end_time_field_display(self):
-        end_time_field = Charge._meta.get_field('end_time')
-        self.assertEqual(end_time_field.verbose_name, 'end time')
-        self.assertGreater(len(end_time_field.help_text), 0)
+        field = get_model_field(Charge, 'end_time')
+        self.assertEqual(field.verbose_name, 'end time')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_charge_closed_field_display(self):
-        closed_field = Charge._meta.get_field('closed')
-        self.assertEqual(closed_field.verbose_name, 'closed')
-        self.assertGreater(len(closed_field.help_text), 0)
+        field = get_model_field(Charge, 'closed')
+        self.assertEqual(field.verbose_name, 'closed')
+        self.assertGreater(len(field.help_text), 0)
 
     def test_charge_can_be_created_today(self):
         today = timezone.now().replace(hour=0, minute=0, second=0)
         timedelta_zero = timedelta()
 
-        charge = Charge(
+        charge = validate_and_save(Charge(
             project=self.project,
             start_time=today
-        )
-        charge.full_clean()
-        charge.save()
+        ))
 
         self.assertEqual(charge.project, self.project)
         self.assertEqual(charge.start_time, today)
@@ -162,186 +160,146 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(charge.closed, False)
 
     def test_charge_end_time_is_not_required(self):
-        end_time_field = Charge._meta.get_field('end_time')
+        end_time_field = get_model_field(Charge, 'end_time')
         self.assertTrue(end_time_field.blank)
 
     def test_charge_end_time_is_nullable(self):
-        end_time_field = Charge._meta.get_field('end_time')
+        end_time_field = get_model_field(Charge, 'end_time')
         self.assertTrue(end_time_field.null)
 
     def test_charge_closed_is_not_required(self):
-        closed_field = Charge._meta.get_field('closed')
+        closed_field = get_model_field(Charge, 'closed')
         self.assertTrue(closed_field.blank)
 
     def test_charge_closed_is_not_nullable(self):
-        closed_field = Charge._meta.get_field('closed')
+        closed_field = get_model_field(Charge, 'closed')
         self.assertFalse(closed_field.null)
 
     def test_charge_closed_is_false_by_default(self):
-        closed_field = Charge._meta.get_field('closed')
+        closed_field = get_model_field(Charge, 'closed')
         self.assertFalse(closed_field.default)
 
     def test_cannot_save_with_inactive_project(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        inactive_project = Project(name='Test 2', active=False)
-        inactive_project.full_clean()
-        inactive_project.save()
+        inactive_project = validate_and_save(Project(
+            name='Test 2',
+            active=False))
 
         # Should raise a keyed validation error
-        with self.assertRaises(ValidationError) as cm:
-            charge = Charge(
+        self.assertValidationErrorOnSave(
+            instance=Charge(
                 project=inactive_project,
                 start_time=start_datetime,
                 end_time=start_datetime + timedelta(hours=1)
-            )
-            charge.full_clean()
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['project']), 1)
-        self.assertEqual(error_dict['project'][0].code,
-                         'project_must_be_active')
+            ),
+            field='project',
+            error_code='project_must_be_active')
 
     def test_cannot_create_charge_with_end_time_before_start_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         # Should raise a keyed validation error
-        with self.assertRaises(ValidationError) as cm:
-            charge = Charge(
+        self.assertValidationErrorOnSave(
+            instance=Charge(
                 project=self.project,
                 start_time=start_datetime,
                 end_time=start_datetime - timedelta(minutes=1)
-            )
-            charge.full_clean()
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['end_time']), 1)
-        self.assertEqual(error_dict['end_time'][0].code,
-                         'end_time_must_be_on_or_after_start_time')
+            ),
+            field='end_time',
+            error_code='end_time_must_be_on_or_after_start_time')
 
         # Should raise a generic validation error if the end time field
         # is excluded
-        with self.assertRaises(ValidationError) as cm:
-            charge = Charge(
+        self.assertValidationErrorOnSave(
+            instance=Charge(
                 project=self.project,
                 start_time=start_datetime,
                 end_time=start_datetime - timedelta(minutes=1)
-            )
-            charge.full_clean(exclude=('end_time',))
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['__all__']), 1)
-        self.assertEqual(error_dict['__all__'][0].code,
-                         'end_time_must_be_on_or_after_start_time')
+            ),
+            clean_kwargs={'exclude': ('end_time',)},
+            field='__all__',
+            error_code='end_time_must_be_on_or_after_start_time')
 
     def test_cannot_create_charge_with_end_time_before_start_time__db(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        with self.assertRaises(IntegrityError):
-            Charge.objects.create(
-                project=self.project,
-                start_time=start_datetime,
-                end_time=start_datetime - timedelta(minutes=1)
-            )
+        self.assertFailsDatabaseConstraint(
+            Charge,
+            project=self.project,
+            start_time=start_datetime,
+            end_time=start_datetime - timedelta(minutes=1))
 
     def test_cannot_close_charge_without_end_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         # Should raise a keyed validation error
-        with self.assertRaises(ValidationError) as cm:
-            charge = Charge(
+        self.assertValidationErrorOnSave(
+            instance=Charge(
                 project=self.project,
                 start_time=start_datetime,
                 closed=True
-            )
-            charge.full_clean()
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['closed']), 1)
-        self.assertEqual(error_dict['closed'][0].code,
-                         'cannot_close_without_end_time')
+            ),
+            field='closed',
+            error_code='cannot_close_without_end_time')
 
         # Should raise a generic validation error if the end time field
         # is excluded
-        with self.assertRaises(ValidationError) as cm:
-            charge = Charge(
+        self.assertValidationErrorOnSave(
+            instance=Charge(
                 project=self.project,
                 start_time=start_datetime,
                 closed=True
-            )
-            charge.full_clean(exclude=('closed',))
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['__all__']), 1)
-        self.assertEqual(error_dict['__all__'][0].code,
-                         'cannot_close_without_end_time')
+            ),
+            clean_kwargs={'exclude': ('closed',)},
+            field='__all__',
+            error_code='cannot_close_without_end_time')
 
     def test_cannot_close_without_end_time__db(self):
-        with self.assertRaises(IntegrityError):
-            Charge.objects.create(
-                project=self.project,
-                start_time=timezone.make_aware(
-                    datetime(2019, 1, 1, hour=8, minute=0, second=0)),
-                closed=True
-            )
+        self.assertFailsDatabaseConstraint(
+            Charge,
+            project=self.project,
+            start_time=timezone.make_aware(
+                datetime(2019, 1, 1, hour=8, minute=0, second=0)),
+            closed=True
+        )
 
     def test_cannot_modify_charge_when_closed(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        charge = Charge(
+        charge = validate_and_save(Charge(
             project=self.project,
             start_time=start_datetime,
             end_time=start_datetime + timedelta(hours=1),
             closed=True
-        )
-
-        charge.full_clean()
-        charge.save()
+        ))
 
         # Should raise a generic validation error if attempting to
         # save on a closed charge
-        with self.assertRaises(ValidationError) as cm:
-            charge.full_clean()
-            charge.save()
-
-        error_dict = cm.exception.error_dict
-        self.assertEqual(len(error_dict.keys()), 1)
-        self.assertEqual(len(error_dict['__all__']), 1)
-        self.assertEqual(error_dict['__all__'][0].code,
-                         'cannot_modify_when_closed')
+        self.assertValidationErrorOnSave(
+            instance=charge,
+            field='__all__',
+            error_code='cannot_modify_when_closed')
 
         # But should be able to save the change if it is
         # re-opening the charge
         charge.closed = False
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
         self.assertEqual(charge.closed, False)
 
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        charge = Charge(
+        validate_and_save(Charge(
             project=self.project,
             start_time=start_datetime
-        )
-        charge.full_clean()
-        charge.save()
+        ))
 
         with self.assertRaises(ProtectedError):
             self.project.delete()
@@ -352,18 +310,15 @@ class ChargeModelTestCase(TestCase):
         timedelta_zero = timedelta()
         added_time = timedelta(minutes=30)
 
-        charge = Charge(
+        charge = validate_and_save(Charge(
             project=self.project,
             start_time=start_datetime
-        )
-        charge.full_clean()
-        charge.save()
+        ))
 
         self.assertEqual(charge.time_charged, timedelta_zero)
 
         charge.end_time = start_datetime + added_time
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
 
         self.assertEqual(charge.time_charged, added_time)
 
@@ -371,40 +326,34 @@ class ChargeModelTestCase(TestCase):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        charge = Charge(
+        charge = validate_and_save(Charge(
             project=self.project,
             start_time=start_datetime
-        )
-        charge.full_clean()
-        charge.save()
+        ))
 
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(minutes=30)
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
 
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1)
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
 
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
 
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Open]')
 
         charge.closed = True
-        charge.full_clean()
-        charge.save()
+        validate_and_save(charge)
 
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Closed]')
@@ -451,25 +400,24 @@ class ChargeModelTestCase(TestCase):
 
     ### Helper Methods ###
 
-    def create_test_charges(self, charge_timedeltas):
+    @classmethod
+    def create_test_charges(cls, charge_timedeltas):
         next_charge_start_datetime = timezone.make_aware(datetime(
             2019, 1, 1, hour=0, minute=0, second=0))
         charges = []
 
         for charge_time in charge_timedeltas:
             charge_end_datetime = next_charge_start_datetime + charge_time
-            charge = Charge(
-                project=self.project,
+            charges.append(validate_and_save(Charge(
+                project=cls.project,
                 start_time=next_charge_start_datetime,
                 end_time=charge_end_datetime
-            )
-            charge.full_clean()
-            charge.save()
-            charges.append(charge)
+            )))
 
             next_charge_start_datetime = charge_end_datetime
 
-    def get_ordered_test_charge_list(self):
+    @classmethod
+    def get_ordered_test_charge_list(cls):
         baseline = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
         plus_one_hour = baseline + timedelta(hours=1)
@@ -482,13 +430,9 @@ class ChargeModelTestCase(TestCase):
         ordered_charges = []
 
         for entry in ordered_datetimes:
-            charge = Charge(
-                project=self.project,
+            ordered_charges.append(validate_and_save(Charge(
+                project=cls.project,
                 start_time=entry
-            )
-            charge.full_clean()
-            charge.save()
-
-            ordered_charges.append(charge)
+            )))
 
         return ordered_charges
