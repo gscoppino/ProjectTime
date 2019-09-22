@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime, date, timedelta
 from ..models import Project, Charge
+from ..querysets import ProjectQuerySet, ChargeQuerySet
 from .utils import validate_and_save
 
 # Create your tests here.
@@ -36,6 +37,10 @@ class ModelTestCase(TestCase):
 
 
 class ProjectModelTestCase(ModelTestCase):
+    def test_project_has_custom_queryset_manager(self):
+        self.assertQuerysetEqual(Project.objects.get_queryset(),
+                                 ProjectQuerySet(model=Project))
+
     def test_project_name_field_display(self):
         field = get_model_field(Project, 'name')
         self.assertEqual(field.verbose_name, 'name')
@@ -116,6 +121,10 @@ class ChargeModelTestCase(ModelTestCase):
     @classmethod
     def setUpTestData(cls):
         cls.project = validate_and_save(Project(name='Test'))
+
+    def test_charge_has_custom_queryset_manager(self):
+        self.assertQuerysetEqual(Charge.objects.get_queryset(),
+                                 ChargeQuerySet(model=Charge))
 
     def test_charge_project_field_display(self):
         field = get_model_field(Charge, 'project')
