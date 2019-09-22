@@ -55,6 +55,11 @@ class Charge(models.Model):
                 name='end_time_must_be_on_or_after_start_time',
                 check=models.Q(end_time__gte=models.F('start_time'))
             ),
+            models.CheckConstraint(
+                name='cannot_close_without_end_time',
+                check=~((models.Q(closed__exact=True)) &
+                        (models.Q(end_time__exact=None)))
+            )
         )
 
     project = models.ForeignKey(

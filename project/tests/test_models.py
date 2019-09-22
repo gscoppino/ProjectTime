@@ -290,6 +290,15 @@ class ChargeModelTestCase(TestCase):
         self.assertEqual(error_dict['__all__'][0].code,
                          'cannot_close_without_end_time')
 
+    def test_cannot_close_without_end_time__db(self):
+        with self.assertRaises(IntegrityError):
+            Charge.objects.create(
+                project=self.project,
+                start_time=timezone.make_aware(
+                    datetime(2019, 1, 1, hour=8, minute=0, second=0)),
+                closed=True
+            )
+
     def test_cannot_modify_charge_when_closed(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
