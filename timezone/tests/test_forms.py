@@ -8,8 +8,8 @@ from timezone.forms import TimezoneForm
 class TimezoneFormTestCase(SimpleTestCase):
     def test_timezone_field_label(self):
         form = TimezoneForm()
-        timezone_field = form.fields['timezone'].get_bound_field(
-            form, 'timezone')
+        timezone_field = (form.fields['timezone']
+                          .get_bound_field(form, 'timezone'))
 
         self.assertEqual(timezone_field.label, 'Timezone')
 
