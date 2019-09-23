@@ -1,3 +1,4 @@
+import types
 from datetime import timedelta
 from django.http import HttpRequest
 from django.test import TestCase
@@ -19,6 +20,13 @@ class ProjectModelAdminTestCase(TestCase):
 
         for project in qs:
             self.assertTrue(hasattr(project, 'db__latest_charge'))
+
+    def test_latest_charge_is_set_as_computed_field(self):
+        self.assertTrue('latest_charge' in self.model_admin.list_display)
+        obj = types.SimpleNamespace()
+        obj.db__latest_charge = timezone.now()
+        self.assertEqual(self.model_admin.latest_charge(obj), timezone.now().date())
+        obj.db__latest_charge = 'Test'
 
     def test_all_change_fields_are_editable_when_creating_new_project(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
@@ -48,6 +56,9 @@ class ChargeModelAdminTestCase(TestCase):
         # This property configures the admin to support browsing
         # through Charge records via a more granular date picker.
         self.assertEqual(self.model_admin.date_hierarchy, 'start_time')
+    
+    def test_change_list_template_is_overwritten_to_show_total_time_charged(self):
+        self.assertEqual(self.model_admin.change_list_template, 'charge_change_list.html')
 
     def test_queryset_is_annotated_with_time_charged(self):
         validate_and_save(Charge(project=self.project,
@@ -59,6 +70,12 @@ class ChargeModelAdminTestCase(TestCase):
 
         for charge in qs:
             self.assertTrue(hasattr(charge, 'db__time_charged'))
+    
+    def test_time_charged_is_set_as_computed_field(self):
+        self.assertTrue('time_charged' in self.model_admin.list_display)
+        obj = types.SimpleNamespace()
+        obj.db__time_charged = 'Test'
+        self.assertEqual(self.model_admin.time_charged(obj), 'Test')
 
     def test_all_change_fields_are_editable_when_creating_new_charge(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest,
