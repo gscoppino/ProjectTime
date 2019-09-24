@@ -4,6 +4,12 @@ from django.utils import timezone
 from django.utils.http import urlencode
 from .models import Project, Charge
 
+def with_attrs(**attrs):
+    def with_attrs(f):
+        for k,v in attrs.items():
+            setattr(f, k, v)
+        return f
+    return with_attrs
 
 class ProjectTimeAdminSite(admin.AdminSite):
     site_title = 'ProjectTime'
@@ -74,10 +80,9 @@ class ChargeAdmin(admin.ModelAdmin):
         else:
             return ()
 
+    @with_attrs(admin_order_field='db__time_charged')
     def time_charged(self, obj):
         return obj.db__time_charged
-
-    time_charged.admin_order_field = 'db__time_charged'
 
 
 @admin.register(Project, site=admin_site)
@@ -102,10 +107,9 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return ('name',)
 
+    @with_attrs(admin_order_field='db__latest_charge')
     def latest_charge(self, obj):
         if not obj.db__latest_charge:
             return None
 
         return timezone.localtime(obj.db__latest_charge).date()
-
-    latest_charge.admin_order_field = 'db__latest_charge'

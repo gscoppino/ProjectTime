@@ -27,6 +27,10 @@ class ProjectModelAdminTestCase(TestCase):
         obj.db__latest_charge = timezone.now()
         self.assertEqual(self.model_admin.latest_charge(obj), timezone.now().date())
         obj.db__latest_charge = 'Test'
+    
+    def test_latest_charge_computed_field_has_ordering_specified(self):
+        self.assertTrue(hasattr(self.model_admin.latest_charge,
+                                'admin_order_field'))
 
     def test_all_change_fields_are_editable_when_creating_new_project(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
@@ -76,6 +80,10 @@ class ChargeModelAdminTestCase(TestCase):
         obj = types.SimpleNamespace()
         obj.db__time_charged = 'Test'
         self.assertEqual(self.model_admin.time_charged(obj), 'Test')
+    
+    def test_time_charged_computed_field_has_ordering_specified(self):
+        self.assertTrue(hasattr(self.model_admin.time_charged,
+                                'admin_order_field'))
 
     def test_all_change_fields_are_editable_when_creating_new_charge(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest,
