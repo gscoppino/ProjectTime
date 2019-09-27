@@ -3,13 +3,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import urlencode
 from .models import Project, Charge
-
-def with_attrs(**attrs):
-    def with_attrs(f):
-        for k,v in attrs.items():
-            setattr(f, k, v)
-        return f
-    return with_attrs
+from .utils import with_attrs
 
 class ProjectTimeAdminSite(admin.AdminSite):
     site_title = 'ProjectTime'
