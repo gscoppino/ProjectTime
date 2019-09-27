@@ -9,6 +9,12 @@ from .utils import validate_and_save
 
 # Simple matcher for a URL path with query parameters e.g.
 # /admin/APP_NAME/MODEL_NAME?PARAM=VALUE
+# From start to finish:
+#   1. Match one or more path segments that start with '/' and may have alphanumeric and/or unreserved characters.
+#   2. Match an optional trailing '/' after the last path segment
+#   3. Match the '?' character indicating the start of the query portion of the URL
+#   4. Match a query of the form 'key=value'. The key and value can have alphanumeric and/or unreserved characters. The value may have encoded characters as well.
+#   5. Match one or more additional queries of the form 'key=value' that start with the '&' character, with the same stipulations as step 4.
 URL_REGEX = r'^(\/[A-Za-z0-9-_.~]+)+\/?\?[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+(&[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+)*$'
 
 class ProjectModelAdminTestCase(TestCase):
