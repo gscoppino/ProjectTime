@@ -7,10 +7,19 @@ from ..admin import ProjectAdmin, ChargeAdmin, admin_site
 from ..models import Project, Charge
 from .utils import validate_and_save
 
+# Simple matcher for a URL path with query parameters e.g.
+# /admin/APP_NAME/MODEL_NAME?PARAM=VALUE
+URL_REGEX = r'^(\/[A-Za-z0-9-_.~]+)+\/?\?[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+(&[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+)*$'
 
 class ProjectModelAdminTestCase(TestCase):
     def setUp(self):
         self.model_admin = ProjectAdmin(model=Project, admin_site=admin_site)
+    
+    def test_changelist_url(self):
+        return self.assertRegex(
+            ProjectAdmin.get_default_changelist_url(),
+            URL_REGEX
+        )
 
     def test_queryset_is_annotated_with_latest_charge(self):
         validate_and_save(Project(name='Test'))
@@ -55,6 +64,12 @@ class ChargeModelAdminTestCase(TestCase):
     def setUp(self):
         self.project = validate_and_save(Project(name='Test'))
         self.model_admin = ChargeAdmin(model=Charge, admin_site=admin_site)
+
+    def test_changelist_url(self):
+        return self.assertRegex(
+            ProjectAdmin.get_default_changelist_url(),
+            URL_REGEX
+        )
     
     def test_date_hierarchy_is_set_to_start_time(self):
         # This property configures the admin to support browsing
