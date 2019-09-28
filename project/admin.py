@@ -5,6 +5,7 @@ from django.utils.http import urlencode
 from .models import Project, Charge
 from .utils import with_attrs
 
+
 class ProjectTimeAdminSite(admin.AdminSite):
     site_title = 'ProjectTime'
     site_header = 'ProjectTime'
@@ -23,9 +24,16 @@ class ProjectTimeAdminSite(admin.AdminSite):
         response = super().index(request, extra_context)
 
         ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
+            response.context_data['app_list'],
+            'project',
+            'Projects',
+            ProjectAdmin.get_default_changelist_url())
+
         ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+            response.context_data['app_list'],
+            'project',
+            'Charges',
+            ChargeAdmin.get_default_changelist_url())
 
         return response
 
@@ -33,9 +41,16 @@ class ProjectTimeAdminSite(admin.AdminSite):
         response = super().app_index(request, app_label, extra_context)
 
         ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Projects', ProjectAdmin.get_default_changelist_url())
+            response.context_data['app_list'],
+            'project',
+            'Projects',
+            ProjectAdmin.get_default_changelist_url())
+
         ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'], 'project', 'Charges', ChargeAdmin.get_default_changelist_url())
+            response.context_data['app_list'],
+            'project',
+            'Charges',
+            ChargeAdmin.get_default_changelist_url())
 
         return response
 
