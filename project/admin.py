@@ -66,6 +66,7 @@ class ChargeAdmin(admin.ModelAdmin):
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
     change_list_template = 'charge_change_list.html'
+    change_form_template = 'charge_change_form.html'
 
     @staticmethod
     def get_default_changelist_url():
@@ -99,6 +100,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
+    change_form_template = "project_change_form.html"
 
     @staticmethod
     def get_default_changelist_url():
