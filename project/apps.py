@@ -7,4 +7,4 @@ class ProjectAppConfig(AppConfig):
 
 
 class ProjectAdminConfig(AdminConfig):
-    default_site = 'project.admin.ProjectTimeAdminSite'
+    default_site = 'project.site.ProjectTimeAdminSite'

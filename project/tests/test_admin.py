@@ -7,25 +7,18 @@ from ..admin import ProjectAdmin, ChargeAdmin, admin_site
 from ..models import Project, Charge
 from .utils import validate_and_save
 
-# Simple matcher for a URL path with query parameters e.g.
-# /admin/APP_NAME/MODEL_NAME?PARAM=VALUE
-# From start to finish:
-#   1. Match one or more path segments that start with '/' and may have alphanumeric and/or unreserved characters.
-#   2. Match an optional trailing '/' after the last path segment
-#   3. Match the '?' character indicating the start of the query portion of the URL
-#   4. Match a query of the form 'key=value'. The key and value can have alphanumeric and/or unreserved characters. The value may have encoded characters as well.
-#   5. Match one or more additional queries of the form 'key=value' that start with the '&' character, with the same stipulations as step 4.
-URL_REGEX = r'^(\/[A-Za-z0-9-_.~]+)+\/?\?[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+(&[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+)*$'
 
 class ProjectModelAdminTestCase(TestCase):
     def setUp(self):
         self.model_admin = ProjectAdmin(model=Project, admin_site=admin_site)
-    
-    def test_changelist_url(self):
-        return self.assertRegex(
-            ProjectAdmin.get_default_changelist_url(),
-            URL_REGEX
-        )
+
+    def test_changelist_shows_only_active_projects_by_default(self):
+        self.assertEqual(self.model_admin.default_filters,
+                         {'active__exact': 1})
+
+    def test_change_form_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_form_template,
+                         'change_form.html')
 
     def test_queryset_is_annotated_with_latest_charge(self):
         validate_and_save(Project(name='Test'))
@@ -40,9 +33,10 @@ class ProjectModelAdminTestCase(TestCase):
         self.assertTrue('latest_charge' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
         obj.db__latest_charge = timezone.now()
-        self.assertEqual(self.model_admin.latest_charge(obj), timezone.now().date())
+        self.assertEqual(self.model_admin.latest_charge(obj),
+                         timezone.now().date())
         obj.db__latest_charge = 'Test'
-    
+
     def test_latest_charge_computed_field_has_ordering_specified(self):
         self.assertTrue(hasattr(self.model_admin.latest_charge,
                                 'admin_order_field'))
@@ -71,19 +65,22 @@ class ChargeModelAdminTestCase(TestCase):
         self.project = validate_and_save(Project(name='Test'))
         self.model_admin = ChargeAdmin(model=Charge, admin_site=admin_site)
 
-    def test_changelist_url(self):
-        return self.assertRegex(
-            ProjectAdmin.get_default_changelist_url(),
-            URL_REGEX
-        )
-    
+    def test_changelist_shows_only_unclosed_charges_by_default(self):
+        self.assertEqual(self.model_admin.default_filters,
+                         {'closed__exact': 0})
+
     def test_date_hierarchy_is_set_to_start_time(self):
         # This property configures the admin to support browsing
         # through Charge records via a more granular date picker.
         self.assertEqual(self.model_admin.date_hierarchy, 'start_time')
-    
-    def test_change_list_template_is_overwritten_to_show_total_time_charged(self):
-        self.assertEqual(self.model_admin.change_list_template, 'charge_change_list.html')
+
+    def test_change_list_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_list_template,
+                         'charge_change_list.html')
+
+    def test_change_form_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_form_template,
+                         'change_form.html')
 
     def test_queryset_is_annotated_with_time_charged(self):
         validate_and_save(Charge(project=self.project,
@@ -95,13 +92,13 @@ class ChargeModelAdminTestCase(TestCase):
 
         for charge in qs:
             self.assertTrue(hasattr(charge, 'db__time_charged'))
-    
+
     def test_time_charged_is_set_as_computed_field(self):
         self.assertTrue('time_charged' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
         obj.db__time_charged = 'Test'
         self.assertEqual(self.model_admin.time_charged(obj), 'Test')
-    
+
     def test_time_charged_computed_field_has_ordering_specified(self):
         self.assertTrue(hasattr(self.model_admin.time_charged,
                                 'admin_order_field'))

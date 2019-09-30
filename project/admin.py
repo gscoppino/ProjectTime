@@ -1,79 +1,22 @@
 from django.contrib import admin
-from django.urls import reverse
 from django.utils import timezone
-from django.utils.http import urlencode
+from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
+from .mixins import ModelAdminDefaultFilterMixin
 from .models import Project, Charge
+from .site import admin_site
 from .utils import with_attrs
 
 
-class ProjectTimeAdminSite(admin.AdminSite):
-    site_title = 'ProjectTime'
-    site_header = 'ProjectTime'
-    index_title = 'ProjectTime Administration'
-
-    @staticmethod
-    def update_admin_url(app_list, app_label, model_name, url):
-        for app in app_list:
-            if app['app_label'] == app_label:
-                for model in app['models']:
-                    if model['name'] == model_name:
-                        model['admin_url'] = url
-                        break
-
-    def index(self, request, extra_context=None):
-        response = super().index(request, extra_context)
-
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'],
-            'project',
-            'Projects',
-            ProjectAdmin.get_default_changelist_url())
-
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'],
-            'project',
-            'Charges',
-            ChargeAdmin.get_default_changelist_url())
-
-        return response
-
-    def app_index(self, request, app_label, extra_context=None):
-        response = super().app_index(request, app_label, extra_context)
-
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'],
-            'project',
-            'Projects',
-            ProjectAdmin.get_default_changelist_url())
-
-        ProjectTimeAdminSite.update_admin_url(
-            response.context_data['app_list'],
-            'project',
-            'Charges',
-            ChargeAdmin.get_default_changelist_url())
-
-        return response
-
-
-admin_site = ProjectTimeAdminSite()
-
-
 @admin.register(Charge, site=admin_site)
-class ChargeAdmin(admin.ModelAdmin):
+class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     date_hierarchy = 'start_time'
     list_display = ('project', 'start_time', 'end_time',
                     'time_charged', 'closed',)
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
     change_list_template = 'charge_change_list.html'
-    change_form_template = 'charge_change_form.html'
-
-    @staticmethod
-    def get_default_changelist_url():
-        return '{path}?{query}'.format(
-            path=reverse('admin:project_charge_changelist'),
-            query=urlencode({'closed__exact': 0})
-        )
+    change_form_template = 'change_form.html'
+    default_filters = DEFAULT_CHARGE_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
@@ -96,18 +39,12 @@ class ChargeAdmin(admin.ModelAdmin):
 
 
 @admin.register(Project, site=admin_site)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
-    change_form_template = "project_change_form.html"
-
-    @staticmethod
-    def get_default_changelist_url():
-        return '{path}?{query}'.format(
-            path=reverse('admin:project_project_changelist'),
-            query=urlencode({'active__exact': 1})
-        )
+    change_form_template = "change_form.html"
+    default_filters = DEFAULT_PROJECT_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_latest_charge()
