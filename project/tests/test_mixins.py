@@ -23,10 +23,14 @@ class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
         test_context = {
             'app_list': [
                 {
-                    'app_label': 'test_app',
+                    'app_label': 'project',
                     'models': [
                         {
-                            'object_name': 'test_model',
+                            'object_name': 'Project',
+                            'admin_url': '/admin/test/url'
+                        },
+                        {
+                            'object_name': 'Charge',
                             'admin_url': '/admin/test/url'
                         }
                     ]
@@ -47,24 +51,35 @@ class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
 
         class TestSite(AdminSiteDefaultFilterMixin, FakeAdminSite):
             default_filters = {
-                'test_app.test_model': {'name__exact': 'name'}
+                'project.Project': {'test__exact': 'test'},
+                'project.Charge': {'test__exact': 'test'}
             }
 
         testInstance = TestSite()
 
         response = testInstance.index(HttpRequest())
         app = next((app for app in response.context_data['app_list']
-                    if app['app_label'] == 'test_app'))
-        model = next((model for model in app['models']
-                      if model['object_name'] == 'test_model'))
-        self.assertRegex(model['admin_url'], URL_REGEX)
+                    if app['app_label'] == 'project'))
+
+        project_model = next((model for model in app['models']
+                              if model['object_name'] == 'Project'))
+        charge_model = next((model for model in app['models']
+                             if model['object_name'] == 'Charge'))
+
+        self.assertRegex(project_model['admin_url'], URL_REGEX)
+        self.assertRegex(charge_model['admin_url'], URL_REGEX)
 
         response = testInstance.app_index(HttpRequest(), 'fake_app_label')
         app = next((app for app in response.context_data['app_list']
-                    if app['app_label'] == 'test_app'))
-        model = next((model for model in app['models']
-                      if model['object_name'] == 'test_model'))
-        self.assertRegex(model['admin_url'], URL_REGEX)
+                    if app['app_label'] == 'project'))
+
+        project_model = next((model for model in app['models']
+                              if model['object_name'] == 'Project'))
+        charge_model = next((model for model in app['models']
+                             if model['object_name'] == 'Charge'))
+
+        self.assertRegex(project_model['admin_url'], URL_REGEX)
+        self.assertRegex(charge_model['admin_url'], URL_REGEX)
 
 
 class ModelAdminDefaultFilterMixinTestCase(SimpleTestCase):
@@ -78,17 +93,20 @@ class ModelAdminDefaultFilterMixinTestCase(SimpleTestCase):
             def change_view(self, request, object_id, form_url='', extra_context=None):
                 assertRegex(extra_context['changelist_url'], URL_REGEX)
 
-        class TestAdmin(ModelAdminDefaultFilterMixin, FakeModelAdmin):
-            pass
+        class ProjectTestAdmin(ModelAdminDefaultFilterMixin, FakeModelAdmin):
+            model = Project
+            default_filters = {'query_param': 'value'}
+        
+        class ChargeTestAdmin(ModelAdminDefaultFilterMixin, FakeModelAdmin):
+            model = Charge
+            default_filters = {'query_param': 'value'}
 
-        testInstance = TestAdmin()
+        testInstance = ProjectTestAdmin()
 
-        testInstance.model = Project
-        testInstance.default_filters = {'query_param': 'value'}
         testInstance.add_view(HttpRequest())
         testInstance.change_view(HttpRequest(), 0)
 
-        testInstance.model = Charge
-        testInstance.default_filters = {'query_param': 'value'}
+        testInstance = ChargeTestAdmin()
+
         testInstance.add_view(HttpRequest())
         testInstance.change_view(HttpRequest(), 0)
