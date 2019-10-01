@@ -1,3 +1,4 @@
+import types
 from datetime import timedelta
 from django.http import HttpRequest
 from django.test import TestCase
@@ -11,6 +12,14 @@ class ProjectModelAdminTestCase(TestCase):
     def setUp(self):
         self.model_admin = ProjectAdmin(model=Project, admin_site=admin_site)
 
+    def test_changelist_shows_only_active_projects_by_default(self):
+        self.assertEqual(self.model_admin.default_filters,
+                         {'active__exact': 1})
+
+    def test_change_form_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_form_template,
+                         'change_form.html')
+
     def test_queryset_is_annotated_with_latest_charge(self):
         validate_and_save(Project(name='Test'))
         validate_and_save(Project(name='Test 2'))
@@ -19,6 +28,18 @@ class ProjectModelAdminTestCase(TestCase):
 
         for project in qs:
             self.assertTrue(hasattr(project, 'db__latest_charge'))
+
+    def test_latest_charge_is_set_as_computed_field(self):
+        self.assertTrue('latest_charge' in self.model_admin.list_display)
+        obj = types.SimpleNamespace()
+        obj.db__latest_charge = timezone.now()
+        self.assertEqual(self.model_admin.latest_charge(obj),
+                         timezone.now().date())
+        obj.db__latest_charge = 'Test'
+
+    def test_latest_charge_computed_field_has_ordering_specified(self):
+        self.assertTrue(hasattr(self.model_admin.latest_charge,
+                                'admin_order_field'))
 
     def test_all_change_fields_are_editable_when_creating_new_project(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
@@ -44,6 +65,23 @@ class ChargeModelAdminTestCase(TestCase):
         self.project = validate_and_save(Project(name='Test'))
         self.model_admin = ChargeAdmin(model=Charge, admin_site=admin_site)
 
+    def test_changelist_shows_only_unclosed_charges_by_default(self):
+        self.assertEqual(self.model_admin.default_filters,
+                         {'closed__exact': 0})
+
+    def test_date_hierarchy_is_set_to_start_time(self):
+        # This property configures the admin to support browsing
+        # through Charge records via a more granular date picker.
+        self.assertEqual(self.model_admin.date_hierarchy, 'start_time')
+
+    def test_change_list_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_list_template,
+                         'charge_change_list.html')
+
+    def test_change_form_template_is_overridden(self):
+        self.assertEqual(self.model_admin.change_form_template,
+                         'change_form.html')
+
     def test_queryset_is_annotated_with_time_charged(self):
         validate_and_save(Charge(project=self.project,
                                  start_time=timezone.now()))
@@ -54,6 +92,16 @@ class ChargeModelAdminTestCase(TestCase):
 
         for charge in qs:
             self.assertTrue(hasattr(charge, 'db__time_charged'))
+
+    def test_time_charged_is_set_as_computed_field(self):
+        self.assertTrue('time_charged' in self.model_admin.list_display)
+        obj = types.SimpleNamespace()
+        obj.db__time_charged = 'Test'
+        self.assertEqual(self.model_admin.time_charged(obj), 'Test')
+
+    def test_time_charged_computed_field_has_ordering_specified(self):
+        self.assertTrue(hasattr(self.model_admin.time_charged,
+                                'admin_order_field'))
 
     def test_all_change_fields_are_editable_when_creating_new_charge(self):
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest,
