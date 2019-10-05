@@ -79,7 +79,7 @@ platforms:
 env_specs:
   database:
     inherit_from: []
-    packages: [postgresql]
+    packages: [postgresql=11.2]
   app:
     inherit_from: [database]
     packages: [python=3.7, django=2.2, pytz, sqlparse, psycopg2]
