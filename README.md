@@ -2,6 +2,8 @@
 
 A tool that can be used to keep track of time spent on projects.
 
+[![Build Status](https://travis-ci.org/gscoppino/ProjectTime.svg?branch=master)](https://travis-ci.org/gscoppino/ProjectTime)
+
 ## Setup Notes
 
 ### Recommended
