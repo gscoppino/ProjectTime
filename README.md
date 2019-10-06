@@ -42,10 +42,10 @@ The tool can be set up to run manually without a conda environment.
 
 ## Development
 
-Run `anaconda-project run setup` to build a Conda environment with extra
-development tools such as a linter, code formatter, and interactive execution
-environment. To take advantage of these, configure your editor or IDE to use
-the `development` environment in the `envs` folder.
+Run `anaconda-project run prepare --env-spec development` to build a Conda environment
+with extra development tools such as a linter, code formatter, and interactive
+execution environment. To take advantage of these, configure your editor or IDE
+to use the `development` environment in the `envs` folder.
 
 Development workflow is the typical workflow Django project.
 Django's `django-admin` and the project `manage.py` script are aliased as
@@ -74,11 +74,11 @@ always exists, while the `anaconda-project run manage.py` commands take care of
 ensuring that the latest database migrations are always applied before the server
 is started. In addition, all Python scripts are run with deprecation warnings enabled.
 
-The development Conda environment created by `anaconda-project run setup` prepares
-a IPython kernel that can be loaded into a Jupyter Notebook, allowing for execution
-of code in the `development` environment in an interactive notebook. Run
-`anaconda-project run jupyter notebook development.ipynb` to load a notebook that
-is templated with code to load the Django project.
+The `anaconda-project run ipython-kernel-create` command prepares an IPython
+kernel that can be loaded into a Jupyter Notebook, allowing for execution of
+code in the `development` environment in an interactive notebook. Run
+`anaconda-project run jupyter notebook development.ipynb` to load a notebook
+that is templated with code to load the Django project.
 
 ## Testing
 
