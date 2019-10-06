@@ -13,6 +13,8 @@ install:
   - conda update -q conda
   - conda info -a
   - conda install anaconda-project
+  - anaconda-project prepare --env-spec database
+  - anaconda-project prepare --env-spec app
 before_script:
   - anaconda-project run postgres &
 script:
