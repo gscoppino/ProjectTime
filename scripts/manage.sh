@@ -15,7 +15,7 @@ if [ ! -e "$DB_DIRECTORY/$DB_LOCK_FILE" ]; then
     exit 1
 fi
 
-if [ "$1" == "runserver" ]; then
+if [ "$1" = "runserver" ]; then
     # Ensure the latest schema / fixtures are loaded into the database
     python -Wa manage.py migrate
 fi
