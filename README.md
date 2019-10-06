@@ -91,7 +91,6 @@ To measure code coverage when running tests, use `anaconda-project run coverage`
 When running the `coverage` command this way with no command line arguments, it
 defaults to `coverage run` on the command `manage.py test`, with some extra switches
 to include/omit files relevant to coverage, measure branch coverage, and passing
-extra flags to `manage.py test` to speed up test execution (or bail early if an
-error occurs). To generate a code coverage report afterwards, run
-`anaconda-project run coverage report`. An HTML report can be generated using
-`anaconda-project run coverage html`
+extra flag(s) to `manage.py test` to bail early if an error occurs). To
+generate a code coverage report afterwards, run `anaconda-project run coverage report`.
+An HTML report can be generated using `anaconda-project run coverage html`
