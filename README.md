@@ -82,9 +82,16 @@ that is templated with code to load the Django project.
 
 ## Testing
 
-There are no specific testing requirements but a recommendation to append
+Tests can be run with `anaconda-project run manage.py test`, consistent with how
+other management commands are run. A recommendation would be to append the
+`--parallel --failfast` switches to speed up running tests and verifying test
+behavior.
 
-`--parallel --failfast`
-
-switches when running `manage.py test` to speed up running tests and
-verifying test behavior.
+To measure code coverage when running tests, use `anaconda-project run coverage`.
+When running the `coverage` command this way with no command line arguments, it
+defaults to `coverage run` on the command `manage.py test`, with some extra switches
+to include/omit files relevant to coverage, measure branch coverage, and passing
+extra flags to `manage.py test` to speed up test execution (or bail early if an
+error occurs). To generate a code coverage report afterwards, run
+`anaconda-project run coverage report`. An HTML report can be generated using
+`anaconda-project run coverage html`
