@@ -16,6 +16,7 @@ install:
   - anaconda-project prepare --env-spec database
   - anaconda-project prepare --env-spec app
 before_script:
+  - anaconda-project run pg_ctl initdb
   - anaconda-project run postgres &
 script:
   - anaconda-project run manage.py test
