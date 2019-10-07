@@ -27,9 +27,16 @@ A tool that can be used to keep track of time spent on projects.
 
    `anaconda-project run manage.py runserver`
 
-6. Run tests:
+6. Run unit and integration tests:
 
    `anaconda-project run manage.py test --parallel --failsafe`
+
+7. Run acceptance tests:
+
+    Firefox: `anaconda-project run robot -v BROWSER:firefox test/`
+    Chrome:  `anaconda-project run robot -v BROWSER:chrome test/`
+    Firefox (headless): `anaconda-project run robot -v BROWSER:firefoxheadless test/`
+    Chrome (headless):  `anaconda-project run robot -v BROWSER:chromeheadless test/`
 
 ### Alternative Setup (Advanced)
 
@@ -43,8 +50,8 @@ The tool can be set up to run manually without a conda environment.
 ## Development
 
 Run `anaconda-project run prepare --env-spec devtools` to build a Conda environment
-with extra development tools such as a linter, code formatter, and interactive
-execution environment. To take advantage of these, configure your editor or IDE
+with extra development tools such as linter(s), code formatter(s), and interactive
+execution environment(s). To take advantage of these, configure your editor or IDE
 to use the `devtools` environment in the `envs` folder.
 
 Development workflow is the typical workflow Django project.
@@ -83,18 +90,25 @@ that is templated with code to load the Django project.
 
 ## Testing
 
-Tests can be run with `anaconda-project run manage.py test`, consistent with how
-other management commands are run. A recommendation would be to append the
-`--parallel --failfast` switches to speed up running tests and verifying test
-behavior.
+Unit and integration tests can be run with `anaconda-project run manage.py test`,
+consistent with how other management commands are run. A recommendation would
+be to append the `--parallel --failfast` switches to speed up running tests and
+verifying test behavior.
 
-To measure code coverage when running tests, use `anaconda-project run coverage`.
-When running the `coverage` command this way with no command line arguments, it
-defaults to `coverage run` on the command `manage.py test`, with some extra switches
-to include/omit files relevant to coverage, measure branch coverage, and passing
-extra flag(s) to `manage.py test` to bail early if an error occurs). To
-generate a code coverage report afterwards, run `anaconda-project run coverage report`.
-An HTML report can be generated using `anaconda-project run coverage html`
+To measure code coverage when running unit and integration tests, use
+`anaconda-project run coverage`. When running the `coverage` command this way
+with no command line arguments, it defaults to `coverage run` on the command
+`manage.py test`, with some extra switches to include/omit files relevant to
+coverage, measure branch coverage, and passing extra flag(s) to `manage.py test`
+to bail early if an error occurs). To generate a code coverage report afterwards,
+run `anaconda-project run coverage report`. An HTML report can be generated using
+`anaconda-project run coverage html`.
+
+Acceptance tests can be run with `anaconda-project run robot test/`. Variables can be
+passed using the `--variable KEY:VALUE` or `-v KEY:VALUE` flag. Use the variable
+`BROWSER` to control what browser is used to run the tests. The speed of
+execution (in seconds) can be controlled with the variable `DRIVER_SPEED_SECS`.
+The acceptance tests will automatically start/stop a test server to run against.
 
 ## Profiling
 
