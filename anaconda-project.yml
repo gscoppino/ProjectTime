@@ -27,10 +27,10 @@ description:
 commands: {
   postgres: {unix: sh scripts/postgres.sh, env_spec: database},
   pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
-  django-admin: {unix: django-admin, env_spec: app},
-  manage.py: {unix: sh scripts/manage.sh, env_spec: app},
-  coverage: {unix: sh scripts/coverage.sh, env_spec: development},
-  ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: development},
+  django-admin: {unix: django-admin, env_spec: application},
+  manage.py: {unix: sh scripts/manage.sh, env_spec: application},
+  coverage: {unix: sh scripts/coverage.sh, env_spec: devtools},
+  ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: devtools},
   jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
 }
 
@@ -60,7 +60,7 @@ downloads: {}
 # Use `anaconda-project add-packages` to add packages.
 #
 packages: []
-channels: []
+channels: [conda-forge]
 
 #
 # In the platforms section, list platforms the project should work on
@@ -81,12 +81,18 @@ platforms:
 env_specs:
   database:
     inherit_from: []
-    packages: [postgresql=11.2]
-  app:
-    inherit_from: [database]
-    packages: [python=3.7, django=2.2, pytz, sqlparse, psycopg2]
-  development:
-    inherit_from: [app]
+    packages: [postgresql=11.5]
+  application:
+    inherit_from: []
+    packages: [python=3.7, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=2.2]
+  application-debug:
+    inherit_from: [application]
+    packages: [django-debug-toolbar=2.0]
+    variables: {
+      DJANGO_SETTINGS_MODULE: "ProjectTime.settings-debug"
+    }
+  devtools:
+    inherit_from: [application-debug]
     packages: [ipykernel, pylint, pep8, autopep8, coverage]
   notebook:
     inherit_from: []
