@@ -14,7 +14,7 @@ install:
   - conda info -a
   - conda install anaconda-project
   - anaconda-project prepare --env-spec database
-  - anaconda-project prepare --env-spec app
+  - anaconda-project prepare --env-spec application
 before_script:
   - anaconda-project run pg_ctl initdb
   - anaconda-project run postgres &

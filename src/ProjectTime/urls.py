@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
+from django.conf import settings
+from django.urls import include, path
 from project.admin import admin_site
 from timezone.views import TimezoneView
 
@@ -22,3 +23,9 @@ urlpatterns = [
     path('admin/', admin_site.urls),
     path('', TimezoneView.as_view(), name='select-timezone')
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]
