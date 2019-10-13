@@ -18,5 +18,6 @@ install:
 before_script:
   - anaconda-project run pg_ctl initdb
   - anaconda-project run postgres &
+  - sleep 10
 script:
   - anaconda-project run manage.py test
