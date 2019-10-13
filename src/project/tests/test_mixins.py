@@ -1,9 +1,9 @@
 import copy
 from django.contrib import admin
 from django.db import models
-from django.http import HttpRequest
 from django.template.response import TemplateResponse
 from django.test import SimpleTestCase
+from django.test.client import RequestFactory
 from ..mixins import AdminSiteDefaultFilterMixin, ModelAdminDefaultFilterMixin
 from ..models import Project, Charge
 
@@ -57,7 +57,7 @@ class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
 
         testInstance = TestSite()
 
-        response = testInstance.index(HttpRequest())
+        response = testInstance.index(RequestFactory().get('/foo/bar'))
         app = next((app for app in response.context_data['app_list']
                     if app['app_label'] == 'project'))
 
@@ -69,7 +69,8 @@ class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
         self.assertRegex(project_model['admin_url'], URL_REGEX)
         self.assertRegex(charge_model['admin_url'], URL_REGEX)
 
-        response = testInstance.app_index(HttpRequest(), 'fake_app_label')
+        response = testInstance.app_index(
+            RequestFactory().get('/foo/bar'), 'fake_app_label')
         app = next((app for app in response.context_data['app_list']
                     if app['app_label'] == 'project'))
 
@@ -96,17 +97,17 @@ class ModelAdminDefaultFilterMixinTestCase(SimpleTestCase):
         class ProjectTestAdmin(ModelAdminDefaultFilterMixin, FakeModelAdmin):
             model = Project
             default_filters = {'query_param': 'value'}
-        
+
         class ChargeTestAdmin(ModelAdminDefaultFilterMixin, FakeModelAdmin):
             model = Charge
             default_filters = {'query_param': 'value'}
 
         testInstance = ProjectTestAdmin()
 
-        testInstance.add_view(HttpRequest())
-        testInstance.change_view(HttpRequest(), 0)
+        testInstance.add_view(RequestFactory().get('/foo/bar'))
+        testInstance.change_view(RequestFactory().get('/foo/bar'), 0)
 
         testInstance = ChargeTestAdmin()
 
-        testInstance.add_view(HttpRequest())
-        testInstance.change_view(HttpRequest(), 0)
+        testInstance.add_view(RequestFactory().get('/foo/bar'))
+        testInstance.change_view(RequestFactory().get('/foo/bar'), 0)

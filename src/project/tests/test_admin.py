@@ -18,7 +18,7 @@ class ProjectModelAdminTestCase(TestCase):
 
     def test_change_form_template_is_overridden(self):
         self.assertEqual(self.model_admin.change_form_template,
-                         'change_form.html')
+                         'admin/charge/change_form.html')
 
     def test_queryset_is_annotated_with_latest_charge(self):
         validate_and_save(Project(name='Test'))
@@ -76,11 +76,11 @@ class ChargeModelAdminTestCase(TestCase):
 
     def test_change_list_template_is_overridden(self):
         self.assertEqual(self.model_admin.change_list_template,
-                         'charge_change_list.html')
+                         'admin/charge/change_list.html')
 
     def test_change_form_template_is_overridden(self):
         self.assertEqual(self.model_admin.change_form_template,
-                         'change_form.html')
+                         'admin/charge/change_form.html')
 
     def test_queryset_is_annotated_with_time_charged(self):
         validate_and_save(Charge(project=self.project,
