@@ -14,8 +14,8 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
                     'time_charged', 'closed',)
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
-    change_list_template = 'charge_change_list.html'
-    change_form_template = 'change_form.html'
+    change_list_template = 'admin/project/charge/change_list.html'
+    change_form_template = 'admin/project/charge/change_form.html'
     default_filters = DEFAULT_CHARGE_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
@@ -43,7 +43,7 @@ class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
-    change_form_template = "change_form.html"
+    change_form_template = "admin/project/charge/change_form.html"
     default_filters = DEFAULT_PROJECT_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
