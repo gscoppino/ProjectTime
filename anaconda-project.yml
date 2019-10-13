@@ -25,10 +25,12 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {
-  setup: {unix: sh scripts/setup.sh, env_spec: development },
   postgres: {unix: sh scripts/postgres.sh, env_spec: database},
+  pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
   django-admin: {unix: django-admin, env_spec: app},
   manage.py: {unix: sh scripts/manage.sh, env_spec: app},
+  coverage: {unix: sh scripts/coverage.sh, env_spec: development},
+  ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: development},
   jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
 }
 
@@ -79,13 +81,13 @@ platforms:
 env_specs:
   database:
     inherit_from: []
-    packages: [postgresql]
+    packages: [postgresql=11.2]
   app:
     inherit_from: [database]
     packages: [python=3.7, django=2.2, pytz, sqlparse, psycopg2]
   development:
     inherit_from: [app]
-    packages: [ipykernel, pylint, pep8, autopep8]
+    packages: [ipykernel, pylint, pep8, autopep8, coverage]
   notebook:
     inherit_from: []
     packages: [python=3.7, jupyterlab]

@@ -1,0 +1,22 @@
+# Adapted from https://conda.io/projects/conda/en/latest/user-guide/tasks/use-conda-with-travis-ci.html#the-travis-yml-file
+language: python
+python:
+  - "3.7"
+before_install:
+  - sudo apt-get update
+install:
+  - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda install anaconda-project
+  - anaconda-project prepare --env-spec database
+  - anaconda-project prepare --env-spec app
+before_script:
+  - anaconda-project run pg_ctl initdb
+  - anaconda-project run postgres &
+script:
+  - anaconda-project run manage.py test

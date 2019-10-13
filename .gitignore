@@ -1,5 +1,7 @@
 .ipynb_checkpoints
+.coverage
 __pycache__
+htmlcov
 db
 envs
 kernel.json
