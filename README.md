@@ -53,9 +53,10 @@ Django's `django-admin` and the project `manage.py` script are aliased as
 
 For example, to start the server:
 
-`anaconda-project run manage.py runserver`
+1) Perform migrations: `anaconda-project run manage.py migrate`
+2) Start the server: `anaconda-project run manage.py runserver`
 
-Or to make migrations on models:
+To make migrations on models:
 
 `anaconda-project run manage.py makemigrations`
 
