@@ -59,9 +59,9 @@ Or to make migrations on models:
 
 `anaconda-project run manage.py makemigrations`
 
-And to create a new Django app:
+And to create a new Django app (in the `src` directory):
 
-`anaconda-project run django-admin startapp APP_NAME`
+`anaconda-project run django-admin startapp APP_NAME src`
 
 In addition, the `postgres` script is aliased as an `anaconda-project` command.
 
@@ -77,7 +77,7 @@ is started. In addition, all Python scripts are run with deprecation warnings en
 The `anaconda-project run ipython-kernel-create` command prepares an IPython
 kernel that can be loaded into a Jupyter Notebook, allowing for execution of
 code in the `development` environment in an interactive notebook. Run
-`anaconda-project run jupyter notebook development.ipynb` to load a notebook
+`anaconda-project run jupyter notebook src/development.ipynb` to load a notebook
 that is templated with code to load the Django project.
 
 ## Testing
