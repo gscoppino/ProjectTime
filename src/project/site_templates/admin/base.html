@@ -4,3 +4,8 @@
 {{ block.super }}
 In TZ: {{ timezone }}.
 {% endblock %}
+
+{% block userlinks %}
+<a href="{% url 'admin:dashboard' %}">View Dashboard</a> /
+{{ block.super }}
+{% endblock %}
