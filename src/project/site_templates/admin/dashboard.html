@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+</style>
+
+<h1>Monthly Summary</h1>
+
+<h2>Projects</h2>
+<form>
+    {% for project in projects %}
+    <label for="{{ project.name }}">{{ project.name }}</label>
+    <input type="checkbox" name="project" value="{{ project.pk }}" checked>
+    {% endfor %}
+
+    <button type="submit">Filter</button>
+</form>
+
+<div id="monthly-charge-summary">
+    <svg></svg>
+</div>
+
+<script type="text/javascript" src="{% static 'project/vendor/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'project/vendor/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'project/dashboard.js' %}"></script>
+{% endblock %}
