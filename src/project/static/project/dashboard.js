@@ -91,6 +91,8 @@ function initDashboard(d3, moment) {
 
         slice.append('text')
             .attr('transform', d => `translate(${arc.centroid(d)})`)
+            .attr('dx', '-3em')
+            .attr('dy', '1em')
             .text(d => `${d.data.key}: ${Number((d.data.value / totalHoursCharged) * 100).toFixed(2)}%`)
             .attr('fill', 'white');
     }
