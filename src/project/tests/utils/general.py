@@ -1,3 +1,11 @@
+from django.utils import timezone
+
+def get_start_of_today():
+    return timezone.now().replace(hour=0,
+                                  minute=0,
+                                  second=0,
+                                  microsecond=0)
+
 def validate_and_save(model_instance, clean_kwargs={}, save_kwargs={}):
     # NOTE: This method is generic and useful enough that it could moved out into an application utility library.
     model_instance.full_clean(**clean_kwargs)

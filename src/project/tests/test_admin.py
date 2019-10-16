@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 from ..admin import ProjectAdmin, ChargeAdmin, admin_site
 from ..models import Project, Charge
-from .utils import validate_and_save
+from .utils.general import validate_and_save
 
 
 class ProjectModelAdminTestCase(TestCase):

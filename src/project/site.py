@@ -38,7 +38,9 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
                  self.admin_view(self.dashboard_view),
                  name='dashboard'),
 
-            path('monthly-summary', self.admin_view(self.monthly_summary_view))
+            path('monthly-summary',
+                 self.admin_view(self.monthly_summary_view),
+                 name='dashboard-data')
         ]
 
         return extra_urls + urls

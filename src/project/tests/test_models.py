@@ -6,7 +6,8 @@ from django.utils import timezone
 from datetime import datetime, date, timedelta
 from ..models import Project, Charge
 from ..querysets import ProjectQuerySet, ChargeQuerySet
-from .utils import validate_and_save
+from .utils.general import validate_and_save
+from .utils.charge import create_test_charges
 
 # Create your tests here.
 
@@ -382,7 +383,13 @@ class ChargeModelTestCase(ModelTestCase):
             timedelta(hours=1),
         )
 
-        self.create_test_charges(charge_timedeltas)
+        create_test_charges(
+            self.project,
+            timezone.make_aware(datetime(
+                2019, 1, 1, hour=0, minute=0, second=0
+            )),
+            charge_timedeltas)
+
         self.assertQuerysetEqual(
             Charge.objects.annotate_time_charged(),
             charge_timedeltas,
@@ -396,27 +403,17 @@ class ChargeModelTestCase(ModelTestCase):
             timedelta(hours=1),
         )
 
-        self.create_test_charges(charge_timedeltas)
+        create_test_charges(
+            self.project,
+            timezone.make_aware(datetime(
+                2019, 1, 1, hour=0, minute=0, second=0
+            )),
+            charge_timedeltas)
+
         self.assertEqual(Charge.objects.aggregate_time_charged(),
                          sum(charge_timedeltas, timedelta()))
 
     ### Helper Methods ###
-
-    @classmethod
-    def create_test_charges(cls, charge_timedeltas):
-        next_charge_start_datetime = timezone.make_aware(datetime(
-            2019, 1, 1, hour=0, minute=0, second=0))
-        charges = []
-
-        for charge_time in charge_timedeltas:
-            charge_end_datetime = next_charge_start_datetime + charge_time
-            charges.append(validate_and_save(Charge(
-                project=cls.project,
-                start_time=next_charge_start_datetime,
-                end_time=charge_end_datetime
-            )))
-
-            next_charge_start_datetime = charge_end_datetime
 
     @classmethod
     def get_ordered_test_charge_list(cls):

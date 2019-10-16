@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.utils import timezone
 from ..models import Project, Charge
 from ..querysets import ProjectQuerySet, ChargeQuerySet
-from .utils import validate_and_save
+from .utils.general import validate_and_save
 
 
 class ProjectQuerySetTestCase(TestCase):
