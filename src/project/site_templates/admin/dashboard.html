@@ -15,17 +15,15 @@
 <form>
     {% for project in projects %}
     <label for="{{ project.name }}">{{ project.name }}</label>
-    <input type="checkbox" name="project" value="{{ project.pk }}" checked>
+    <input type="checkbox" name="project" value="{{ project.id }}" {% if project.selected %}checked{% endif %}>
     {% endfor %}
 
     <button type="submit">Filter</button>
 </form>
 
-<div id="monthly-charge-summary">
-    <svg></svg>
-</div>
+{{ chart_div | safe }}
 
-<script type="text/javascript" src="{% static 'project/vendor/moment.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'project/vendor/d3.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'project/dashboard.js' %}"></script>
+<script type="text/javascript" src="{% static 'project/vendor/bokeh.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'project/vendor/bokeh-widget.min.js' %}"></script>
+{{ chart_script | safe }}
 {% endblock %}

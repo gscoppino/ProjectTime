@@ -84,7 +84,7 @@ env_specs:
     packages: [postgresql=11.5]
   application:
     inherit_from: []
-    packages: [python=3.7, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=2.2]
+    packages: [python=3.7, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=2.2, pandas=0.25, bokeh=1.4]
   application-debug:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.0]
