@@ -2,20 +2,16 @@
 {% load static %}
 
 {% block content %}
-<style>
-    html,
-    body {
-        height: 100%;
-    }
-</style>
 
 <h1>Monthly Summary</h1>
 
-<h2>Projects</h2>
 <form>
+    <h2>Select Project(s):</h2>
     {% for project in projects %}
-    <label for="{{ project.name }}">{{ project.name }}</label>
-    <input type="checkbox" name="project" value="{{ project.id }}" {% if project.selected %}checked{% endif %}>
+    <div>
+        <label for="{{ project.name }}">{{ project.name }}</label>
+        <input type="checkbox" name="project" value="{{ project.id }}" {% if project.selected %}checked{% endif %}>
+    </div>
     {% endfor %}
 
     <button type="submit">Filter</button>
