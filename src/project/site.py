@@ -126,7 +126,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
                 **project,
                 'selected': not project_ids or str(project['id']) in project_ids
             }
-            for project in Project.objects.values('id', 'name')
+            for project in Project.objects.values('id', 'name').order_by('name')
         ])
 
         series = self.get_monthly_summary_series(

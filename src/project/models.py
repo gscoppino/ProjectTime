@@ -10,9 +10,6 @@ from .querysets import ProjectQuerySet, ChargeQuerySet
 class Project(models.Model):
     objects = ProjectQuerySet.as_manager()
 
-    class Meta:
-        ordering = ('name',)
-
     name = models.CharField(
         unique=True,
         max_length=255,
@@ -48,7 +45,6 @@ class Charge(models.Model):
     objects = ChargeQuerySet.as_manager()
 
     class Meta:
-        ordering = ('start_time',)
         get_latest_by = ('start_time',)
         constraints = (
             models.CheckConstraint(

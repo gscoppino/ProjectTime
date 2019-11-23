@@ -14,6 +14,7 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
                     'time_charged', 'closed',)
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
+    ordering = ('start_time',)
     change_list_template = 'admin/charge/change_list.html'
     change_form_template = 'admin/charge/change_form.html'
     default_filters = DEFAULT_CHARGE_CHANGELIST_FILTERS
@@ -43,6 +44,7 @@ class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
+    ordering = ('name',)
     change_form_template = "admin/charge/change_form.html"
     default_filters = DEFAULT_PROJECT_CHANGELIST_FILTERS
 
