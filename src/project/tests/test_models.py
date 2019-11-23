@@ -361,13 +361,6 @@ class ChargeModelTestCase(ModelTestCase):
         self.assertEqual(
             str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Closed]')
 
-    def test_charges_are_ordered_by_charge_date_and_start_time(self):
-        ordered_charges = self.get_ordered_test_charge_list()
-
-        self.assertQuerysetEqual(Charge.objects.all(),
-                                 ordered_charges,
-                                 transform=lambda charge: charge)
-
     def test_get_earliest_charge(self):
         ordered_charges = self.get_ordered_test_charge_list()
         self.assertEqual(Charge.objects.earliest(), ordered_charges[0])
@@ -391,7 +384,7 @@ class ChargeModelTestCase(ModelTestCase):
             charge_timedeltas)
 
         self.assertQuerysetEqual(
-            Charge.objects.annotate_time_charged(),
+            Charge.objects.annotate_time_charged().order_by('start_time'),
             charge_timedeltas,
             transform=lambda charge: charge.db__time_charged
         )
