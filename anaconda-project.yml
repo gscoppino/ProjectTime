@@ -89,7 +89,7 @@ env_specs:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.0]
     variables: {
-      DJANGO_SETTINGS_MODULE: "ProjectTime.settings-debug"
+      DJANGO_SETTINGS_MODULE: "config.settings-debug"
     }
   devtools:
     inherit_from: [application-debug]

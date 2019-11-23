@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'timezone.middleware.TimezoneMiddleware'
 ]
 
-ROOT_URLCONF = 'ProjectTime.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ProjectTime.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
