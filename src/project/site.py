@@ -42,7 +42,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
 
         extra_urls = [
             path('timezone',
-                 self.admin_view(TimezoneView.as_view()),
+                 TimezoneView.as_view(),
                  name='select-timezone'),
             path('dashboard',
                  self.admin_view(self.dashboard_view),
