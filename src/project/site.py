@@ -11,6 +11,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.urls import path
 from math import pi
+from timezone.views import TimezoneView
 from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
 from .mixins import AdminSiteDefaultFilterMixin
 from .models import Project, Charge
@@ -38,7 +39,11 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
 
     def get_urls(self):
         urls = super().get_urls()
+
         extra_urls = [
+            path('timezone',
+                 self.admin_view(TimezoneView.as_view()),
+                 name='select-timezone'),
             path('dashboard',
                  self.admin_view(self.dashboard_view),
                  name='dashboard')

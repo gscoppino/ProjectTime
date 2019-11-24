@@ -16,12 +16,10 @@ Including another URLconf
 
 from django.conf import settings
 from django.urls import include, path
-from project.admin import admin_site
-from timezone.views import TimezoneView
+from project.admin import admin_site as site
 
 urlpatterns = [
-    path('admin/', admin_site.urls),
-    path('', TimezoneView.as_view(), name='select-timezone')
+    path('', site.urls),
 ]
 
 if settings.DEBUG:
