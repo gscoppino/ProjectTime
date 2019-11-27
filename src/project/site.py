@@ -9,7 +9,7 @@ from django.contrib import admin
 from django.db.models import F, Sum
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.urls import path
+from django.urls import path, reverse_lazy
 from math import pi
 from timezone.views import TimezoneView
 from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
@@ -42,7 +42,9 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
 
         extra_urls = [
             path('timezone',
-                 TimezoneView.as_view(),
+                 self.admin_view(TimezoneView.as_view(
+                     success_url=reverse_lazy('admin:index')
+                 )),
                  name='select-timezone'),
             path('dashboard',
                  self.admin_view(self.dashboard_view),

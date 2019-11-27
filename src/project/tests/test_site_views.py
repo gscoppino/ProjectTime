@@ -36,6 +36,32 @@ class AdminUserTestCase(TestCase):
             self.fail('Unable to login.')
 
 
+class ProjectTimeAdminSiteTimezoneFormViewTestCase(AdminUserTestCase):
+    def test_view_redirects_when_user_is_not_admin(self):
+        response = self.client.get(reverse('admin:select-timezone'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_is_ok_when_user_is_admin(self):
+        self.performLogin()
+        response = self.client.get(reverse('admin:select-timezone'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_timezone_form_template_is_used(self):
+        self.client.get(reverse('admin:select-timezone'))
+        self.assertTemplateUsed('timezone_form.html')
+
+    def test_redirects_to_login_on_successful_submit(self):
+        self.performLogin()
+        response = self.client.post(reverse('admin:select-timezone'), {
+            'timezone': 'America/New_York'
+        })
+
+        self.assertRedirects(
+            response,
+            reverse('admin:index'),
+            fetch_redirect_response=False)
+
+
 class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
     def test_view_redirects_when_user_is_not_admin(self):
         response = self.client.get(reverse('admin:dashboard'))
