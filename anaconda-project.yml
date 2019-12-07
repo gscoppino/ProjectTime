@@ -29,7 +29,9 @@ commands: {
   pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
   django-admin: {unix: django-admin, env_spec: application},
   manage.py: {unix: sh scripts/manage.sh, env_spec: application},
-  coverage: {unix: sh scripts/coverage.sh, env_spec: devtools},
+  coverage: {unix: sh scripts/coverage.sh, env_spec: test},
+  robot: {unix: sh scripts/robot.sh, env_spec: test-acceptance},
+  robot-tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
   ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: devtools},
   jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
 }
@@ -60,6 +62,7 @@ downloads: {}
 # Use `anaconda-project add-packages` to add packages.
 #
 packages: []
+
 channels: [conda-forge]
 
 #
@@ -93,7 +96,20 @@ env_specs:
     }
   devtools:
     inherit_from: [application-debug]
-    packages: [ipykernel, pylint, pep8, autopep8, coverage]
+    packages: [ipykernel, pylint, pep8, autopep8]
+  test:
+    inherit_from: [application]
+    packages: [coverage]
+  test-acceptance:
+    inherit_from: [application]
+    packages:
+      - robotframework
+      - robotframework-seleniumlibrary
+      - python-chromedriver-binary >=78,<79
+      - geckodriver
+    variables: {
+      DJANGO_SETTINGS_MODULE: "config.settings"
+    }
   notebook:
     inherit_from: []
     packages: [python=3.7, jupyterlab]

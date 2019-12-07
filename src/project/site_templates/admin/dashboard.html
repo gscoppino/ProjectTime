@@ -10,7 +10,8 @@
     {% for project in projects %}
     <div>
         <label for="{{ project.name }}">{{ project.name }}</label>
-        <input type="checkbox" name="project" value="{{ project.id }}" {% if project.selected %}checked{% endif %}>
+        <input type="checkbox" name="project" id="{{ project.name }}" value="{{ project.id }}"
+            {% if project.selected %}checked{% endif %}>
     </div>
     {% endfor %}
 
