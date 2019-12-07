@@ -36,7 +36,7 @@ A tool that can be used to keep track of time spent on projects.
     Firefox: `anaconda-project run robot -v BROWSER:firefox test/`
     Chrome:  `anaconda-project run robot -v BROWSER:chrome test/`
     Firefox (headless): `anaconda-project run robot -v BROWSER:firefoxheadless test/`
-    Chrome (headless):  `anaconda-project run robot -v BROWSER:chromeheadless test/`
+    Chrome (headless):  `anaconda-project run robot -v BROWSER:headlesschrome test/`
 
 ### Alternative Setup (Advanced)
 
