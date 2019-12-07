@@ -3,6 +3,7 @@
 .coverage
 __pycache__
 htmlcov
+test_reports
 db
 envs
 kernel.json
