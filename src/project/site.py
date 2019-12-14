@@ -30,7 +30,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
         context = super().each_context(request)
 
         if context.get('timezone') is not None:
-            raise ValueError('Timezone context key would conflict with an'
+            raise ValueError('Timezone context key would conflict with an '
                              'existing key in the Django admin context.')
 
         context['timezone'] = request.session.get('timezone') or 'N/A'
