@@ -15,21 +15,21 @@ Go To Home Page
 
 Go To Dashboard
     Click Link          //a[contains(text(), "View Dashboard") and @href="/dashboard"]
-    Title Should Be     | ProjectTime
+    Title Should Be     Dashboard | ProjectTime
 
 User Is Prompted To Set Timezone
     Element Should Be Visible   //ul[@class="messagelist"]//li[@class="warning"]
 
 Set Timezone To "${timezone}"
     Click Link                  //div[@id="header"]//a[contains(text(), "Change Timezone") and @href="/timezone"]
-    Title Should Be             | Django site admin
+    Title Should Be             Change Timezone | Django site admin
     Select From List By Label   timezone    ${timezone}
     Click Button                Submit
     Title Should Be             ProjectTime Administration | ProjectTime
 
 User Uses Prompt To Set Timezone To "${timezone}"
     Click Link                  //ul[@class="messagelist"]//li[@class="warning"]//a[contains(text(), "Change Timezone") and @href="/timezone"]
-    Title Should Be             | Django site admin
+    Title Should Be             Change Timezone | Django site admin
     Select From List By Label   timezone    ${timezone}
     Click Button                Submit
     Title Should Be             ProjectTime Administration | ProjectTime
