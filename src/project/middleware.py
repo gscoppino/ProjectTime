@@ -4,6 +4,7 @@ from django.utils.safestring import mark_safe
 
 
 class ProjectTimeTimezoneWarningMiddleware:
+    message_tag = 'no_timezone_msg'
     message_whitelist = (
         reverse_lazy('admin:select-timezone'),
         reverse_lazy('admin:logout'),
@@ -24,6 +25,12 @@ class ProjectTimeTimezoneWarningMiddleware:
         if request.path_info in self.message_whitelist:
             return self.get_response(request)
 
+        has_message = any(message for message in messages.get_messages(request)
+                          if message.extra_tags == self.message_tag)
+
+        if has_message:
+            return self.get_response(request)
+
         # Warn the user that they have not specified a timezone
         # and prompt them to do so.
         url = reverse('admin:select-timezone')
@@ -33,7 +40,8 @@ class ProjectTimeTimezoneWarningMiddleware:
                 'Timezone has not been specified. '
                 f'<a href="{url}">Change Timezone</a> '
                 'to the desired timezone.'
-            )
+            ),
+            extra_tags=self.message_tag
         )
 
         return self.get_response(request)

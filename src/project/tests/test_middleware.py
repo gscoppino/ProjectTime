@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.messages.storage.base import Message
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 from unittest.mock import MagicMock, patch
@@ -8,6 +9,16 @@ from ..middleware import ProjectTimeTimezoneWarningMiddleware
 
 def mock_add_warning_message():
     return MagicMock(return_value=None)
+
+
+def mock_get_messages_with_existing_warning(request):
+    return [
+        Message(
+            messages.constants.WARNING,
+            'Test Message',
+            extra_tags=ProjectTimeTimezoneWarningMiddleware.message_tag
+        )
+    ]
 
 
 class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
@@ -64,6 +75,22 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
     def test_does_not_warn_user_when_user_is_not_authenticated(self, mock_method):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = AnonymousUser()
+        mock_request.session = {}
+
+        def mock_get_response(request):
+            pass
+
+        middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
+        self.assertFalse(mock_method.called)
+
+        middleware.__call__(mock_request)
+        self.assertFalse(mock_method.called)
+
+    @patch.object(messages, 'warning', new_callable=mock_add_warning_message)
+    @patch.object(messages, 'get_messages', new=mock_get_messages_with_existing_warning)
+    def test_does_not_warn_if_already_warned(self, mock_method):
+        mock_request = RequestFactory().get('/foo/bar')
+        mock_request.user = User()
         mock_request.session = {}
 
         def mock_get_response(request):
