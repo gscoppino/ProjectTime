@@ -1,12 +1,10 @@
 from django.contrib import messages
-from django.http.response import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 
 
 class ProjectTimeTimezoneWarningMiddleware:
     message_whitelist = (
-        reverse_lazy('admin:login'),
         reverse_lazy('admin:select-timezone'),
         reverse_lazy('admin:logout'),
         reverse_lazy('admin:jsi18n'),
@@ -17,16 +15,14 @@ class ProjectTimeTimezoneWarningMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
+        if not request.user.is_authenticated:
+            return self.get_response(request)
 
         if 'timezone' in request.session:
-            return response
+            return self.get_response(request)
 
         if request.path_info in self.message_whitelist:
-            return response
-
-        if isinstance(response, HttpResponseRedirect):
-            return response
+            return self.get_response(request)
 
         # Warn the user that they have not specified a timezone
         # and prompt them to do so.
@@ -40,4 +36,4 @@ class ProjectTimeTimezoneWarningMiddleware:
             )
         )
 
-        return response
+        return self.get_response(request)

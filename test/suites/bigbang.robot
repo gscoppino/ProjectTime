@@ -14,6 +14,15 @@ Resource          ../keywords/charge.robot
 Admin Logs In To Site
     Login To The Site With Username "admin" And Password "admin"
 
+Admin Is Prompted To Set Timezone
+    Login To The Site With Username "admin" And Password "admin"
+    User Is Prompted To Set Timezone
+    User Uses Prompt To Set Timezone To "America/New_York"
+
+Admin Changes Timezone
+    Login To The Site With Username "admin" And Password "admin"
+    Set Timezone To "America/New_York"
+
 Admin Creates A New Project
     Login To The Site With Username "admin" And Password "admin"
     Create Project With Name "Test Project"
