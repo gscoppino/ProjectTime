@@ -1,6 +1,8 @@
 {% extends "admin/login.html" %}
 {% load i18n static %}
 
+{% block title %}Change Timezone{{ block.super }}{% endblock %}
+
 {% block content %}
 
 {% if form.errors and not form.non_field_errors %}
