@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
+from django.utils import timezone, formats
 from datetime import datetime, timedelta
 from .querysets import ProjectQuerySet, ChargeQuerySet
 
@@ -132,9 +132,9 @@ class Charge(models.Model):
 
         return '{project}, {start_time} - {end_time} ({time_charged} {units}) [{status}]'.format(
             project=self.project.name,
-            start_time=timezone.localtime(self.start_time),
-            end_time=timezone.localtime(
-                self.end_time) if self.end_time else '__:__:__',
+            start_time=formats.localize(timezone.localtime(self.start_time)),
+            end_time=(formats.localize(timezone.localtime(self.end_time))
+                      if self.end_time else '__:__:__'),
             time_charged=charged,
             units='hours' if charged.total_seconds() >= 3600 else 'minutes',
             status='Closed' if self.closed else 'Open'
