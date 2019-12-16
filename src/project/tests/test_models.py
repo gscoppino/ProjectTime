@@ -335,31 +335,31 @@ class ChargeModelTestCase(ModelTestCase):
         ))
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - __:__:__ (0:00:00 minutes) [Open]')
+            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - __:__:__ (0:00:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(minutes=30)
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 08:30:00+00:00 (0:30:00 minutes) [Open]')
+            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 8:30 a.m. (0:30:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1)
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:00:00+00:00 (1:00:00 hours) [Open]')
+            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9 a.m. (1:00:00 hours) [Open]')
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Open]')
+            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Open]')
 
         charge.closed = True
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, 2019-01-01 08:00:00+00:00 - 2019-01-01 09:15:00+00:00 (1:15:00 hours) [Closed]')
+            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Closed]')
 
     def test_get_earliest_charge(self):
         ordered_charges = self.get_ordered_test_charge_list()
