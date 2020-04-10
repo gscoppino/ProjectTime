@@ -6,9 +6,10 @@ A tool that can be used to keep track of time spent on projects.
 
 ## Setup Notes
 
-### Recommended
+### Using Anaconda Project (Recommended)
 
 1. Install [MiniConda](https://docs.conda.io/en/latest/miniconda.html).
+
 2. Open a terminal, ensuring the conda `base` environment is activated. If it is
    not activated:
 
@@ -38,14 +39,22 @@ A tool that can be used to keep track of time spent on projects.
     Firefox (headless): `anaconda-project run robot -v BROWSER:firefoxheadless test/`
     Chrome (headless):  `anaconda-project run robot -v BROWSER:headlesschrome test/`
 
-### Alternative Setup (Advanced)
+### Using Pip
 
-The tool can be set up to run manually without a conda environment.
+1. Install [Python](https://www.python.org/downloads/).
 
-1. Open `anaconda-project.yml` and install the dependencies listed in
-   `env_specs` in any choice of environment.
-2. Directly run command scripts described in the
-   `anaconda-project.yml` `commands` in the environment of choice.
+2. Install [PostgreSQL](https://www.postgresql.org/download/).
+
+3. Open a terminal, and install the tool into your `site-packages` in editable mode:
+
+    `pip install -e pypi`
+
+4. The Anaconda Project development commands utilize specific environment
+   configurations and scripts to perform their intended tasks. By looking
+   in `anaconda-project.yml`, the specific commands and their environment
+   configurations can be seen. Ensure the necessary dependencies for the
+   command to run are installed in your Python environment, then execute
+   the associated script with the necessary arguments.
 
 ## Development
 
@@ -115,3 +124,8 @@ The acceptance tests will automatically start/stop a test server to run against.
 The `application-debug` environment adds `django-debug-toolbar` to the
 application runtime. To use it, do:
 `anaconda-project run --env-spec application-debug manage.py runserver`.
+
+## Packaging
+
+For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
+For Conda: `anaconda-project run conda-build conda-recipe`

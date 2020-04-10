@@ -7,7 +7,11 @@ from robot.api.deco import keyword
 
 class ProjectTimeLibrary:
     def __init__(self):
-        self.path = os.path.join(os.path.dirname(__file__), '..', '..', 'src')
+        self.path = os.path.join(os.path.dirname(__file__),
+                                 '..',
+                                 '..',
+                                 'src',
+                                 'ProjectTime')
         self.test_server_pid = None
 
     @keyword('Start Test Server On Port "${port}" With Data "${fixtures}"')

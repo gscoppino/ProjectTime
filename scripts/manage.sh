@@ -1,5 +1,6 @@
 #!/bin/sh
 
+PKG_DIR="./src/ProjectTime"
 DB_DIRECTORY="./db"
 DB_LOCK_FILE="postmaster.pid"
 
@@ -16,4 +17,4 @@ if [ ! -e "$DB_DIRECTORY/$DB_LOCK_FILE" ]; then
 fi
 
 # Run the given management command
-cd src && python -Wa manage.py $@
+cd $PKG_DIR && python -Wa manage.py $@
