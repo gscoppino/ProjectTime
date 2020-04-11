@@ -29,13 +29,13 @@ A tool that can be used to keep track of time spent on projects.
 
 6. Run unit and integration tests:
 
-   `anaconda-project run manage.py test --parallel --failsafe`
+   `anaconda-project run manage.py test --parallel --failfast`
 
 7. Run acceptance tests:
 
     Firefox: `anaconda-project run robot -v BROWSER:firefox test/`
     Chrome:  `anaconda-project run robot -v BROWSER:chrome test/`
-    Firefox (headless): `anaconda-project run robot -v BROWSER:firefoxheadless test/`
+    Firefox (headless): `anaconda-project run robot -v BROWSER:headlessfirefox test/`
     Chrome (headless):  `anaconda-project run robot -v BROWSER:headlesschrome test/`
 
 ### Alternative Setup (Advanced)

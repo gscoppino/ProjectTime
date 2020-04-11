@@ -88,7 +88,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
             for charge in charges
         })
 
-        series = (pd.Series(chart_data)
+        series = (pd.Series(chart_data, dtype='float64')
                   .reset_index(name='value')
                   .rename(columns={'index': 'charge'}))
 
