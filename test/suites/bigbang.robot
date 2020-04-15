@@ -1,14 +1,14 @@
 *** Settings ***
-Test Setup        Start Test Server On Port "${SERVER_PORT}" With Data "admin_user.json"
-Test Teardown     Run Keywords    Logout Of Site    Stop Test Server
 Library           DateTime
-Library           ../libraries/ProjectTimeLibrary.py
 Resource          ../variables/execution.robot
+Resource          ../keywords/setup.robot
 Resource          ../keywords/login.robot
 Resource          ../keywords/logout.robot
 Resource          ../keywords/general.robot
 Resource          ../keywords/project.robot
 Resource          ../keywords/charge.robot
+Test Setup        Start Test Server On Port "${SERVER_PORT}" With Data "admin_user.json"
+Test Teardown     Run Keywords    Logout Of Site    Terminate All Processes
 
 *** Test Cases ***
 Admin Logs In To Site
