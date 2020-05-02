@@ -1,33 +1,21 @@
 *** Settings ***
 Library             SeleniumLibrary
-Library             chromedriver_binary
-
-Resource           ../variables/execution.robot
 
 *** Keywords ***
-Start Site
-    Set Selenium Speed  ${DRIVER_SPEED_SECS} seconds
-    Open Browser        ${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}   ${BROWSER}
-
-Go To Home Page
-    Click Link          //a[contains(text(), "Home") and @href="/"]
-    Title Should Be     ProjectTime Administration | ProjectTime
-
-Go To Dashboard
-    Click Link          //a[contains(text(), "View Dashboard") and @href="/dashboard"]
-    Title Should Be     Dashboard | ProjectTime
-
-User Is Prompted To Set Timezone
+The site prompts the user for a timezone to use during their session
     Element Should Be Visible   //ul[@class="messagelist"]//li[@class="no_timezone_msg warning"]
 
-Set Timezone To "${timezone}"
-    Click Link                  //div[@id="header"]//a[contains(text(), "Change Timezone") and @href="/timezone"]
+The site no longer prompts the user for a timezone
+    Element Should Not Be Visible    //ul[@class="messagelist"]//li[@class="no_timezone_msg warning"]
+
+The user uses the "${name}" link to set their timezone to "${timezone}"
+    Click Link                  //div[@id="header"]//a[text()="${name}"]
     Title Should Be             Change Timezone | Django site admin
     Select From List By Label   timezone    ${timezone}
     Click Button                Submit
     Title Should Be             ProjectTime Administration | ProjectTime
 
-User Uses Prompt To Set Timezone To "${timezone}"
+The user uses the timezone prompt to set their timezone to "${timezone}"
     Click Link                  //ul[@class="messagelist"]//li[@class="no_timezone_msg warning"]//a[contains(text(), "Change Timezone") and @href="/timezone"]
     Title Should Be             Change Timezone | Django site admin
     Select From List By Label   timezone    ${timezone}

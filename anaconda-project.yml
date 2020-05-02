@@ -27,13 +27,16 @@ description:
 commands: {
   postgres: {unix: sh scripts/postgres.sh, env_spec: database},
   pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
+  psql: {unix: psql, env_spec: database},
+  pg_dump: {unix: pg_dump, env_spec: database},
   django-admin: {unix: django-admin, env_spec: application},
   manage.py: {unix: sh scripts/manage.sh, env_spec: application},
   coverage: {unix: sh scripts/coverage.sh, env_spec: test},
   robot: {unix: sh scripts/robot.sh, env_spec: test-acceptance},
   robot-tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
   ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: devtools},
-  jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
+  jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook},
+  nb: {notebook: src/development.ipynb, env_spec: notebook}
 }
 
 #
@@ -82,12 +85,18 @@ platforms:
 # Use `anaconda-project add-env-spec` to add environment specs.
 #
 env_specs:
+  _python_:
+    inherit_from: []
+    packages: [python=3.8]
+  _anaconda-project_:
+    inherit_from: [_python_]
+    packages: [anaconda-project]
   database:
     inherit_from: []
     packages: [postgresql=12.2]
   application:
-    inherit_from: []
-    packages: [python=3.8, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.0]
+    inherit_from: [_python_]
+    packages: [psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.0]
   application-debug:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.2]
@@ -101,15 +110,12 @@ env_specs:
     inherit_from: [application]
     packages: [coverage]
   test-acceptance:
-    inherit_from: [application]
+    inherit_from: [_python_, _anaconda-project_]
     packages:
       - robotframework
       - robotframework-seleniumlibrary
       - python-chromedriver-binary<81
       - geckodriver
-    variables: {
-      DJANGO_SETTINGS_MODULE: "config.settings"
-    }
   notebook:
-    inherit_from: []
-    packages: [python=3.8, jupyterlab]
+    inherit_from: [_python_]
+    packages: [notebook]
