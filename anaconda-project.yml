@@ -25,12 +25,8 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {
-  postgres: {unix: sh scripts/postgres.sh, env_spec: database},
-  pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
-  psql: {unix: psql, env_spec: database},
-  pg_dump: {unix: pg_dump, env_spec: database},
   django-admin: {unix: django-admin, env_spec: application},
-  manage.py: {unix: sh scripts/manage.sh, env_spec: application},
+  manage.py: {unix: cd src && python -Wa manage.py, env_spec: application},
   coverage: {unix: sh scripts/coverage.sh, env_spec: test},
   robot: {unix: sh scripts/robot.sh, env_spec: test-acceptance},
   robot-tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
@@ -91,9 +87,6 @@ env_specs:
   _anaconda-project_:
     inherit_from: [_python_]
     packages: [anaconda-project]
-  database:
-    inherit_from: []
-    packages: [postgresql=12.2]
   application:
     inherit_from: [_python_]
     packages: [psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.0]

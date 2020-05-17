@@ -1,0 +1,32 @@
+version: "3"
+services:
+  db:
+    image: postgres:12.3
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+  shell:
+    depends_on:
+      - db
+    build: ./scripts/docker/anaconda-project
+    working_dir: /usr/src
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./:/usr/src
+      - conda:/usr/src/envs
+    ports:
+      - 8000:8000
+    command: tail -f /dev/null
+volumes:
+  db:
+  conda:
