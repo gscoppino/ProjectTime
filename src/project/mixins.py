@@ -1,4 +1,4 @@
-from .utils import get_changelist_url
+from .utils.urls import get_changelist_url
 
 class AdminSiteDefaultFilterMixin:
     """

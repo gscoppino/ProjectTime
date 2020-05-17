@@ -4,7 +4,7 @@ from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGE
 from .mixins import ModelAdminDefaultFilterMixin
 from .models import Project, Charge
 from .site import admin_site
-from .utils import with_attrs
+from .utils.decorators import with_attrs
 
 
 @admin.register(Charge, site=admin_site)
