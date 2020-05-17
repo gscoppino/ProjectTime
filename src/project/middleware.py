@@ -19,6 +19,9 @@ class ProjectTimeTimezoneWarningMiddleware:
         if not request.user.is_authenticated:
             return self.get_response(request)
 
+        if 'text/html' not in request.headers.get('Accept', ''):
+            return self.get_response(request)
+
         if 'timezone' in request.session:
             return self.get_response(request)
 
