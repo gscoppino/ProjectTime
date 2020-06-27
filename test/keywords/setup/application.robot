@@ -4,7 +4,7 @@ Library             Process
 *** Keywords ***
 Start The Application On Port "${port}" With Data "${fixture}"
     Start Process    anaconda-project    run    manage.py    testserver
-    ...    --addrport    ${port}
+    ...    --addrport    0.0.0.0:${port}
     ...    --noinput
     ...    ../test/fixtures/${fixture}
     ...    cwd=${CURDIR}/../../../

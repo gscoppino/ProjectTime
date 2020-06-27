@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - db:/var/lib/postgresql/data
-  shell:
+  project:
     depends_on:
       - db
     build: ./scripts/docker/anaconda-project
@@ -27,6 +27,16 @@ services:
     ports:
       - 8000:8000
     command: tail -f /dev/null
+  selenium-chrome:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - 4444:4444
+      - 5900:5900
+  selenium-firefox:
+    image: selenium/standalone-firefox-debug
+    ports:
+      - 4445:4445
+      - 5900:5900
 volumes:
   db:
   conda:

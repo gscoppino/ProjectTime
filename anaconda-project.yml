@@ -28,7 +28,7 @@ commands: {
   django-admin: {unix: django-admin, env_spec: application},
   manage.py: {unix: cd src && python -Wa manage.py, env_spec: application},
   coverage: {unix: sh scripts/coverage.sh, env_spec: test},
-  robot: {unix: sh scripts/robot.sh, env_spec: test-acceptance},
+  robot: {unix: robot -d test_reports, env_spec: test-acceptance},
   robot-tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
   ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: devtools},
   jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook},
