@@ -21,7 +21,7 @@ A tool that can be used to keep track of time spent on projects.
 
 4. Start the database:
 
-    `anaconda-project run postgres start`
+    `anaconda-project run postgres`
 
 5. Start the tool:
 
