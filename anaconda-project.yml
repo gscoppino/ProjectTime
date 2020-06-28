@@ -27,8 +27,8 @@ description:
 commands: {
   postgres: {unix: sh scripts/postgres.sh, env_spec: database},
   pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
-  psql: {unix: psql, env_spec: database},
   pg_dump: {unix: pg_dump, env_spec: database},
+  psql: {unix: psql, env_spec: database},
   django-admin: {unix: django-admin, env_spec: application},
   manage.py: {unix: sh scripts/manage.sh, env_spec: application},
   coverage: {unix: sh scripts/coverage.sh, env_spec: test},
