@@ -27,6 +27,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = User()
         mock_request.session = {}
+        mock_request.headers = {"Accept": "text/html"}
 
         def mock_get_response(request):
             pass
@@ -43,6 +44,23 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = User()
         mock_request.session = {'timezone': 'America/New_York'}
+        mock_request.headers = {"Accept": "text/html"}
+
+        def mock_get_response(request):
+            pass
+
+        middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
+        self.assertFalse(mock_method.called)
+
+        middleware.__call__(mock_request)
+        self.assertFalse(mock_method.called)
+
+    @patch.object(messages, 'warning', new_callable=mock_add_warning_message)
+    def test_does_not_warn_user_when_request_is_not_html(self, mock_method):
+        mock_request = RequestFactory().get("/foo/bar")
+        mock_request.user = User()
+        mock_request.session = {}
+        mock_request.headers = {"Accept": "text/css"}
 
         def mock_get_response(request):
             pass
@@ -58,6 +76,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = User()
         mock_request.session = {}
+        mock_request.headers = {"Accept": "text/html"}
 
         def mock_get_response(request):
             pass
@@ -76,6 +95,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = AnonymousUser()
         mock_request.session = {}
+        mock_request.headers = {"Accept": "text/html"}
 
         def mock_get_response(request):
             pass
@@ -92,6 +112,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = User()
         mock_request.session = {}
+        mock_request.headers = {"Accept": "text/html"}
 
         def mock_get_response(request):
             pass
