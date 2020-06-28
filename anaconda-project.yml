@@ -103,7 +103,7 @@ env_specs:
       DJANGO_SETTINGS_MODULE: "config.settings-debug"
     }
   devtools:
-    inherit_from: [application-debug]
+    inherit_from: [application-debug, _anaconda-project_]
     packages: [ipykernel, pylint, pep8, autopep8]
   test:
     inherit_from: [application]
