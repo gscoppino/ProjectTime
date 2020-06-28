@@ -87,6 +87,9 @@ env_specs:
   _anaconda-project_:
     inherit_from: [_python_]
     packages: [anaconda-project]
+  _anaconda-project_:
+    inherit_from: [_python_]
+    packages: [anaconda-project]
   application:
     inherit_from: [_python_]
     packages: [psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.0]
@@ -97,7 +100,7 @@ env_specs:
       DJANGO_SETTINGS_MODULE: "config.settings-debug"
     }
   devtools:
-    inherit_from: [application-debug]
+    inherit_from: [application-debug, _anaconda-project_]
     packages: [ipykernel, pylint, pep8, autopep8]
   test:
     inherit_from: [application]
