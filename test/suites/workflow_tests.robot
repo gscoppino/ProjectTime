@@ -15,7 +15,7 @@ Resource          ../keywords/execution/project.robot
 Resource          ../keywords/execution/charge.robot
 Resource          ../keywords/execution/dashboard.robot
 
-Test Setup        Run Keywords    Start The Application On Port "${SERVER_PORT}" With Data "admin_user.json"    Start The Browser At The Site Root
+Test Setup        Run Keywords    Start The Application With Data From "admin_user.json"    Start The Browser At The Site Root
 Test Teardown     Run Keywords    Logout Of Site    Close All Browsers    Terminate All Processes
 
 *** Test Cases ***

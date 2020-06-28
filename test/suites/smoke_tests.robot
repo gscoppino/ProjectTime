@@ -16,7 +16,7 @@ Resource          ../keywords/execution/charge.robot
 Resource          ../keywords/execution/dashboard.robot
 
 Suite Setup       Run Keywords
-...                   Start The Application On Port "${SERVER_PORT}" With Data "admin_user.json"
+...                   Start The Application With Data From "admin_user.json"
 ...                   Start The Browser
 Test Setup        Navigate To The Site Root
 Test Teardown     Run Keywords
