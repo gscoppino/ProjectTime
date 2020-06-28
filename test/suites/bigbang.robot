@@ -1,14 +1,14 @@
 *** Settings ***
-Test Setup        Start Test Server On Port "${SERVER_PORT}" With Data "admin_user.json"
-Test Teardown     Run Keywords    Logout Of Site    Stop Test Server
 Library           DateTime
-Library           ../libraries/ProjectTimeLibrary.py
 Resource          ../variables/execution.robot
+Resource          ../keywords/setup.robot
 Resource          ../keywords/login.robot
 Resource          ../keywords/logout.robot
 Resource          ../keywords/general.robot
 Resource          ../keywords/project.robot
 Resource          ../keywords/charge.robot
+Test Setup        Start Test Server On Port "${SERVER_PORT}" With Data "admin_user.json"
+Test Teardown     Run Keywords    Logout Of Site    Terminate All Processes
 
 *** Test Cases ***
 Admin Logs In To Site
@@ -58,12 +58,15 @@ Admin Views Project Charges On The Dashboard
     Go To Dashboard
     Checkbox Should Be Selected    Test Project 1
     Checkbox Should Be Selected    Test Project 2
+    Element Should Be Visible    //div[contains(@class, "bk-root")]//canvas[contains(@class, "bk-canvas")]
     Unselect Checkbox    Test Project 1
     Click Button    Filter
     Checkbox Should Not Be Selected    Test Project 1
     Checkbox Should Be Selected    Test Project 2
+    Element Should Be Visible    //div[contains(@class, "bk-root")]//canvas[contains(@class, "bk-canvas")]
     Unselect Checkbox    Test Project 2
     Select Checkbox    Test Project 1
     Click Button    Filter
     Checkbox Should Be Selected    Test Project 1
     Checkbox Should Not Be Selected    Test Project 2
+    Element Should Be Visible    //div[contains(@class, "bk-root")]//canvas[contains(@class, "bk-canvas")]

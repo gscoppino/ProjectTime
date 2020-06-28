@@ -84,13 +84,13 @@ platforms:
 env_specs:
   database:
     inherit_from: []
-    packages: [postgresql=11.5]
+    packages: [postgresql=12.2]
   application:
     inherit_from: []
-    packages: [python=3.7, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=2.2, pandas=0.25, bokeh=1.4]
+    packages: [python=3.8, psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.0]
   application-debug:
     inherit_from: [application]
-    packages: [django-debug-toolbar=2.0]
+    packages: [django-debug-toolbar=2.2]
     variables: {
       DJANGO_SETTINGS_MODULE: "config.settings-debug"
     }
@@ -105,11 +105,11 @@ env_specs:
     packages:
       - robotframework
       - robotframework-seleniumlibrary
-      - python-chromedriver-binary >=78,<79
+      - python-chromedriver-binary<81
       - geckodriver
     variables: {
       DJANGO_SETTINGS_MODULE: "config.settings"
     }
   notebook:
     inherit_from: []
-    packages: [python=3.7, jupyterlab]
+    packages: [python=3.8, jupyterlab]

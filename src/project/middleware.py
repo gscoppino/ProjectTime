@@ -7,8 +7,7 @@ class ProjectTimeTimezoneWarningMiddleware:
     message_tag = 'no_timezone_msg'
     message_whitelist = (
         reverse_lazy('admin:select-timezone'),
-        reverse_lazy('admin:logout'),
-        reverse_lazy('admin:jsi18n'),
+        reverse_lazy('admin:logout')
     )
 
     def __init__(self, get_response):
@@ -17,6 +16,9 @@ class ProjectTimeTimezoneWarningMiddleware:
 
     def __call__(self, request):
         if not request.user.is_authenticated:
+            return self.get_response(request)
+
+        if 'text/html' not in request.headers.get('Accept', ''):
             return self.get_response(request)
 
         if 'timezone' in request.session:

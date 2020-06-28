@@ -2,9 +2,7 @@ from .settings import *
 
 DEBUG = True
 
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
-
-INTERNAL_IPS = ['127.0.0.1']
+DEBUG_TOOLBAR_CONFIG = {'SHOW_TOOLBAR_CALLBACK': lambda _: DEBUG}
 
 MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
