@@ -11,8 +11,8 @@ readme_text = readme_file.read()
 setuptools.setup(
     name=project_spec['name'],
     description=project_spec["description"],
-    version=os.getenv('VERSION'),
-    python_requires='~=3.7',
+    version=os.getenv('PROJECT_TIME_VERSION'),
+    python_requires='~=3.8',
     install_requires=[
         'psycopg2~=2.8',
         'sqlparse~=0.3',

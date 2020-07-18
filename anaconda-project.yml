@@ -29,7 +29,7 @@ variables: {
   PGDATA: { default: ./db, description: Where PostgreSQL database files are stored },
   PYTHONPATH: { default: src/ProjectTime, description: Where Python source files are stored },
   DJANGO_SETTINGS_MODULE: { default: config.settings, description: Which Django settings file to use },
-  VERSION: 1.0.0
+  PROJECT_TIME_VERSION: 1.0.0
 }
 
 # lists any services that should be available before the code runs.
