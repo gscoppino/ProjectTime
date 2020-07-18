@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 from unittest.mock import patch
-from ..site import ProjectTimeAdminSite
+from ProjectTime.project.site import ProjectTimeAdminSite
 
 
 def get_mock_timezone_context(self, request):

@@ -3,8 +3,8 @@ from django.contrib.admin.apps import AdminConfig
 
 
 class ProjectAppConfig(AppConfig):
-    name = 'project'
+    name = 'ProjectTime.project'
 
 
 class ProjectAdminConfig(AdminConfig):
-    default_site = 'project.site.ProjectTimeAdminSite'
+    default_site = 'ProjectTime.project.site.ProjectTimeAdminSite'

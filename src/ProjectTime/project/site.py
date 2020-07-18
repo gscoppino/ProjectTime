@@ -11,7 +11,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.urls import path, reverse_lazy
 from math import pi
-from timezone.views import TimezoneView
+from ProjectTime.timezone.views import TimezoneView
 from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
 from .mixins import AdminSiteDefaultFilterMixin
 from .models import Project, Charge

@@ -4,8 +4,8 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
 from datetime import datetime, date, timedelta
-from ..models import Project, Charge
-from ..querysets import ProjectQuerySet, ChargeQuerySet
+from ProjectTime.project.models import Project, Charge
+from ProjectTime.project.querysets import ProjectQuerySet, ChargeQuerySet
 from .utils.general import validate_and_save
 from .utils.charge import create_test_charges
 

@@ -2,9 +2,9 @@ from django.shortcuts import reverse
 from django.views.generic import FormView
 from django.test import TestCase, RequestFactory
 from django.views.generic.edit import FormMixin
-from timezone.forms import TimezoneForm
-from timezone.views import TimezoneView
 from unittest.mock import MagicMock, patch
+from ProjectTime.timezone.forms import TimezoneForm
+from ProjectTime.timezone.views import TimezoneView
 
 
 class ViewTestCase(TestCase):

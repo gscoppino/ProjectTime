@@ -6,8 +6,8 @@ from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
 from unittest.mock import MagicMock, patch
-from ..models import Project
-from ..site import ProjectTimeAdminSite
+from ProjectTime.project.models import Project
+from ProjectTime.project.site import ProjectTimeAdminSite
 from .utils.general import validate_and_save
 from .utils.charge import ChargeFactory
 
