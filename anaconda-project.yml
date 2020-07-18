@@ -25,24 +25,27 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands: {
-  postgres: {unix: sh scripts/postgres.sh, env_spec: database},
-  pg_ctl: {unix: sh scripts/pg_ctl.sh, env_spec: database},
+  postgres: {unix: postgres, env_spec: database},
+  pg_ctl: {unix: pg_ctl, env_spec: database},
   pg_dump: {unix: pg_dump, env_spec: database},
   psql: {unix: psql, env_spec: database},
   django-admin: {unix: django-admin, env_spec: application},
-  manage.py: {unix: sh scripts/manage.sh, env_spec: application},
-  coverage: {unix: sh scripts/coverage.sh, env_spec: test},
-  robot: {unix: sh scripts/robot.sh, env_spec: test-acceptance},
+  manage.py: {unix: django-admin, env_spec: application},
+  coverage: {unix: cd $PYTHONPATH && coverage, env_spec: test},
+  robot: {unix: robot, env_spec: test-acceptance},
   robot-tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
-  ipython-kernel-create: {unix: sh scripts/ipython-kernel-create.sh, env_spec: devtools},
-  jupyter: {unix: sh scripts/jupyter.sh, env_spec: notebook}
+  jupyter: {unix: jupyter, env_spec: devtools}
 }
 
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
 #
-variables: {}
+variables: {
+  PGDATA: { default: ./db, description: Where PostgreSQL database files are stored },
+  PYTHONPATH: { default: src, description: Where Python source files are stored },
+  DJANGO_SETTINGS_MODULE: { default: config.settings, description: Which Django settings file to use }
+}
 
 #
 # In the services section, list any services that should be
@@ -90,6 +93,9 @@ env_specs:
   _anaconda-project_:
     inherit_from: [_python_]
     packages: [anaconda-project]
+  _notebook_:
+    inherit_from: [_python_]
+    packages: [notebook]
   database:
     inherit_from: []
     packages: [postgresql=12.2]
@@ -100,11 +106,11 @@ env_specs:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.2]
     variables: {
-      DJANGO_SETTINGS_MODULE: "config.settings-debug"
+      DJANGO_SETTINGS_MODULE: config.settings-debug
     }
   devtools:
-    inherit_from: [application-debug, _anaconda-project_]
-    packages: [ipykernel, pylint, pep8, autopep8]
+    inherit_from: [application-debug, _anaconda-project_, _notebook_]
+    packages: [notebook, pylint, pep8, autopep8]
   test:
     inherit_from: [application]
     packages: [coverage]
@@ -115,6 +121,3 @@ env_specs:
       - robotframework-seleniumlibrary
       - python-chromedriver-binary<81
       - geckodriver
-  notebook:
-    inherit_from: [_python_]
-    packages: [notebook]

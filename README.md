@@ -22,28 +22,24 @@ The project is built on the [Django](https://www.djangoproject.com) framework. I
 
 Task                            | Command
 --------------------------------|-------------------------------------------
+Create a database               | `anaconda-project run pg_ctl initdb`
 Start the database              | `anaconda-project run postgres`
 Apply Django migrations         | `anaconda-project run manage.py migrate`
 Start the web server            | `anaconda-project run manage.py runserver`
 Run unit tests                  | `anaconda-project run manage.py test`
-Run unit tests w/ code coverage | `anaconda-project run coverage`
+Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py test`
 Generate coverage report        | `anaconda-project run coverage report`
 Generate coverage report (HTML) | `anaconda-project run coverage html`
 Run acceptance tests            | `anaconda-project run robot test/`
 Start a new Django app          | `anaconda-project run django-admin startapp <app> src`
 Create new Django migrations    | `anaconda-project run manage.py makemigrations`
+Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
 ## Extra Notes
 
 ### Development Tools
 
 By running `anaconda-project prepare --env-spec devtools`, an environment containing useful development tools (such as linters, formatters, and interactive execution environments) will be created in `envs/devtools`.
-
-The `anaconda-project run ipython-kernel-create` command prepares an IPython
-kernel that can be loaded into a Jupyter Notebook, allowing for execution of
-code in the `devtools` environment in an interactive notebook. Run
-`anaconda-project run jupyter notebook src/development.ipynb` to load a notebook
-that is templated with code to load the Django project.
 
 ### Unit Testing
 
@@ -52,7 +48,8 @@ that is templated with code to load the Django project.
 
 ### Acceptance Testing
 
-Use `-v` to pass variables to Robot.
+* Pass `-d` to write Robot output files to a directory of your choice.
+* Pass `-v` to pass variables to Robot.
   * `-v BROWSER:<browser>` will change the browser Robot uses to test the application. Examples of valid browsers are:
       - `firefox`
       - `headlessfirefox`
