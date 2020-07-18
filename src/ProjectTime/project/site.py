@@ -54,7 +54,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
         return extra_urls + urls
 
     def get_monthly_summary_series(self, date, project_ids=[]):
-        charges = Charge.objects.all()
+        charges = Charge.objects.filter(end_time__isnull=False)
         if project_ids:
             charges = charges.filter(project__in=project_ids)
 
