@@ -11,12 +11,12 @@ commands: {
   pg_ctl: {unix: pg_ctl, env_spec: database},
   pg_dump: {unix: pg_dump, env_spec: database},
   psql: {unix: psql, env_spec: database},
-  django-admin: {unix: django-admin, env_spec: application},
-  manage.py: {unix: django-admin, env_spec: application},
-  coverage: {unix: cd $PYTHONPATH && coverage, env_spec: test},
+  django-admin: {unix: python -m scripts.dev_install && django-admin, env_spec: application},
+  manage.py: {unix: python -m scripts.dev_install && cd src/ProjectTime && python manage.py, env_spec: application},
+  coverage: {unix: python -m scripts.dev_install && cd src/ProjectTime && coverage, env_spec: test},
   robot: {unix: robot, env_spec: test-acceptance},
   robot.tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
-  jupyter: {unix: jupyter, env_spec: devtools},
+  jupyter: {unix: python -m scripts.dev_install && jupyter, env_spec: devtools},
   setup.py: {unix: python setup.py, env_spec: build-pypi},
   conda-build: {unix: conda-build, env_spec: build-conda}
 }
@@ -26,9 +26,8 @@ commands: {
 # Use `anaconda-project add-variable` to add variables.
 #
 variables: {
-  PGDATA: { default: ./db, description: Where PostgreSQL database files are stored },
-  PYTHONPATH: { default: src/ProjectTime, description: Where Python source files are stored },
-  DJANGO_SETTINGS_MODULE: { default: config.settings, description: Which Django settings file to use },
+  PGDATA: { default: db, description: Where PostgreSQL database files are stored },
+  DJANGO_SETTINGS_MODULE: { default: ProjectTime.config.settings, description: Which Django settings file to use },
   PROJECT_TIME_VERSION: 1.0.0
 }
 
@@ -56,7 +55,7 @@ platforms:
 env_specs:
   _python_:
     inherit_from: []
-    packages: [python=3.8]
+    packages: [python=3.8, pip]
   _anaconda-project_:
     inherit_from: [_python_]
     packages: [anaconda-project]
@@ -73,7 +72,7 @@ env_specs:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.2]
     variables: {
-      DJANGO_SETTINGS_MODULE: config.settings-debug
+      DJANGO_SETTINGS_MODULE: ProjectTime.config.settings-debug
     }
   devtools:
     inherit_from: [application-debug, _anaconda-project_, _notebook_]
