@@ -35,7 +35,7 @@ Start a new Django app          | `anaconda-project run django-admin startapp <a
 Create new Django migrations    | `anaconda-project run manage.py makemigrations`
 Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
-## Extra Notes
+## Extra Development Tips
 
 ### Development Tools
 
@@ -62,3 +62,8 @@ By running `anaconda-project prepare --env-spec devtools`, an environment contai
 The `application-debug` environment adds `django-debug-toolbar` to the
 application runtime. To use it, do:
 `anaconda-project run --env-spec application-debug manage.py runserver`.
+
+## Packaging
+
+For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
+For Conda: `anaconda-project run conda-build conda-recipe`

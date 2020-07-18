@@ -6,9 +6,9 @@ from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
 from unittest.mock import MagicMock, patch
-from ..models import Project
-from ..site import ProjectTimeAdminSite
-from .utils.general import validate_and_save
+from ProjectTime.project.models import Project, Charge
+from ProjectTime.project.site import ProjectTimeAdminSite
+from .utils.general import validate_and_save, get_start_of_today
 from .utils.charge import ChargeFactory
 
 
@@ -155,6 +155,17 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
                 project=project_b,
                 charge_time=charge
             ))
+        
+        # Create some unclosed charges in the current month
+        validate_and_save(Charge(
+            project=project_a,
+            start_time=get_start_of_today()
+        ))
+
+        validate_and_save(Charge(
+            project=project_b,
+            start_time=get_start_of_today()
+        ))
 
         # Create charges in a past month
 

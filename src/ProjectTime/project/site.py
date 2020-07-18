@@ -11,7 +11,7 @@ from django.template.response import TemplateResponse
 from django.utils import timezone
 from django.urls import path, reverse_lazy
 from math import pi
-from timezone.views import TimezoneView
+from ProjectTime.timezone.views import TimezoneView
 from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
 from .mixins import AdminSiteDefaultFilterMixin
 from .models import Project, Charge
@@ -54,7 +54,7 @@ class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
         return extra_urls + urls
 
     def get_monthly_summary_series(self, date, project_ids=[]):
-        charges = Charge.objects.all()
+        charges = Charge.objects.filter(end_time__isnull=False)
         if project_ids:
             charges = charges.filter(project__in=project_ids)
 

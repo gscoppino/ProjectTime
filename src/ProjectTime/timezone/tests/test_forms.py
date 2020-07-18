@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from pytz import common_timezones
-from timezone.forms import TimezoneForm
+from ProjectTime.timezone.forms import TimezoneForm
 
 # Create your tests here.
 

@@ -4,7 +4,7 @@ from django.contrib.messages.storage.base import Message
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 from unittest.mock import MagicMock, patch
-from ..middleware import ProjectTimeTimezoneWarningMiddleware
+from ProjectTime.project.middleware import ProjectTimeTimezoneWarningMiddleware
 
 
 def mock_add_warning_message():

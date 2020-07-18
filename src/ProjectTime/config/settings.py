@@ -36,9 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'project.apps.ProjectAdminConfig',
-    'project.apps.ProjectAppConfig',
-    'timezone.apps.TimezoneConfig'
+    'ProjectTime.project.apps.ProjectAdminConfig',
+    'ProjectTime.project.apps.ProjectAppConfig',
+    'ProjectTime.timezone.apps.TimezoneConfig'
 ]
 
 MIDDLEWARE = [
@@ -49,11 +49,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'timezone.middleware.TimezoneMiddleware',
-    'project.middleware.ProjectTimeTimezoneWarningMiddleware'
+    'ProjectTime.timezone.middleware.TimezoneMiddleware',
+    'ProjectTime.project.middleware.ProjectTimeTimezoneWarningMiddleware'
 ]
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'ProjectTime.config.urls'
 
 TEMPLATES = [
     {
@@ -73,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'ProjectTime.config.wsgi.application'
 
 
 # Database

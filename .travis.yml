@@ -3,7 +3,7 @@ addons:
   firefox: latest
 language: python
 python:
-  - "3.7"
+  - "3.8"
 before_install:
   - sudo apt-get update
 install:
@@ -24,4 +24,5 @@ before_script:
   - sleep 10
 script:
   - anaconda-project run manage.py test
-  - anaconda-project run robot test/suites/bigbang.robot
+  - anaconda-project run robot test/suites/smoke_tests.robot
+  - anaconda-project run robot test/suites/workflow_tests.robot

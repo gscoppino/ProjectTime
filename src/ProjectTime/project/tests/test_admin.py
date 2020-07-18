@@ -3,8 +3,8 @@ from datetime import timedelta
 from django.http import HttpRequest
 from django.test import TestCase
 from django.utils import timezone
-from ..admin import ProjectAdmin, ChargeAdmin, admin_site
-from ..models import Project, Charge
+from ProjectTime.project.admin import ProjectAdmin, ChargeAdmin, admin_site
+from ProjectTime.project.models import Project, Charge
 from .utils.general import validate_and_save
 
 
