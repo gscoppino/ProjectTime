@@ -17,9 +17,9 @@ setuptools.setup(
         'psycopg2~=2.8',
         'sqlparse~=0.3',
         'pytz~=2019.3',
-        'django~=2.2',
-        'pandas~=0.25',
-        'bokeh~=1.4'
+        'django~=3.0',
+        'pandas~=1.0',
+        'bokeh~=2.1'
     ],
     author='Giuseppe Scoppino',
     author_email='scoppino.giuseppe@gmail.com',
