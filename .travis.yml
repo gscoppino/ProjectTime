@@ -24,8 +24,8 @@ before_script:
   - sleep 10
 script:
   - anaconda-project run manage.py test
-  - anaconda-project run robot -v SERVER_HOST:0.0.0.0 -v SERVER_PORT:18000 -d smoke_test_artifacts test/suites/smoke_tests.robot
-  - anaconda-project run robot -v SERVER_HOST:0.0.0.0 -v SERVER_PORT:18000 -d workflow_test_artifacts test/suites/workflow_tests.robot
+  - anaconda-project run robot -v SERVER_HOST:127.0.0.1 -d smoke_test_artifacts test/suites/smoke_tests.robot
+  - anaconda-project run robot -v SERVER_HOST:127.0.0.1 -d workflow_test_artifacts test/suites/workflow_tests.robot
   - anaconda-project run setup.py sdist bdist_wheel
   - anaconda-project run conda build conda-recipe
 after_failure:
