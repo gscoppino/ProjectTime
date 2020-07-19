@@ -1,5 +1,6 @@
 *** Settings ***
 Library             Process
+Library             ../../libraries/ProjectTimeLibrary.py
 Resource           ../../variables/execution.robot
 
 *** Keywords ***
@@ -10,5 +11,5 @@ Start The Application With Data From "${fixture}"
     ...    --noinput
     ...    ../../test/fixtures/${fixture}
     ...    cwd=${CURDIR}/../../../
-    Run Process    curl    -4    --retry-delay    2    --retry    5    --retry-connrefused
-    ...    ${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}
+    Wait Until Keyword Succeeds    5x    2 seconds
+    ...    Check Application Status At URL "${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}"
