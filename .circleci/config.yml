@@ -24,7 +24,7 @@ jobs:
           background: true
       - run: sleep 10
       - run: anaconda-project run manage.py test
-      - run: anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
-      - run: anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
+      # - run: anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
+      # - run: anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
       - run: anaconda-project run setup.py sdist bdist_wheel
       - run: anaconda-project run conda build conda-recipe
