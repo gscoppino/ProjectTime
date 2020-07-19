@@ -1,28 +1,30 @@
 version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.0.1
 jobs:
   build:
     machine:
       image: 'ubuntu-1604:201903-01'
     steps:
       - checkout
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y firefox
+      - browser-tools/install-firefox
       - run: wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda_installer.sh
       - run: bash miniconda_installer.sh -b -p $HOME/miniconda
-      - run: PATH="$HOME/miniconda/bin:$PATH" conda config --set always_yes yes --set changeps1 no
-      - run: PATH="$HOME/miniconda/bin:$PATH" conda update -q conda
-      - run: PATH="$HOME/miniconda/bin:$PATH" conda info -a
-      - run: PATH="$HOME/miniconda/bin:$PATH" conda install anaconda-project
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project prepare --env-spec database
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project prepare --env-spec application
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project prepare --env-spec test-acceptance
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run pg_ctl initdb
+      - run: echo "export PATH=$HOME/miniconda/bin:$PATH" >> $BASH_ENV
+      - run: conda config --set always_yes yes --set changeps1 no
+      - run: conda update -q conda
+      - run: conda info -a
+      - run: conda install anaconda-project
+      - run: anaconda-project prepare --env-spec database
+      - run: anaconda-project prepare --env-spec application
+      - run: anaconda-project prepare --env-spec test-acceptance
+      - run: anaconda-project run pg_ctl initdb
       - run:
-          command: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run postgres
+          command: anaconda-project run postgres
           background: true
       - run: sleep 10
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run manage.py test
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run setup.py sdist bdist_wheel
-      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run conda build conda-recipe
+      - run: anaconda-project run manage.py test
+      - run: anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
+      - run: anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
+      - run: anaconda-project run setup.py sdist bdist_wheel
+      - run: anaconda-project run conda build conda-recipe
