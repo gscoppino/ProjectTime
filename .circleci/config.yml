@@ -18,15 +18,11 @@ jobs:
       - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project prepare --env-spec test-acceptance
       - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run pg_ctl initdb
       - run:
-          command: |
-            PATH="$HOME/miniconda/bin:$PATH" anaconda-project run postgres &
-            PATH="$HOME/miniconda/bin:$PATH" sleep 10
-            PATH="$HOME/miniconda/bin:$PATH" anaconda-project run manage.py test
-      - run:
-          command: |
-            PATH="$HOME/miniconda/bin:$PATH" anaconda-project run postgres &
-            PATH="$HOME/miniconda/bin:$PATH" sleep 10
-            PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
-            PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
+          command: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run postgres
+          background: true
+      - run: sleep 10
+      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run manage.py test
+      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
+      - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
       - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run setup.py sdist bdist_wheel
       - run: PATH="$HOME/miniconda/bin:$PATH" anaconda-project run conda build conda-recipe
