@@ -66,4 +66,4 @@ application runtime. To use it, do:
 ## Packaging
 
 For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
-For Conda: `anaconda-project run conda-build conda-recipe`
+For Conda: `anaconda-project run conda build conda-recipe`

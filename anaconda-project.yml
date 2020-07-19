@@ -18,7 +18,7 @@ commands: {
   robot.tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
   jupyter: {unix: python -m scripts.dev_install && jupyter, env_spec: devtools},
   setup.py: {unix: python setup.py, env_spec: build-pypi},
-  conda-build: {unix: conda-build, env_spec: build-conda}
+  conda: {unix: conda, env_spec: conda}
 }
 
 #
@@ -93,8 +93,9 @@ env_specs:
     packages:
       - setuptools
       - pyyaml
-  build-conda:
+  conda:
     inherit_from: [_python_, build-pypi]
     packages:
       - conda
       - conda-build
+      - conda-verify
