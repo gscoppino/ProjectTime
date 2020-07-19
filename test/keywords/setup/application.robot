@@ -11,6 +11,5 @@ Start The Application With Data From "${fixture}"
     ...    --noinput
     ...    ../../test/fixtures/${fixture}
     ...    cwd=${CURDIR}/../../../
-    ...    shell=yes
     Wait Until Keyword Succeeds    5x    2 seconds
     ...    Check Application Status At URL "${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}"
