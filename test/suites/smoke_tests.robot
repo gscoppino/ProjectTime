@@ -16,7 +16,7 @@ Resource          ../keywords/execution/charge.robot
 Resource          ../keywords/execution/dashboard.robot
 
 Suite Setup       Run Keywords
-...                   Start The Application With Data From "admin_user.json"
+...                   Check Application Status
 ...                   Start The Browser
 Test Setup        Navigate To The Site Root
 Test Teardown     Run Keywords
@@ -24,7 +24,6 @@ Test Teardown     Run Keywords
 ...                   Navigate To A Blank Page
 Suite Teardown    Run Keywords
 ...                   Close All Browsers
-...                   Terminate Process
 
 *** Test Cases ***
 Admin Logs In To Site

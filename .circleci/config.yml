@@ -24,7 +24,11 @@ jobs:
           background: true
       - run: sleep 10
       - run: anaconda-project run manage.py test
-      # - run: anaconda-project run robot -d smoke_test_artifacts test/suites/smoke_tests.robot
-      # - run: anaconda-project run robot -d workflow_test_artifacts test/suites/workflow_tests.robot
+      - run:
+          command: anaconda-project run manage.py testserver --addrport 8000 --noinput ../../test/fixtures/admin_user.json
+          background: true
+      - run: sleep 10
+      - run: anaconda-project run robot -v SERVER_PORT:8000 -d smoke_test_artifacts test/suites/smoke_tests.robot
+      - run: anaconda-project run robot -v SERVER_PORT:8000 -d workflow_test_artifacts test/suites/workflow_tests.robot
       - run: anaconda-project run setup.py sdist bdist_wheel
       - run: anaconda-project run conda build conda-recipe

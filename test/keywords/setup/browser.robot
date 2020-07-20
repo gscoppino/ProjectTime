@@ -5,6 +5,7 @@ Resource           ../../variables/execution.robot
 
 *** Keywords ***
 Start The Browser
+    Set Selenium Speed    ${DRIVER_SPEED_SECS} seconds
     Open Browser    about:blank    ${BROWSER}
 
 Start The Browser At The Site Root

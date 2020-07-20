@@ -21,11 +21,12 @@ A tool that can be used to keep track of time spent on projects.
 The project is built on the [Django](https://www.djangoproject.com) framework. It is backed by the [PostgreSQL](https://www.postgresql.org) database.
 
 Task                            | Command
---------------------------------|-------------------------------------------
+--------------------------------|-----------------------------------------------------------------
 Create a database               | `anaconda-project run pg_ctl initdb`
 Start the database              | `anaconda-project run postgres`
 Apply Django migrations         | `anaconda-project run manage.py migrate`
 Start the web server            | `anaconda-project run manage.py runserver`
+Start a new test server         | `anaconda-project run manage.py testserver ../../<fixture-path>`
 Run unit tests                  | `anaconda-project run manage.py test`
 Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py test`
 Generate coverage report        | `anaconda-project run coverage report`
@@ -48,6 +49,12 @@ By running `anaconda-project prepare --env-spec devtools`, an environment contai
 
 ### Acceptance Testing
 
+When starting the test server, a few useful flags:
+* Pass `--noinput` to wipe the test database without a user prompt
+* Pass `--addrport` to use a different port e.g. running the dev and test server side by side
+
+For running robot:
+
 * Pass `-d` to write Robot output files to a directory of your choice.
 * Pass `-v` to pass variables to Robot.
   * `-v BROWSER:<browser>` will change the browser Robot uses to test the application. Examples of valid browsers are:
@@ -56,6 +63,7 @@ By running `anaconda-project prepare --env-spec devtools`, an environment contai
       - `chrome`
       - `headlesschrome`
    * `-v DRIVER_SPEED_SECS:<seconds>` will speed up or slow down test execution
+   * `-v SERVER_PORT:<port>` to change the port Robot uses to access the application. Useful if running a dev and test server side-by-side.
 
 ### Performance Profiling
 
@@ -65,5 +73,5 @@ application runtime. To use it, do:
 
 ## Packaging
 
-For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
-For Conda: `anaconda-project run conda build conda-recipe`
+* For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
+* For Conda: `anaconda-project run conda build conda-recipe`

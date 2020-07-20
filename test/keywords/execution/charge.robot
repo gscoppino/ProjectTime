@@ -14,6 +14,9 @@ The site displays "${charge name}" in the charges list
 The user goes to the charges list
     Navigate To The Charges List
 
+The user clicks the "${locator}" link in the charges list
+    Click Link    xpath://*[@id="result_list"]//a[contains(text(), "${locator}")]
+
 The user creates a charge for "${name}" with start date "${start_date}" and start time "${start_time}"
     Navigate To The Add Charge Page
     Select From List By Label   project         ${name}
