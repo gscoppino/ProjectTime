@@ -1,2 +1,2 @@
-release: cd src && python manage.py migrate
-web: cd src && gunicorn config.wsgi
+release: cd src/ProjectTime && python manage.py migrate
+web: cd src/ProjectTime && gunicorn config.wsgi
