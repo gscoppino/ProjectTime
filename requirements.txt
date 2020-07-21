@@ -1,8 +1,6 @@
 ############################################################################
 # This file is only here for Heroku to know how to deploy the application. #
 ############################################################################
-Django==3.0
 django-heroku
-bokeh==2.0
-pandas==1.0
 gunicorn
+-e .
