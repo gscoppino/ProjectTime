@@ -1,4 +1,7 @@
+# Operating system artifacts
 .DS_Store
+
+# Development artifacts
 .ipynb_checkpoints
 .coverage
 __pycache__
@@ -7,3 +10,8 @@ test_reports
 db
 envs
 kernel.json
+
+# Distribution artifacts
+*.egg-info
+dist
+build

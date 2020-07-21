@@ -1,117 +1,77 @@
-# Project Time!
+# Project Time
 
 A tool that can be used to keep track of time spent on projects.
 
-[![Build Status](https://travis-ci.org/gscoppino/ProjectTime.svg?branch=master)](https://travis-ci.org/gscoppino/ProjectTime)
+[![Build Status](https://app.circleci.com/pipelines/github/gscoppino/ProjectTime?branch=master)](https://app.circleci.com/pipelines/github/gscoppino/ProjectTime)
 
-## Setup Notes
+## Development Environment Setup
 
-### Recommended
+1. Install [Miniconda](https://docs.conda.io/miniconda.html).
 
-1. Install [MiniConda](https://docs.conda.io/en/latest/miniconda.html).
-2. Open a terminal, ensuring the conda `base` environment is activated. If it is
-   not activated:
+   Miniconda is the recommended environment for development. Miniconda is a minimal distribution of [Conda](https://docs.conda.io), a cross-platform package management and environment management tool for Python projects.
 
-   `conda activate base`
+2. Open a terminal and ensure the conda `base` environment is activated.
 
-3. Install [Anaconda Project](https://anaconda-project.readthedocs.io/en/latest)
-   within the base environment:
+3. Install Anaconda Project: `conda install anaconda-project`
 
-   `conda install anaconda-project`
+   [Anaconda Project](https://anaconda-project.readthedocs.io) is the recommended task runner, and is installable using `conda`. Anaconda Project allows for multiple Conda environments to be defined in a single file, each with their own associated package dependencies. Commands can be associated with specific environments, and can be tailored to different platforms. Anaconda Project also assists with environment setup and cross-platform environment variables, among other things.
 
-4. Start the database:
+## Useful Project Commands
 
-    `anaconda-project run postgres`
+The project is built on the [Django](https://www.djangoproject.com) framework. It is backed by the [PostgreSQL](https://www.postgresql.org) database.
 
-5. Start the tool:
+Task                            | Command
+--------------------------------|-----------------------------------------------------------------
+Create a database               | `anaconda-project run pg_ctl initdb`
+Start the database              | `anaconda-project run postgres`
+Apply Django migrations         | `anaconda-project run manage.py migrate`
+Start the web server            | `anaconda-project run manage.py runserver`
+Start a new test server         | `anaconda-project run manage.py testserver ../../<fixture-path>`
+Run unit tests                  | `anaconda-project run manage.py test`
+Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py test`
+Generate coverage report        | `anaconda-project run coverage report`
+Generate coverage report (HTML) | `anaconda-project run coverage html`
+Run acceptance tests            | `anaconda-project run robot test/`
+Start a new Django app          | `anaconda-project run django-admin startapp <app> src`
+Create new Django migrations    | `anaconda-project run manage.py makemigrations`
+Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
-   `anaconda-project run manage.py runserver`
+## Extra Development Tips
 
-6. Run unit and integration tests:
+### Development Tools
 
-   `anaconda-project run manage.py test --parallel --failfast`
+By running `anaconda-project prepare --env-spec devtools`, an environment containing useful development tools (such as linters, formatters, and interactive execution environments) will be created in `envs/devtools`.
 
-7. Run acceptance tests:
+### Unit Testing
 
-    Firefox: `anaconda-project run robot -v BROWSER:firefox test/`
-    Chrome:  `anaconda-project run robot -v BROWSER:chrome test/`
-    Firefox (headless): `anaconda-project run robot -v BROWSER:headlessfirefox test/`
-    Chrome (headless):  `anaconda-project run robot -v BROWSER:headlesschrome test/`
+* Pass `--fail-fast` to fail execution immediately as soon as a test fails.
+* Pass `--parallel` to run tests in parallel.
 
-### Alternative Setup (Advanced)
+### Acceptance Testing
 
-The tool can be set up to run manually without a conda environment.
+When starting the test server, a few useful flags:
+* Pass `--noinput` to wipe the test database without a user prompt
+* Pass `--addrport` to use a different port e.g. running the dev and test server side by side
 
-1. Open `anaconda-project.yml` and install the dependencies listed in
-   `env_specs` in any choice of environment.
-2. Directly run command scripts described in the
-   `anaconda-project.yml` `commands` in the environment of choice.
+For running robot:
 
-## Development
+* Pass `-d` to write Robot output files to a directory of your choice.
+* Pass `-v` to pass variables to Robot.
+  * `-v BROWSER:<browser>` will change the browser Robot uses to test the application. Examples of valid browsers are:
+      - `firefox`
+      - `headlessfirefox`
+      - `chrome`
+      - `headlesschrome`
+   * `-v DRIVER_SPEED_SECS:<seconds>` will speed up or slow down test execution
+   * `-v SERVER_PORT:<port>` to change the port Robot uses to access the application. Useful if running a dev and test server side-by-side.
 
-Run `anaconda-project run prepare --env-spec devtools` to build a Conda environment
-with extra development tools such as linter(s), code formatter(s), and interactive
-execution environment(s). To take advantage of these, configure your editor or IDE
-to use the `devtools` environment in the `envs` folder.
-
-Development workflow is the typical workflow Django project.
-Django's `django-admin` and the project `manage.py` script are aliased as
-`anaconda-project` commands.
-
-For example, to start the server:
-
-1) Perform migrations: `anaconda-project run manage.py migrate`
-2) Start the server: `anaconda-project run manage.py runserver`
-
-To make migrations on models:
-
-`anaconda-project run manage.py makemigrations`
-
-And to create a new Django app (in the `src` directory):
-
-`anaconda-project run django-admin startapp APP_NAME src`
-
-In addition, the `postgres` script is aliased as an `anaconda-project` command.
-
-For example, to start the database server:
-
-`anaconda-project run postgres`
-
-The `anaconda-project run postgres` command takes care of ensuring a database
-always exists, while the `anaconda-project run manage.py` commands take care of
-ensuring that the latest database migrations are always applied before the server
-is started. In addition, all Python scripts are run with deprecation warnings enabled.
-
-The `anaconda-project run ipython-kernel-create` command prepares an IPython
-kernel that can be loaded into a Jupyter Notebook, allowing for execution of
-code in the `devtools` environment in an interactive notebook. Run
-`anaconda-project run jupyter notebook src/development.ipynb` to load a notebook
-that is templated with code to load the Django project.
-
-## Testing
-
-Unit and integration tests can be run with `anaconda-project run manage.py test`,
-consistent with how other management commands are run. A recommendation would
-be to append the `--parallel --failfast` switches to speed up running tests and
-verifying test behavior.
-
-To measure code coverage when running unit and integration tests, use
-`anaconda-project run coverage`. When running the `coverage` command this way
-with no command line arguments, it defaults to `coverage run` on the command
-`manage.py test`, with some extra switches to include/omit files relevant to
-coverage, measure branch coverage, and passing extra flag(s) to `manage.py test`
-to bail early if an error occurs). To generate a code coverage report afterwards,
-run `anaconda-project run coverage report`. An HTML report can be generated using
-`anaconda-project run coverage html`.
-
-Acceptance tests can be run with `anaconda-project run robot test/`. Variables can be
-passed using the `--variable KEY:VALUE` or `-v KEY:VALUE` flag. Use the variable
-`BROWSER` to control what browser is used to run the tests. The speed of
-execution (in seconds) can be controlled with the variable `DRIVER_SPEED_SECS`.
-The acceptance tests will automatically start/stop a test server to run against.
-
-## Profiling
+### Performance Profiling
 
 The `application-debug` environment adds `django-debug-toolbar` to the
 application runtime. To use it, do:
 `anaconda-project run --env-spec application-debug manage.py runserver`.
+
+## Packaging
+
+* For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
+* For Conda: `anaconda-project run conda build conda-recipe`

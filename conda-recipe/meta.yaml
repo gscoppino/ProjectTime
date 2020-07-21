@@ -1,0 +1,30 @@
+{% set data = load_setup_py_data(setup_file='../setup.py', from_recipe_dir=True) %}
+
+package:
+  name: {{ data.get('name').lower() }}
+  version: {{ data.get('version') }}
+
+source:
+  path: ../dist/ProjectTime-{{ data.get('version') }}.tar.gz
+
+requirements:
+  build:
+    - python=3.8
+    - setuptools
+    - pyyaml
+
+  run:
+    - python=3.8
+    - psycopg2=2.8
+    - sqlparse=0.3
+    - pytz=2019.3
+    - django=3.0
+    - pandas=1.0
+    - bokeh=2.1
+
+test:
+  imports:
+    - {{ data.get('name') }}
+
+about:
+  home: {{ data.get('url') }}
