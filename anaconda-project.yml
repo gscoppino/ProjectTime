@@ -82,7 +82,7 @@ env_specs:
     packages:
       - coverage
   test-acceptance:
-    inherit_from: [_python_, _anaconda-project_]
+    inherit_from: [_python_]
     packages:
       - robotframework
       - robotframework-seleniumlibrary
