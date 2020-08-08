@@ -5,6 +5,7 @@ from django.utils import timezone
 from ProjectTime.project.models import Project, Charge
 from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
 
+
 def create_charge(**options):
     try:
         project = Project.objects.get(name=options['name'])
@@ -28,11 +29,13 @@ def create_charge(**options):
         charge.full_clean()
         charge.save()
     except ValidationError as e:
-        raise CommandError("Unable to create charge due to a validation error.")
+        raise CommandError(
+            "Unable to create charge due to a validation error.")
     except Exception:
         raise CommandError("Failed to create charge.")
 
     return "Charge was successfully created."
+
 
 class Command(BaseCommand):
     help = "Add a charge."

@@ -16,7 +16,7 @@ commands: {
   coverage: {unix: python -m scripts.dev_install && cd src/ProjectTime && coverage, env_spec: test},
   robot: {unix: robot, env_spec: test-acceptance},
   robot.tidy: {unix: python -m robot.tidy, env_spec: test-acceptance},
-  jupyter: {unix: python -m scripts.dev_install && jupyter, env_spec: devtools},
+  jupyter: {unix: python -m scripts.dev_install && jupyter, env_spec: default},
   setup.py: {unix: python setup.py, env_spec: build-pypi},
   conda: {unix: conda, env_spec: conda}
 }
@@ -62,21 +62,24 @@ env_specs:
   _notebook_:
     inherit_from: [_python_]
     packages: [notebook]
+  _lint_:
+    inherit_from: [_python_]
+    packages: [pylint, pep8, autopep8]
   database:
     inherit_from: []
     packages: [postgresql=12.2]
   application:
     inherit_from: [_python_]
-    packages: [psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.1]
+    packages: [psycopg2=2.8, sqlparse=0.3, pytz=2019.3, django=3.0, pandas=1.0, bokeh=2.1, tabulate=0.8]
   application-debug:
     inherit_from: [application]
     packages: [django-debug-toolbar=2.2]
     variables: {
       DJANGO_SETTINGS_MODULE: ProjectTime.config.settings-debug
     }
-  devtools:
-    inherit_from: [application-debug, _anaconda-project_, _notebook_]
-    packages: [notebook, pylint, pep8, autopep8]
+  default:
+    inherit_from: [application-debug, test, test-acceptance, _lint_, _anaconda-project_, _notebook_]
+    packages: []
   test:
     inherit_from: [application]
     packages:

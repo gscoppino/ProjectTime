@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from ProjectTime.project.models import Charge
 
+
 def close_charge(**options):
     try:
         if options['pk']:
@@ -24,6 +25,7 @@ def close_charge(**options):
 
     return "Charge was successfully closed."
 
+
 class Command(BaseCommand):
     help = "Close a charge."
 
@@ -33,7 +35,6 @@ class Command(BaseCommand):
             type=int,
             help="The PK of the charge to end (default: latest open)"
         )
-
 
     def handle(self, *args, **options):
         success_message = close_charge(**options)

@@ -40,7 +40,7 @@ Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
 ### Development Tools
 
-By running `anaconda-project prepare --env-spec devtools`, an environment containing useful development tools (such as linters, formatters, and interactive execution environments) will be created in `envs/devtools`.
+By running `anaconda-project prepare --env-spec default`, an environment containing useful development tools (such as linters, formatters, and interactive execution environments) will be created in `envs/default`.
 
 ### Unit Testing
 

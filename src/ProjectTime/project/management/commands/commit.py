@@ -5,6 +5,7 @@ from django.utils import timezone
 from ProjectTime.project.models import Charge
 from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
 
+
 def end_charge(**options):
     try:
         if options['pk']:
@@ -32,6 +33,7 @@ def end_charge(**options):
         raise CommandError("Failed to update charge end time.")
 
     return "Charge end time was successfully updated."
+
 
 class Command(BaseCommand):
     help = "Commit an end time for a charge."
