@@ -49,7 +49,7 @@ commands:
 # Use `anaconda-project add-variable` to add variables.
 #
 variables:
-  PROJECT_TIME_VERSION: 1.0.0,
+  PROJECT_TIME_VERSION: 1.0.0
   PGDATA:
     default: db
     description: Where PostgreSQL database files are stored
