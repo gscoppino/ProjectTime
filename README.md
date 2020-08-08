@@ -67,7 +67,7 @@ For running robot:
 
 ### Performance Profiling
 
-The `application-debug` environment adds `django-debug-toolbar` to the application runtime. To use it, set the `DJANGO_SETTINGS_MODULE` environment variable to `ProjectTime.project.settings-debug`, then run the following command:
+The `application-debug` environment adds `django-debug-toolbar` to the application runtime. To use it, set the `DJANGO_SETTINGS_MODULE` environment variable to `ProjectTime.config.settings-debug`, then run the following command:
 
 ```
 anaconda-project run --env-spec application-debug manage.py runserver
