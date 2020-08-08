@@ -7,7 +7,8 @@ jobs:
       image: 'ubuntu-1604:201903-01'
     steps:
       - checkout
-      - browser-tools/install-firefox
+      - browser-tools/install-firefox # https://github.com/CircleCI-Public/browser-tools-orb/issues/14
+          version: "78.0"
       - run: wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda_installer.sh
       - run: bash miniconda_installer.sh -b -p $HOME/miniconda
       - run: echo "export PATH=$HOME/miniconda/bin:$PATH" >> $BASH_ENV
