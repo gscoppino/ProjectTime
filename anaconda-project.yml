@@ -111,8 +111,6 @@ env_specs:
       - application
     packages:
       - django-debug-toolbar=2.2
-    variables:
-      DJANGO_SETTINGS_MODULE: ProjectTime.config.settings-debug
   default:
     inherit_from:
       - application-debug

@@ -40,7 +40,7 @@ Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
 ### Development Tools
 
-By running `anaconda-project prepare --env-spec default`, an environment containing useful development tools (such as linters, formatters, and interactive execution environments) will be created in `envs/default`.
+By running `anaconda-project prepare --env-spec default`, an environment containing all development/debug/testing dependencies, along with useful development tools (such as linters formatters, and interactive execution environments), will be created in `envs/default`.
 
 ### Unit Testing
 
@@ -67,9 +67,11 @@ For running robot:
 
 ### Performance Profiling
 
-The `application-debug` environment adds `django-debug-toolbar` to the
-application runtime. To use it, do:
-`anaconda-project run --env-spec application-debug manage.py runserver`.
+The `application-debug` environment adds `django-debug-toolbar` to the application runtime. To use it, set the `DJANGO_SETTINGS_MODULE` environment variable to `ProjectTime.project.settings-debug`, then run the following command:
+
+```
+anaconda-project run --env-spec application-debug manage.py runserver
+```
 
 ## Packaging
 
