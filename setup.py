@@ -19,7 +19,8 @@ setuptools.setup(
         'pytz~=2019.3',
         'django~=3.0',
         'pandas~=1.0',
-        'bokeh~=2.1'
+        'bokeh~=2.1',
+        'tabulate~=0.5'
     ],
     author='Giuseppe Scoppino',
     author_email='scoppino.giuseppe@gmail.com',
