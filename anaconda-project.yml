@@ -50,9 +50,12 @@ commands:
 #
 variables:
   PROJECT_TIME_VERSION: 1.0.0
+  PROJECT_TIME_CLI_TIMEZONE:
+    default: UTC
+    description: What timezone management commands operate in
   PGDATA:
     default: db
-    description: Where PostgreSQL database files are stored
+    description: Where PostgreSQL local database files are stored
   DJANGO_SETTINGS_MODULE:
     default: ProjectTime.config.settings
     description: Which Django settings file to use
