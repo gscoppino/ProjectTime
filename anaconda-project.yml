@@ -3,7 +3,6 @@
 # The file is in YAML format, please see http://www.yaml.org/start.html for more.
 
 name: ProjectTime
-description: A tool that can be used to keep track of time spent on projects.
 
 # lists runnable scripts, notebooks, and other code.
 commands:
@@ -49,7 +48,6 @@ commands:
 # Use `anaconda-project add-variable` to add variables.
 #
 variables:
-  PROJECT_TIME_VERSION: 1.0.0
   PROJECT_TIME_CLI_TIMEZONE:
     default: UTC
     description: What timezone management commands operate in
@@ -140,7 +138,6 @@ env_specs:
       - _python_
     packages:
       - setuptools
-      - pyyaml
   conda:
     inherit_from:
       - _python_

@@ -1,4 +1,3 @@
-import os
 import setuptools
 
 readme_file = open('README.md', 'r')
