@@ -4,9 +4,9 @@ readme_file = open('README.md', 'r')
 readme_text = readme_file.read()
 
 setuptools.setup(
-    name="ProjectTime",
-    description="A tool that can be used to keep track of time spent on projects.",
-    version="1.0.0",
+    name='ProjectTime',
+    description='A tool that can be used to keep track of time spent on projects.',
+    version='1.0.0',
     python_requires='~=3.8',
     install_requires=[
         'psycopg2~=2.8',
