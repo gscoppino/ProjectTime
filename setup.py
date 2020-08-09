@@ -1,17 +1,12 @@
-import os
 import setuptools
-import yaml
 
-project_file = open('anaconda-project.yml', 'r')
 readme_file = open('README.md', 'r')
-
-project_spec = yaml.load(project_file, Loader=yaml.Loader)
 readme_text = readme_file.read()
 
 setuptools.setup(
-    name=project_spec['name'],
-    description=project_spec["description"],
-    version=os.getenv('PROJECT_TIME_VERSION'),
+    name="ProjectTime",
+    description="A tool that can be used to keep track of time spent on projects.",
+    version="1.0.0",
     python_requires='~=3.8',
     install_requires=[
         'psycopg2~=2.8',
@@ -35,5 +30,4 @@ setuptools.setup(
     }
 )
 
-project_file.close()
 readme_file.close()
