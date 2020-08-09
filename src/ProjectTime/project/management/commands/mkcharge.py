@@ -1,9 +1,10 @@
 from datetime import date, time, datetime
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
+
 
 def create_charge(**options):
     try:
@@ -28,11 +29,13 @@ def create_charge(**options):
         charge.full_clean()
         charge.save()
     except ValidationError as e:
-        raise CommandError("Unable to create charge due to a validation error.")
+        raise CommandError(
+            "Unable to create charge due to a validation error.")
     except Exception:
         raise CommandError("Failed to create charge.")
 
     return "Charge was successfully created."
+
 
 class Command(BaseCommand):
     help = "Add a charge."
@@ -62,7 +65,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        activate_timezone_for_cli()
+        timezone.activate(settings.PROJECT_TIME_CLI_TIMEZONE)
         now = timezone.localtime()
 
         if not options['date']:

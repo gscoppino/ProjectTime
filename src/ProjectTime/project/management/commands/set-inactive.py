@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from ProjectTime.project.models import Project
 
+
 def deactivate_project(**options):
     try:
         project = Project.objects.get(name=options['name'])
@@ -14,11 +15,13 @@ def deactivate_project(**options):
     except Project.DoesNotExist:
         raise CommandError(f"No project with name `{options['name']}` found.")
     except ValidationError as e:
-        raise CommandError("Unable to deactivate project due to a validation error.")
+        raise CommandError(
+            "Unable to deactivate project due to a validation error.")
     except Exception:
         raise CommandError("Failed to deactivate project.")
 
     return "Project was successfully deactivated."
+
 
 class Command(BaseCommand):
     help = "Mark a project as inactive."

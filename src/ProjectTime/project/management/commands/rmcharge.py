@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from ProjectTime.project.models import Charge
 
+
 def delete_charge(**options):
     try:
         if options['pk']:
@@ -18,6 +19,7 @@ def delete_charge(**options):
         raise CommandError("Failed to delete charge.")
 
     return "Charge was successfully deleted."
+
 
 class Command(BaseCommand):
     help = "Delete a charge."

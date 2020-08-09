@@ -1,14 +1,15 @@
 from django.db import models
+from .utils.mixins import PandasQuerySetMixin
 
 
-class ProjectQuerySet(models.QuerySet):
+class ProjectQuerySet(models.QuerySet, PandasQuerySetMixin):
     def annotate_latest_charge(self):
         return self.annotate(
             db__latest_charge=models.Max('charge__end_time')
         )
 
 
-class ChargeQuerySet(models.QuerySet):
+class ChargeQuerySet(models.QuerySet, PandasQuerySetMixin):
     def annotate_time_charged(self):
         return self.annotate(
             db__time_charged=models.F('end_time') - models.F('start_time')

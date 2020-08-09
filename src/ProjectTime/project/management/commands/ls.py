@@ -5,74 +5,93 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.formats import localize
 from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
 
-def _localize_datetime(value):
-    if value is None:
+
+def _localize_datetime(pdvalue):
+    if pdvalue is pd.NaT:
         return None
 
-    return localize(timezone.localtime(value), use_l10n=settings.USE_L10N)
+    return localize(timezone.localtime(pdvalue.to_pydatetime()), use_l10n=settings.USE_L10N)
 
-def _localize_timedelta(value):
-    if value is None:
+
+def _localize_timedelta(pdvalue):
+    if pdvalue is pd.NaT:
         return None
 
-    return localize(value, use_l10n=settings.USE_L10N)
+    return localize(pdvalue.to_pytimedelta(), use_l10n=settings.USE_L10N)
+
 
 def get_projects_dataframe(**options):
     try:
-        projects = Project.objects.annotate_latest_charge().values_list(
+        projects = Project.objects.annotate_latest_charge()
+
+        if not options['all']:
+            projects = projects.filter(active=True)
+
+        df = projects.to_pandas(
             'pk',
             'name',
             'active',
             'db__latest_charge',
-            named=True
-        )
+        ).astype({
+            "db__latest_charge": 'datetime64[ns, UTC]'
+        })
     except Exception:
         raise CommandError("Failed to retrieve the project list.")
 
-    projects = [project._replace(
-        db__latest_charge=_localize_datetime(project.db__latest_charge)
-    ) for project in projects]
+    if df.empty:
+        return df
 
-    df = pd.DataFrame(
-        projects, columns=('PK', 'Name', 'Active', 'Latest Charge')
-    ).set_index('PK').sort_index()
+    df.update(df.db__latest_charge.apply(_localize_datetime))
 
-    return df
+    return df.set_index('pk').sort_index().rename(columns={
+        "name": "Name",
+        "active": "Active",
+        "db__latest_charge": "Latest Charge"
+    })
+
 
 def get_open_charges_dataframe(**options):
     try:
-        charges = (
-            Charge.objects
-                .filter(closed=False)
-                .select_related('project')
-                .annotate(project_name=F('project__name'))
-                .annotate_time_charged()
-                .values_list(
-                    'pk',
-                    'project__name',
-                    'start_time',
-                    'end_time',
-                    'db__time_charged',
-                    'closed',
-                    named=True
-                )
-        )
+        charges = (Charge.objects
+                   .select_related('project')
+                   .annotate(project_name=F('project__name'))
+                   .annotate_time_charged())
+
+        if not options['all']:
+            charges = charges.filter(closed=False)
+
+        df = charges.to_pandas(
+            'pk',
+            'project__name',
+            'start_time',
+            'end_time',
+            'db__time_charged',
+            'closed',
+        ).astype({
+            "start_time": 'datetime64[ns, UTC]',
+            "end_time": 'datetime64[ns, UTC]',
+            "db__time_charged": 'timedelta64[ns]'
+        })
+
     except Exception:
         raise CommandError("Failed to retrieve the charge list.")
 
-    charges = [charge._replace(
-        start_time=_localize_datetime(charge.start_time),
-        end_time=_localize_datetime(charge.end_time),
-        db__time_charged=_localize_timedelta(charge.db__time_charged)
-    ) for charge in charges]
+    if df.empty:
+        return df
 
-    df = pd.DataFrame(
-        charges, columns=('PK', 'Project', 'Start', 'End', 'Time Charged', 'Closed')
-    ).set_index('PK').sort_index()
+    df.update(df.start_time.apply(_localize_datetime))
+    df.update(df.end_time.apply(_localize_datetime))
+    df.update(df.db__time_charged.apply(_localize_timedelta))
 
-    return df
+    return df.set_index('pk').sort_index().rename(columns={
+        'project__name': 'Project',
+        'start_time': 'Start Time',
+        'end_time': 'End Time',
+        'db__time_charged': 'Time Charged',
+        'closed': 'Closed'
+    })
+
 
 class Command(BaseCommand):
     help = "List records."
@@ -80,19 +99,26 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         subparsers = parser.add_subparsers(required=True, dest="command")
 
-        subparsers.add_parser("projects")
-        subparsers.add_parser("charges")
-    
+        projects_parser = subparsers.add_parser("projects")
+        projects_parser.add_argument(
+            '-a', '--all', action="store_true", help="List all projects."
+        )
+
+        charges_parser = subparsers.add_parser("charges")
+        charges_parser.add_argument(
+            '-a', '--all', action="store_true", help="List all charges."
+        )
+
     def handle(self, *args, **options):
-        activate_timezone_for_cli()
+        timezone.activate(settings.PROJECT_TIME_CLI_TIMEZONE)
+
         pd.set_option("display.width", None)
         pd.set_option("display.max_rows", None)
         pd.set_option("display.max_columns", None)
-        pd.set_option("display.colheader_justify", "left")
 
         if options['command'] == "projects":
-            return str(get_projects_dataframe(**options))
+            return get_projects_dataframe(**options).to_markdown()
         elif options['command'] == "charges":
-            return str(get_open_charges_dataframe(**options))
+            return get_open_charges_dataframe(**options).to_markdown()
         else:
             return CommandError("Unrecognized record type.")
