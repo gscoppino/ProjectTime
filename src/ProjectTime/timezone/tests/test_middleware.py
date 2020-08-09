@@ -10,7 +10,7 @@ class TimezoneMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.session = {'timezone': timezone_to_activate}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = TimezoneMiddleware(mock_get_response)
@@ -25,7 +25,7 @@ class TimezoneMiddlewareTestCase(SimpleTestCase):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.session = {}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = TimezoneMiddleware(mock_get_response)

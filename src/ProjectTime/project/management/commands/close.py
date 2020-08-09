@@ -16,8 +16,8 @@ def close_charge(**options):
     except Charge.DoesNotExist:
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")
-        else:
-            raise CommandError("There are no opened charges to close.")
+
+        raise CommandError("There are no opened charges to close.")
     except ValidationError:
         raise CommandError("Unable to close charge due to a validation error.")
     except Exception:

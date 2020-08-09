@@ -16,7 +16,8 @@ class TimezoneFormTestCase(SimpleTestCase):
     def test_timezone_field_choices_are_common_timezones(self):
         form = TimezoneForm()
         self.assertEqual(form.fields['timezone'].choices, [
-                         (tz, tz) for tz in common_timezones])
+            (tz, tz) for tz in common_timezones
+        ])
 
     def test_timezone_field_initial_value(self):
         form = TimezoneForm()

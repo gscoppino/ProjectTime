@@ -25,14 +25,14 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
             return ()
-        elif obj.closed and not obj.project.active:
+        if obj.closed and not obj.project.active:
             return ('start_time', 'end_time',)
-        elif obj.closed:
+        if obj.closed:
             return ('start_time', 'end_time', 'project',)
-        elif not obj.project.active:
+        if not obj.project.active:
             return ('start_time', 'end_time', 'closed',)
-        else:
-            return ()
+
+        return ()
 
     @with_attrs(admin_order_field='db__time_charged')
     def time_charged(self, obj):

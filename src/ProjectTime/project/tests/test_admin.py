@@ -24,9 +24,9 @@ class ProjectModelAdminTestCase(TestCase):
         validate_and_save(Project(name='Test'))
         validate_and_save(Project(name='Test 2'))
 
-        qs = self.model_admin.get_queryset(HttpRequest())
+        queryset = self.model_admin.get_queryset(HttpRequest())
 
-        for project in qs:
+        for project in queryset:
             self.assertTrue(hasattr(project, 'db__latest_charge'))
 
     def test_latest_charge_is_set_as_computed_field(self):
@@ -88,9 +88,9 @@ class ChargeModelAdminTestCase(TestCase):
         validate_and_save(Charge(project=self.project,
                                  start_time=timezone.now()))
 
-        qs = self.model_admin.get_queryset(HttpRequest())
+        queryset = self.model_admin.get_queryset(HttpRequest())
 
-        for charge in qs:
+        for charge in queryset:
             self.assertTrue(hasattr(charge, 'db__time_charged'))
 
     def test_time_charged_is_set_as_computed_field(self):
@@ -122,7 +122,7 @@ class ChargeModelAdminTestCase(TestCase):
 
         self.assertEqual(len(readonly_fields), 0)
 
-    def test_charge_start_time_and_end_time_are_read_only_when_project_is_not_active_and_charge_is_closed(self):
+    def test_start_and_end_time_are_read_only_when_project_not_active_and_charge_closed(self):
         charge = validate_and_save(Charge(project=self.project,
                                           start_time=timezone.now(),
                                           end_time=timezone.now() + timedelta(hours=1),
@@ -136,7 +136,7 @@ class ChargeModelAdminTestCase(TestCase):
 
         self.assertSequenceEqual(readonly_fields, ('start_time', 'end_time',))
 
-    def test_charge_start_time_end_time_and_project_are_read_only_when_charge_is_closed(self):
+    def test_start_time_end_time_and_project_are_read_only_when_charge_is_closed(self):
         self.project.active = True
         validate_and_save(self.project)
 
@@ -151,7 +151,7 @@ class ChargeModelAdminTestCase(TestCase):
         self.assertSequenceEqual(readonly_fields,
                                  ('start_time', 'end_time', 'project',))
 
-    def test_charge_start_time_end_time_and_closed_status_are_read_only_when_project_is_not_active(self):
+    def test_start_time_end_time_and_closed_status_are_read_only_when_project_not_active(self):
         charge = validate_and_save(Charge(project=self.project,
                                           start_time=timezone.now(),
                                           closed=False))

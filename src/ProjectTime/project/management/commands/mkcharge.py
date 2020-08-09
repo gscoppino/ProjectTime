@@ -28,7 +28,7 @@ def create_charge(**options):
 
         charge.full_clean()
         charge.save()
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to create charge due to a validation error.")
     except Exception:

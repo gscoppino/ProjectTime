@@ -6,7 +6,7 @@ from unittest.mock import patch
 from ProjectTime.project.site import ProjectTimeAdminSite
 
 
-def get_mock_timezone_context(self, request):
+def get_mock_timezone_context(*args):
     return {'timezone': 'foo'}
 
 

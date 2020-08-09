@@ -1,7 +1,6 @@
-from ProjectTime.project.models import Project
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models.deletion import ProtectedError
-
+from ProjectTime.project.models import Project
 
 def delete_project(**options):
     try:

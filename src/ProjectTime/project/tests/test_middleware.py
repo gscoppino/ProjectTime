@@ -11,7 +11,7 @@ def mock_add_warning_message():
     return MagicMock(return_value=None)
 
 
-def mock_get_messages_with_existing_warning(request):
+def mock_get_messages_with_existing_warning(*args):
     return [
         Message(
             messages.constants.WARNING,
@@ -29,7 +29,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {}
         mock_request.headers = {"Accept": "text/html"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
@@ -46,7 +46,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {'timezone': 'America/New_York'}
         mock_request.headers = {"Accept": "text/html"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
@@ -62,7 +62,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {}
         mock_request.headers = {"Accept": "text/css"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
@@ -78,7 +78,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {}
         mock_request.headers = {"Accept": "text/html"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
@@ -97,7 +97,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {}
         mock_request.headers = {"Accept": "text/html"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)
@@ -114,7 +114,7 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         mock_request.session = {}
         mock_request.headers = {"Accept": "text/html"}
 
-        def mock_get_response(request):
+        def mock_get_response(*args):
             pass
 
         middleware = ProjectTimeTimezoneWarningMiddleware(mock_get_response)

@@ -13,6 +13,11 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='charge',
-            constraint=models.CheckConstraint(check=models.Q(start_time__lte=django.db.models.expressions.F('end_time')), name='start_time_less_than_end_time'),
+            constraint=models.CheckConstraint(
+                check=models.Q(
+                    start_time__lte=django.db.models.expressions.F('end_time')
+                ),
+                name='start_time_less_than_end_time'
+            ),
         ),
     ]

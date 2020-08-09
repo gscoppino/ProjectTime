@@ -16,6 +16,10 @@ A tool that can be used to keep track of time spent on projects.
 
    [Anaconda Project](https://anaconda-project.readthedocs.io) is the recommended task runner, and is installable using `conda`. Anaconda Project allows for multiple Conda environments to be defined in a single file, each with their own associated package dependencies. Commands can be associated with specific environments, and can be tailored to different platforms. Anaconda Project also assists with environment setup and cross-platform environment variables, among other things.
 
+4. (Optional) Prepare the default environment: `anaconda-project run prepare`
+
+   The default environment contains all development, debug, and testing dependencies, in addition to useful development tools (such as linters, formatters, and Jupyter Notebook).
+
 ## Useful Project Commands
 
 The project is built on the [Django](https://www.djangoproject.com) framework. It is backed by the [PostgreSQL](https://www.postgresql.org) database.
@@ -32,15 +36,12 @@ Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py t
 Generate coverage report        | `anaconda-project run coverage report`
 Generate coverage report (HTML) | `anaconda-project run coverage html`
 Run acceptance tests            | `anaconda-project run robot test/`
+Lint Python files               | `anaconda-project run pylint ProjectTime`
 Start a new Django app          | `anaconda-project run django-admin startapp <app> src`
 Create new Django migrations    | `anaconda-project run manage.py makemigrations`
 Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
 ## Extra Development Tips
-
-### Development Tools
-
-By running `anaconda-project prepare --env-spec default`, an environment containing all development/debug/testing dependencies, along with useful development tools (such as linters formatters, and interactive execution environments), will be created in `envs/default`.
 
 ### Unit Testing
 

@@ -1,7 +1,7 @@
+from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone, formats
-from datetime import datetime, timedelta
 from .querysets import ProjectQuerySet, ChargeQuerySet
 
 # Create your models here.
@@ -102,8 +102,8 @@ class Charge(models.Model):
 
             if exclude and 'end_time' in exclude:
                 raise error
-            else:
-                raise ValidationError({'end_time': error})
+
+            raise ValidationError({'end_time': error})
 
         if self.closed and not self.end_time:
             error = ValidationError(
@@ -113,8 +113,8 @@ class Charge(models.Model):
 
             if exclude and 'closed' in exclude:
                 raise error
-            else:
-                raise ValidationError({'closed': error})
+
+            raise ValidationError({'closed': error})
 
         if self.pk:
             previously_closed = (Charge.objects.values_list('closed', flat=True)

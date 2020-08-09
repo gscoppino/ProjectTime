@@ -2,7 +2,6 @@ from datetime import timedelta
 from django.test import TestCase
 from django.utils import timezone
 from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.querysets import ProjectQuerySet, ChargeQuerySet
 from .utils.general import validate_and_save
 
 

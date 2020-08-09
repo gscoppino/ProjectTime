@@ -7,14 +7,14 @@ def rename_project(**options):
     try:
         project = Project.objects.get(name=options['current_name'])
         if project.name == options['new_name']:
-            return
+            return "The new name is the same as the current name."
 
         project.name = options['new_name']
         project.full_clean()
         project.save()
     except Project.DoesNotExist:
         raise CommandError(f"No project with name `{options['name']}` found.")
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to rename project due to a validation error.")
     except Exception:

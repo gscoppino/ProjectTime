@@ -1,8 +1,7 @@
-from django.shortcuts import reverse
 from django.views.generic import FormView
 from django.test import TestCase, RequestFactory
 from django.views.generic.edit import FormMixin
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from ProjectTime.timezone.forms import TimezoneForm
 from ProjectTime.timezone.views import TimezoneView
 
@@ -31,8 +30,7 @@ class TimezoneViewTestCase(ViewTestCase):
     def test_timezone_form_is_used(self):
         self.assertTrue(TimezoneView.form_class is TimezoneForm)
 
-    @patch.object(FormMixin, 'form_valid')
-    def test_set_timezone_for_session_on_successful_submit(self, mock_method):
+    def test_set_timezone_for_session_on_successful_submit(self):
         request = RequestFactory().get('/foo/bar')
         request.session = {}
 
@@ -44,5 +42,7 @@ class TimezoneViewTestCase(ViewTestCase):
 
         form.full_clean()
 
-        view.form_valid(form)
+        with patch.object(FormMixin, 'form_valid'):
+            view.form_valid(form)
+
         self.assertEqual(request.session['timezone'], 'America/New_York')

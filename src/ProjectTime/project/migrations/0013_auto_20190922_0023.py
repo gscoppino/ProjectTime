@@ -12,6 +12,13 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='charge',
-            constraint=models.CheckConstraint(check=models.Q(('closed__exact', True), ('end_time__exact', None), _negated=True), name='cannot_close_without_end_time'),
+            constraint=models.CheckConstraint(
+                check=models.Q(
+                    ('closed__exact', True),
+                    ('end_time__exact', None),
+                    _negated=True
+                ),
+                name='cannot_close_without_end_time'
+            ),
         ),
     ]

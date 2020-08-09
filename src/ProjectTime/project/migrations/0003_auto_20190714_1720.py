@@ -17,6 +17,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name='charge',
-            constraint=models.CheckConstraint(check=models.Q(end_time__gte=django.db.models.expressions.F('start_time')), name='end_time_greater_than_start_time'),
+            constraint=models.CheckConstraint(
+                check=models.Q(
+                    end_time__gte=django.db.models.expressions.F('start_time')
+                ),
+                name='end_time_greater_than_start_time'
+            ),
         ),
     ]

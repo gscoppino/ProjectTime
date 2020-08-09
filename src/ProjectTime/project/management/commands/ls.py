@@ -118,7 +118,8 @@ class Command(BaseCommand):
 
         if options['command'] == "projects":
             return get_projects_dataframe(**options).to_markdown()
-        elif options['command'] == "charges":
+
+        if options['command'] == "charges":
             return get_open_charges_dataframe(**options).to_markdown()
-        else:
-            return CommandError("Unrecognized record type.")
+
+        return CommandError("Unrecognized record type.")

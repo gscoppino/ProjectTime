@@ -9,14 +9,14 @@ class ChargeFactory:
         return Charge(project=project,
                       start_time=start_of_today,
                       end_time=start_of_today + charge_time)
-    
+
     @classmethod
     def past_month(cls, project=None, charge_time=None):
         past_month = get_start_of_today() - timedelta(days=31)
         return Charge(project=project,
                       start_time=past_month,
                       end_time=past_month + charge_time)
-    
+
     @classmethod
     def future_month(cls, project=None, charge_time=None):
         future_month = get_start_of_today() + timedelta(days=31)

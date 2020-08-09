@@ -6,7 +6,7 @@ from ProjectTime.project.models import Project
 def deactivate_project(**options):
     try:
         project = Project.objects.get(name=options['name'])
-        if project.active == False:
+        if not project.active:
             return "Project is already inactive."
 
         project.active = False
@@ -14,7 +14,7 @@ def deactivate_project(**options):
         project.save()
     except Project.DoesNotExist:
         raise CommandError(f"No project with name `{options['name']}` found.")
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to deactivate project due to a validation error.")
     except Exception:

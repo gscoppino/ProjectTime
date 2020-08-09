@@ -72,10 +72,12 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         response = self.client.get(reverse('admin:dashboard'))
         self.assertEqual(response.status_code, 200)
 
-    @patch.object(AdminSite, 'each_context', new_callable=get_mock_admin_context)
-    def test_all_admin_context_is_available_on_context(self, mock_method):
+    def test_all_admin_context_is_available_on_context(self):
         self.performLogin()
-        response = self.client.get(reverse('admin:dashboard'))
+
+        with patch.object(AdminSite, 'each_context', new_callable=get_mock_admin_context):
+            response = self.client.get(reverse('admin:dashboard'))
+
         self.assertIn('foo', response.context)
         self.assertEqual(response.context['foo'], 'bar')
 
@@ -155,7 +157,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
                 project=project_b,
                 charge_time=charge
             ))
-        
+
         # Create some unclosed charges in the current month
         validate_and_save(Charge(
             project=project_a,

@@ -8,7 +8,7 @@ def create_project(**options):
         project = Project(name=options['name'])
         project.full_clean()
         project.save()
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to create project due to a validation error.")
     except Exception:
