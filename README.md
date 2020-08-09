@@ -2,7 +2,7 @@
 
 A tool that can be used to keep track of time spent on projects.
 
-[![Build Status](https://app.circleci.com/pipelines/github/gscoppino/ProjectTime?branch=master)](https://app.circleci.com/pipelines/github/gscoppino/ProjectTime)
+[![gscoppino](https://circleci.com/gh/gscoppino/project-time.svg?style=svg)](https://circleci.com/gh/gscoppino/project-time/tree/master)
 
 ## Development Environment Setup
 
