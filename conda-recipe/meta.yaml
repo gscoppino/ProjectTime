@@ -8,12 +8,15 @@ source:
   path: ../dist/ProjectTime-{{ data.get('version') }}.tar.gz
 
 build:
+  noarch: python
+  script: "$PYTHON -m pip install ProjectTime-$PKG_VERSION.tar.gz"
   entry_points:
     - project-time = {{ data.get('name') }}.manage:main
 
 requirements:
-  build:
+  host:
     - python=3.8
+    - pip
     - setuptools
 
   run:
@@ -34,3 +37,4 @@ test:
 
 about:
   home: {{ data.get('url') }}
+  summary: {{ data.get('description') }}
