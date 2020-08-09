@@ -10,8 +10,6 @@ source:
 build:
   noarch: python
   script: "$PYTHON -m pip install ProjectTime-$PKG_VERSION.tar.gz"
-  entry_points:
-    - project-time = {{ data.get('name') }}.manage:main
 
 requirements:
   host:
@@ -32,8 +30,6 @@ requirements:
 test:
   imports:
     - {{ data.get('name') }}
-  commands:
-    - project-time --help
 
 about:
   home: {{ data.get('url') }}
