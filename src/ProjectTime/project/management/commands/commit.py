@@ -1,9 +1,9 @@
 from datetime import time, datetime
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from ProjectTime.project.models import Charge
-from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
 
 
 def end_charge(**options):
@@ -56,7 +56,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        activate_timezone_for_cli()
+        timezone.activate(settings.PROJECT_TIME_CLI_TIMEZONE)
         now = timezone.localtime()
 
         if not options['end']:

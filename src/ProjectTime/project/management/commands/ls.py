@@ -5,7 +5,6 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.formats import localize
 from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.management.utils.timezone import activate_timezone_for_cli
 
 
 def _localize_datetime(pdvalue):
@@ -111,7 +110,8 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        activate_timezone_for_cli()
+        timezone.activate(settings.PROJECT_TIME_CLI_TIMEZONE)
+
         pd.set_option("display.width", None)
         pd.set_option("display.max_rows", None)
         pd.set_option("display.max_columns", None)
