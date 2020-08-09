@@ -7,11 +7,14 @@ package:
 source:
   path: ../dist/ProjectTime-{{ data.get('version') }}.tar.gz
 
+build:
+  entry_points:
+    - project-time = {{ data.get('name') }}.manage:main
+
 requirements:
   build:
     - python=3.8
     - setuptools
-    - pyyaml
 
   run:
     - python=3.8
@@ -26,6 +29,8 @@ requirements:
 test:
   imports:
     - {{ data.get('name') }}
+  commands:
+    - project-time --help
 
 about:
   home: {{ data.get('url') }}
