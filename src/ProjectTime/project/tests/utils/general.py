@@ -7,6 +7,7 @@ def get_start_of_today():
                                   second=0,
                                   microsecond=0)
 
+
 def validate_and_save(model_instance, clean_kwargs=None, save_kwargs=None):
     # NOTE: This method is generic and useful enough that it could moved out into an application
     # utility library.

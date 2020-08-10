@@ -36,8 +36,10 @@ Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py t
 Generate coverage report        | `anaconda-project run coverage report`
 Generate coverage report (HTML) | `anaconda-project run coverage html`
 Run acceptance tests            | `anaconda-project run robot test/`
-Lint Python files               | `anaconda-project run pylint ProjectTime`
-Start a new Django app          | `anaconda-project run django-admin startapp <app> src`
+Format Python code              | `anaconda-project run autopep8 -r -i --max-line-length 88 src/ProjectTime`
+Sort imports in Python files    | `anaconda-project run isort -rc src/ProjectTime`
+Lint Python files               | `anaconda-project run pylint src/ProjectTime`
+Start a new Django app          | `anaconda-project run django-admin startapp <app> src/ProjectTime`
 Create new Django migrations    | `anaconda-project run manage.py makemigrations`
 Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 

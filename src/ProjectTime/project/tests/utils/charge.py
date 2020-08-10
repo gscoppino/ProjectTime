@@ -27,6 +27,7 @@ class ChargeFactory:
                       start_time=future_month,
                       end_time=future_month + charge_time)
 
+
 def create_test_charges(project, start_time, charge_timedeltas):
     next_charge_start_datetime = start_time
     charges = []
