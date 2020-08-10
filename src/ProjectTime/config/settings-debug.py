@@ -1,4 +1,4 @@
-from .settings import *
+from .settings import *  # pylint: disable=unused-wildcard-import
 
 DEBUG = True
 

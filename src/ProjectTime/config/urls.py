@@ -16,6 +16,7 @@ Including another URLconf
 
 from django.conf import settings
 from django.urls import include, path
+
 from ProjectTime.project.admin import admin_site as site
 
 urlpatterns = [

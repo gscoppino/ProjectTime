@@ -27,6 +27,9 @@ commands:
   manage.py:
     unix: python -m scripts.dev_install && cd src/ProjectTime && python manage.py
     env_spec: application
+  isort:
+    unix: isort
+    env_spec: lint
   pylint:
     unix: python -m scripts.dev_install && pylint --rcfile setup.cfg
     env_spec: lint
@@ -122,6 +125,7 @@ env_specs:
       - _python
       - application
     packages:
+      - isort
       - pylint
       - pep8
       - autopep8

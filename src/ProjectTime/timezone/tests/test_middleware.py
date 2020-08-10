@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 from django.utils import timezone
+
 from ProjectTime.timezone.middleware import TimezoneMiddleware
 
 

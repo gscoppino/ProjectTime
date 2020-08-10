@@ -1,6 +1,9 @@
 from datetime import timedelta
+
 from ProjectTime.project.models import Charge
+
 from .general import get_start_of_today, validate_and_save
+
 
 class ChargeFactory:
     @classmethod

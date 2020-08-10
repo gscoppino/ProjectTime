@@ -1,15 +1,18 @@
-import pandas as pd
 from datetime import timedelta
+from unittest.mock import MagicMock, patch
+
+import pandas as pd
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
-from unittest.mock import MagicMock, patch
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
-from .utils.general import validate_and_save, get_start_of_today
+
 from .utils.charge import ChargeFactory
+from .utils.general import get_start_of_today, validate_and_save
 
 
 def get_mock_admin_context():

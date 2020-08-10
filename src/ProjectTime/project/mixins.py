@@ -1,5 +1,6 @@
 from .utils.urls import get_changelist_url
 
+
 class AdminSiteDefaultFilterMixin:
     """
     A mixin for classes that inherit from django.contrib.admin.AdminSite

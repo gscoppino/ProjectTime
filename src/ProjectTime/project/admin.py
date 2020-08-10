@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.utils import timezone
-from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
+
+from .constants import (DEFAULT_CHARGE_CHANGELIST_FILTERS,
+                        DEFAULT_PROJECT_CHANGELIST_FILTERS)
 from .mixins import ModelAdminDefaultFilterMixin
-from .models import Project, Charge
+from .models import Charge, Project
 from .site import admin_site
 from .utils.decorators import with_attrs
 

@@ -1,9 +1,12 @@
 import copy
+
 from django.template.response import TemplateResponse
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
-from ProjectTime.project.mixins import AdminSiteDefaultFilterMixin, ModelAdminDefaultFilterMixin
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.mixins import (AdminSiteDefaultFilterMixin,
+                                        ModelAdminDefaultFilterMixin)
+from ProjectTime.project.models import Charge, Project
 
 # Simple matcher for a URL path with query parameters e.g.
 # /admin/APP_NAME/MODEL_NAME?PARAM=VALUE

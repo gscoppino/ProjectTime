@@ -1,8 +1,10 @@
 from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone, formats
-from .querysets import ProjectQuerySet, ChargeQuerySet
+from django.utils import formats, timezone
+
+from .querysets import ChargeQuerySet, ProjectQuerySet
 
 # Create your models here.
 

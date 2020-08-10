@@ -1,9 +1,11 @@
+from unittest.mock import MagicMock, patch
+
 from django.contrib import messages
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.messages.storage.base import Message
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
-from unittest.mock import MagicMock, patch
+
 from ProjectTime.project.middleware import ProjectTimeTimezoneWarningMiddleware
 
 

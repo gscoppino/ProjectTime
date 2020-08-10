@@ -1,13 +1,16 @@
 from datetime import datetime, timedelta
+
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
-from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.querysets import ProjectQuerySet, ChargeQuerySet
-from .utils.general import validate_and_save
+
+from ProjectTime.project.models import Charge, Project
+from ProjectTime.project.querysets import ChargeQuerySet, ProjectQuerySet
+
 from .utils.charge import create_test_charges
+from .utils.general import validate_and_save
 
 # Create your tests here.
 

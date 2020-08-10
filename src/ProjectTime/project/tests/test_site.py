@@ -1,8 +1,10 @@
+from unittest.mock import patch
+
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
-from unittest.mock import patch
+
 from ProjectTime.project.site import ProjectTimeAdminSite
 
 

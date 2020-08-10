@@ -1,9 +1,11 @@
-from datetime import date, time, datetime
+from datetime import date, datetime, time
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 def create_charge(**options):

@@ -1,7 +1,9 @@
-from django.views.generic import FormView
-from django.test import TestCase, RequestFactory
-from django.views.generic.edit import FormMixin
 from unittest.mock import patch
+
+from django.test import RequestFactory, TestCase
+from django.views.generic import FormView
+from django.views.generic.edit import FormMixin
+
 from ProjectTime.timezone.forms import TimezoneForm
 from ProjectTime.timezone.views import TimezoneView
 

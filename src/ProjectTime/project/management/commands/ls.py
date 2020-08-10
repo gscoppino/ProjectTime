@@ -4,7 +4,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db.models import F
 from django.utils import timezone
 from django.utils.formats import localize
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 def _localize_datetime(pdvalue):
