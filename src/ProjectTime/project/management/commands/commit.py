@@ -1,8 +1,13 @@
-from datetime import time, datetime
+""" Defines a management command for updating end times on open charges.
+"""
+
+from datetime import datetime, time
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
+
 from ProjectTime.project.models import Charge
 
 
@@ -22,11 +27,11 @@ def end_charge(**options):
         charge.closed = options['close']
         charge.full_clean()
         charge.save()
-    except Charge.DoesNotExist:
+    except Charge.DoesNotExist:  # pylint: disable=no-member
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")
-        else:
-            raise CommandError("There are no open charges to end.")
+
+        raise CommandError("There are no open charges to end.")
     except ValidationError:
         raise CommandError("Unable to end charge due to a validation error.")
     except Exception:
@@ -36,6 +41,8 @@ def end_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for updating end times on open charges.
+    """
     help = "Commit an end time for a charge."
 
     def add_arguments(self, parser):

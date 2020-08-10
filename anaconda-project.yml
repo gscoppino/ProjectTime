@@ -6,6 +6,9 @@ name: ProjectTime
 
 # lists runnable scripts, notebooks, and other code.
 commands:
+  project-time:
+    unix: python -m scripts.dev_install && project-time
+    env_spec: default
   postgres:
     unix: postgres
     env_spec: database
@@ -22,8 +25,17 @@ commands:
     unix: python -m scripts.dev_install && django-admin
     env_spec: application
   manage.py:
-    unix: python -m scripts.dev_install && cd src/ProjectTime && python manage.py
+    unix: python -m scripts.dev_install && cd src/ProjectTime && python -Wa manage.py
     env_spec: application
+  autopep8:
+    unix: autopep8
+    env_spec: lint
+  isort:
+    unix: isort
+    env_spec: lint
+  pylint:
+    unix: python -m scripts.dev_install && pylint --rcfile setup.cfg
+    env_spec: lint
   coverage:
     unix: python -m scripts.dev_install && cd src/ProjectTime && coverage
     env_spec: test
@@ -72,33 +84,31 @@ platforms:
 # Each inherits any global packages or channels,
 # but can have its own unique ones also.
 env_specs:
-  _python_:
+  _python:
     packages:
       - python=3.8
       - pip
-  _anaconda-project_:
+  _notebook:
     inherit_from:
-      - _python_
-    packages:
-      - anaconda-project
-  _notebook_:
-    inherit_from:
-      - _python_
+      - _python
     packages:
       - notebook
-  _lint_:
+  default:
     inherit_from:
-      - _python_
+      - _python
+      - _notebook
+      - application-debug
+      - lint
+      - test
+      - test-acceptance
     packages:
-      - pylint
-      - pep8
-      - autopep8
+      - anaconda-project
   database:
     packages:
       - postgresql=12.2
   application:
     inherit_from:
-      - _python_
+      - _python
     packages:
       - psycopg2=2.8
       - sqlparse=0.3
@@ -109,25 +119,28 @@ env_specs:
       - tabulate=0.8
   application-debug:
     inherit_from:
+      - _python
       - application
     packages:
       - django-debug-toolbar=2.2
-  default:
+  lint:
     inherit_from:
-      - application-debug
-      - test
-      - test-acceptance
-      - _lint_
-      - _anaconda-project_
-      - _notebook_
+      - _python
+      - application
+    packages:
+      - isort
+      - pylint
+      - pep8
+      - autopep8
   test:
     inherit_from:
+      - _python
       - application
     packages:
       - coverage
   test-acceptance:
     inherit_from:
-      - _python_
+      - _python
     packages:
       - robotframework
       - robotframework-seleniumlibrary
@@ -135,12 +148,12 @@ env_specs:
       - geckodriver
   build-pypi:
     inherit_from:
-      - _python_
+      - _python
     packages:
       - setuptools
   conda:
     inherit_from:
-      - _python_
+      - _python
       - build-pypi
     packages:
       - conda

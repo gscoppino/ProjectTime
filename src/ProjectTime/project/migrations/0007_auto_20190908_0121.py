@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='charge',
-            options={'get_latest_by': ('start_time',), 'ordering': ('start_time',)},
+            options={'get_latest_by': ('start_time',),
+                     'ordering': ('start_time',)},
         ),
     ]

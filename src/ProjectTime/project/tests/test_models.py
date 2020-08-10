@@ -1,13 +1,16 @@
+from datetime import datetime, timedelta
+
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.db.models import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
-from datetime import datetime, date, timedelta
-from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.querysets import ProjectQuerySet, ChargeQuerySet
-from .utils.general import validate_and_save
+
+from ProjectTime.project.models import Charge, Project
+from ProjectTime.project.querysets import ChargeQuerySet, ProjectQuerySet
+
 from .utils.charge import create_test_charges
+from .utils.general import validate_and_save
 
 # Create your tests here.
 
@@ -25,13 +28,20 @@ class ModelTestCase(TestCase):
         with self.assertRaises(DataError):
             model_class.objects.create(**kwargs)
 
-    def assertValidationErrorOnSave(self, instance=None, field=None, error_code=None, clean_kwargs={}, save_kwargs={}):
-        with self.assertRaises(ValidationError) as cm:
+    def assertValidationErrorOnSave(
+            self,
+            instance=None,
+            field=None,
+            error_code=None,
+            clean_kwargs=None,
+            save_kwargs=None
+    ):
+        with self.assertRaises(ValidationError) as context_manager:
             validate_and_save(instance,
                               clean_kwargs=clean_kwargs,
                               save_kwargs=save_kwargs)
 
-        error_dict = cm.exception.error_dict
+        error_dict = context_manager.exception.error_dict
         self.assertEqual(len(error_dict.keys()), 1)
         self.assertEqual(len(error_dict[field]), 1)
         self.assertEqual(error_dict[field][0].code, error_code)
@@ -341,25 +351,33 @@ class ChargeModelTestCase(ModelTestCase):
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 8:30 a.m. (0:30:00 minutes) [Open]')
+            str(charge),
+            'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 8:30 a.m. (0:30:00 minutes) [Open]'
+        )
 
         charge.end_time = start_datetime + timedelta(hours=1)
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9 a.m. (1:00:00 hours) [Open]')
+            str(charge),
+            'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9 a.m. (1:00:00 hours) [Open]'
+        )
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Open]')
+            str(charge),
+            'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Open]'
+        )
 
         charge.closed = True
         validate_and_save(charge)
 
         self.assertEqual(
-            str(charge), 'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Closed]')
+            str(charge),
+            'Test, Jan. 1, 2019, 8 a.m. - Jan. 1, 2019, 9:15 a.m. (1:15:00 hours) [Closed]'
+        )
 
     def test_get_earliest_charge(self):
         ordered_charges = self.get_ordered_test_charge_list()

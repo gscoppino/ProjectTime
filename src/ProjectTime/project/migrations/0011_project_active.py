@@ -13,6 +13,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='active',
-            field=models.BooleanField(blank=True, default=True, help_text='An inactive project is disabled for modification.'),
+            field=models.BooleanField(
+                blank=True,
+                default=True,
+                help_text='An inactive project is disabled for modification.'
+            ),
         ),
     ]

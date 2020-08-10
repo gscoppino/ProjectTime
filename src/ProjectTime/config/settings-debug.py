@@ -1,4 +1,7 @@
-from .settings import *
+""" Django settings for improved debugging.
+"""
+
+from .settings import *  # pylint: disable=wildcard-import,unused-wildcard-import
 
 DEBUG = True
 

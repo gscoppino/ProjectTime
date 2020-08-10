@@ -1,20 +1,25 @@
+# pylint: disable=invalid-name
+""" Defines a management command for marking projects as active.
+"""
+
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
+
 from ProjectTime.project.models import Project
 
 
 def activate_project(**options):
     try:
         project = Project.objects.get(name=options['name'])
-        if project.active == True:
+        if project.active:
             return "Project is already active."
 
         project.active = True
         project.full_clean()
         project.save()
-    except Project.DoesNotExist:
+    except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']}` found.")
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to activate project due to a validation error.")
     except Exception:
@@ -24,6 +29,8 @@ def activate_project(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for marking projects as active.
+    """
     help = "Mark a project as active."
 
     def add_arguments(self, parser):

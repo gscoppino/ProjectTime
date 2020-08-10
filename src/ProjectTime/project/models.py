@@ -1,13 +1,22 @@
+""" Django models for the project Django app
+"""
+
+from datetime import timedelta
+
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone, formats
-from datetime import datetime, timedelta
-from .querysets import ProjectQuerySet, ChargeQuerySet
+from django.utils import formats, timezone
+
+from .querysets import ChargeQuerySet, ProjectQuerySet
 
 # Create your models here.
 
 
 class Project(models.Model):
+    """ A model for projects. Projects have unique names and can marked
+        active/inactive. A project cannot be modified while it is marked
+        inactive.
+    """
     objects = ProjectQuerySet.as_manager()
 
     name = models.CharField(
@@ -42,9 +51,15 @@ class Project(models.Model):
 
 
 class Charge(models.Model):
+    """ A model for charges. Charges are associated with projects, and have a
+        start and end time. When the charge has been recorded in the canonical
+        timekeeping system, it should be marked as closed. A charge cannot be
+        modified while it is marked as closed. A charge cannot be created for a
+        project when the project is not active.
+    """
     objects = ChargeQuerySet.as_manager()
 
-    class Meta:
+    class Meta:  # pylint: disable=too-few-public-methods
         get_latest_by = ('start_time',)
         constraints = (
             models.CheckConstraint(
@@ -86,7 +101,7 @@ class Charge(models.Model):
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
 
-        if not self.project.active:
+        if not self.project.active:  # pylint: disable=no-member
             raise ValidationError({
                 'project': ValidationError(
                     'The project must be active.',
@@ -102,8 +117,8 @@ class Charge(models.Model):
 
             if exclude and 'end_time' in exclude:
                 raise error
-            else:
-                raise ValidationError({'end_time': error})
+
+            raise ValidationError({'end_time': error})
 
         if self.closed and not self.end_time:
             error = ValidationError(
@@ -113,8 +128,8 @@ class Charge(models.Model):
 
             if exclude and 'closed' in exclude:
                 raise error
-            else:
-                raise ValidationError({'closed': error})
+
+            raise ValidationError({'closed': error})
 
         if self.pk:
             previously_closed = (Charge.objects.values_list('closed', flat=True)

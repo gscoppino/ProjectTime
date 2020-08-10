@@ -1,4 +1,8 @@
+""" Defines a management command for deleting charges.
+"""
+
 from django.core.management.base import BaseCommand, CommandError
+
 from ProjectTime.project.models import Charge
 
 
@@ -10,11 +14,11 @@ def delete_charge(**options):
             charge = Charge.objects.filter(closed=False).latest()
 
         charge.delete()
-    except Charge.DoesNotExist:
+    except Charge.DoesNotExist:  # pylint: disable=no-member
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")
-        else:
-            raise CommandError("There are no opened charges to delete.")
+
+        raise CommandError("There are no opened charges to delete.")
     except Exception:
         raise CommandError("Failed to delete charge.")
 
@@ -22,6 +26,8 @@ def delete_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for deleting charges.
+    """
     help = "Delete a charge."
 
     def add_arguments(self, parser):

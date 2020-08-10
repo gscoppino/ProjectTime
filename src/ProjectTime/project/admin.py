@@ -1,14 +1,23 @@
+""" Defines and registers ModelAdmins for the project Django app
+"""
+
 from django.contrib import admin
 from django.utils import timezone
-from .constants import DEFAULT_PROJECT_CHANGELIST_FILTERS, DEFAULT_CHARGE_CHANGELIST_FILTERS
+
+from .constants import (DEFAULT_CHARGE_CHANGELIST_FILTERS,
+                        DEFAULT_PROJECT_CHANGELIST_FILTERS)
 from .mixins import ModelAdminDefaultFilterMixin
-from .models import Project, Charge
+from .models import Charge, Project
 from .site import admin_site
 from .utils.decorators import with_attrs
 
 
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
+    """ A ModelAdmin for charges. By default, the change list is filtered to
+        show only open charges. At the bottom of the list display, the total
+        of the hours on display is shown.
+    """
     date_hierarchy = 'start_time'
     list_display = ('project', 'start_time', 'end_time',
                     'time_charged', 'closed',)
@@ -25,14 +34,14 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         if obj is None:
             return ()
-        elif obj.closed and not obj.project.active:
+        if obj.closed and not obj.project.active:
             return ('start_time', 'end_time',)
-        elif obj.closed:
+        if obj.closed:
             return ('start_time', 'end_time', 'project',)
-        elif not obj.project.active:
+        if not obj.project.active:
             return ('start_time', 'end_time', 'closed',)
-        else:
-            return ()
+
+        return ()
 
     @with_attrs(admin_order_field='db__time_charged')
     def time_charged(self, obj):
@@ -41,6 +50,10 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
 
 @admin.register(Project, site=admin_site)
 class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
+    """ A ModelAdmin for projects. By default, the change list is filtered to
+        shown only active projects. The latest charge made on each project is
+        displayed alongside the project information.
+    """
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)

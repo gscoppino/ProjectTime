@@ -1,15 +1,18 @@
-import pandas as pd
 from datetime import timedelta
+from unittest.mock import MagicMock, patch
+
+import pandas as pd
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
-from unittest.mock import MagicMock, patch
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
-from .utils.general import validate_and_save, get_start_of_today
+
 from .utils.charge import ChargeFactory
+from .utils.general import get_start_of_today, validate_and_save
 
 
 def get_mock_admin_context():
@@ -72,10 +75,12 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         response = self.client.get(reverse('admin:dashboard'))
         self.assertEqual(response.status_code, 200)
 
-    @patch.object(AdminSite, 'each_context', new_callable=get_mock_admin_context)
-    def test_all_admin_context_is_available_on_context(self, mock_method):
+    def test_all_admin_context_is_available_on_context(self):
         self.performLogin()
-        response = self.client.get(reverse('admin:dashboard'))
+
+        with patch.object(AdminSite, 'each_context', new_callable=get_mock_admin_context):
+            response = self.client.get(reverse('admin:dashboard'))
+
         self.assertIn('foo', response.context)
         self.assertEqual(response.context['foo'], 'bar')
 
@@ -155,7 +160,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
                 project=project_b,
                 charge_time=charge
             ))
-        
+
         # Create some unclosed charges in the current month
         validate_and_save(Charge(
             project=project_a,

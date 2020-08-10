@@ -1,8 +1,15 @@
+""" Django QuerySets for the project Django app
+"""
+
 from django.db import models
+
 from .utils.mixins import PandasQuerySetMixin
 
 
 class ProjectQuerySet(models.QuerySet, PandasQuerySetMixin):
+    """ Extra queryset methods for projects
+    """
+
     def annotate_latest_charge(self):
         return self.annotate(
             db__latest_charge=models.Max('charge__end_time')
@@ -10,6 +17,9 @@ class ProjectQuerySet(models.QuerySet, PandasQuerySetMixin):
 
 
 class ChargeQuerySet(models.QuerySet, PandasQuerySetMixin):
+    """ Extra queryset methods for charges
+    """
+
     def annotate_time_charged(self):
         return self.annotate(
             db__time_charged=models.F('end_time') - models.F('start_time')

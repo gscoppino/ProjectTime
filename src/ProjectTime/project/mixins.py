@@ -1,4 +1,8 @@
+""" Mixins for the project Django app
+"""
+
 from .utils.urls import get_changelist_url
+
 
 class AdminSiteDefaultFilterMixin:
     """
@@ -45,8 +49,8 @@ class ModelAdminDefaultFilterMixin:
 
     def add_changelist_url_to_context(self, context):
         context['changelist_url'] = get_changelist_url(
-            self.model._meta.app_label,
-            self.model._meta.model_name,
+            self.model._meta.app_label,  # pylint: disable=protected-access
+            self.model._meta.model_name,  # pylint: disable=protected-access
             self.default_filters)
 
     def add_view(self, request, form_url='', extra_context=None):

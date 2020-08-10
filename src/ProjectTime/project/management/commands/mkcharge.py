@@ -1,9 +1,14 @@
-from datetime import date, time, datetime
+""" Defines a management command for creating new charges
+"""
+
+from datetime import date, datetime, time
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 def create_charge(**options):
@@ -28,7 +33,7 @@ def create_charge(**options):
 
         charge.full_clean()
         charge.save()
-    except ValidationError as e:
+    except ValidationError:
         raise CommandError(
             "Unable to create charge due to a validation error.")
     except Exception:
@@ -38,6 +43,8 @@ def create_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for creating new charges.
+    """
     help = "Add a charge."
 
     def add_arguments(self, parser):

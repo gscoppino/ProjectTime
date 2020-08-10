@@ -5,9 +5,13 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ProjectTime.config.settings')
+    """ The application command line entry point.
+    """
+
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                          'ProjectTime.config.settings')
     try:
-        from django.core.management import execute_from_command_line
+        from django.core.management import execute_from_command_line  # pylint: disable=import-outside-toplevel
     except ImportError as exc:
         raise ImportError(
             "Couldn't import Django. Are you sure it's installed and "

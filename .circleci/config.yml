@@ -16,9 +16,11 @@ jobs:
       - run: conda update -q conda
       - run: conda info -a
       - run: conda install anaconda-project
+      - run: anaconda-project prepare --env-spec lint
       - run: anaconda-project prepare --env-spec database
       - run: anaconda-project prepare --env-spec application
       - run: anaconda-project prepare --env-spec test-acceptance
+      - run: anaconda-project run pylint src/ProjectTime --fail-under 8
       - run: anaconda-project run pg_ctl initdb
       - run:
           command: anaconda-project run postgres

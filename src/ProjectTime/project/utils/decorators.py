@@ -1,7 +1,8 @@
 def with_attrs(**attrs):
-    def with_attrs(f):
-        for k,v in attrs.items():
-            setattr(f, k, v)
-        return f
+    def set_attrs(function):
+        for key, value in attrs.items():
+            setattr(function, key, value)
 
-    return with_attrs
+        return function
+
+    return set_attrs

@@ -1,10 +1,14 @@
+""" Defines management commands for listing projects and charges.
+"""
+
 import pandas as pd
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import F
 from django.utils import timezone
 from django.utils.formats import localize
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 def _localize_datetime(pdvalue):
@@ -94,6 +98,8 @@ def get_open_charges_dataframe(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for listing projects and charges.
+    """
     help = "List records."
 
     def add_arguments(self, parser):
@@ -118,7 +124,8 @@ class Command(BaseCommand):
 
         if options['command'] == "projects":
             return get_projects_dataframe(**options).to_markdown()
-        elif options['command'] == "charges":
+
+        if options['command'] == "charges":
             return get_open_charges_dataframe(**options).to_markdown()
-        else:
-            return CommandError("Unrecognized record type.")
+
+        return CommandError("Unrecognized record type.")
