@@ -1,3 +1,6 @@
+""" Defines a management command for renaming projects.
+"""
+
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 
@@ -13,7 +16,7 @@ def rename_project(**options):
         project.name = options['new_name']
         project.full_clean()
         project.save()
-    except Project.DoesNotExist:
+    except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']}` found.")
     except ValidationError:
         raise CommandError(
@@ -25,6 +28,8 @@ def rename_project(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for renaming projects.
+    """
     help = "Rename a project."
 
     def add_arguments(self, parser):

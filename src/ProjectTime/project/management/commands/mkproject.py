@@ -1,3 +1,6 @@
+""" Defines a management command for creating new projects.
+"""
+
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 
@@ -19,6 +22,8 @@ def create_project(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for creating new projects.
+    """
     help = "Add a project."
 
     def add_arguments(self, parser):

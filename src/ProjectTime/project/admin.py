@@ -1,3 +1,6 @@
+""" Defines and registers ModelAdmins for the project Django app
+"""
+
 from django.contrib import admin
 from django.utils import timezone
 
@@ -11,6 +14,10 @@ from .utils.decorators import with_attrs
 
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
+    """ A ModelAdmin for charges. By default, the change list is filtered to
+        show only open charges. At the bottom of the list display, the total
+        of the hours on display is shown.
+    """
     date_hierarchy = 'start_time'
     list_display = ('project', 'start_time', 'end_time',
                     'time_charged', 'closed',)
@@ -43,6 +50,10 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
 
 @admin.register(Project, site=admin_site)
 class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
+    """ A ModelAdmin for projects. By default, the change list is filtered to
+        shown only active projects. The latest charge made on each project is
+        displayed alongside the project information.
+    """
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)

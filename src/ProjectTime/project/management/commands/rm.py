@@ -1,3 +1,6 @@
+""" Defines a management command for deleting projects.
+"""
+
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models.deletion import ProtectedError
 
@@ -8,7 +11,7 @@ def delete_project(**options):
     try:
         project = Project.objects.get(name=options['name'])
         project.delete()
-    except Project.DoesNotExist:
+    except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']} found.")
     except ProtectedError:
         raise CommandError(
@@ -20,6 +23,8 @@ def delete_project(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for deleting projects.
+    """
     help = "Delete a project."
 
     def add_arguments(self, parser):

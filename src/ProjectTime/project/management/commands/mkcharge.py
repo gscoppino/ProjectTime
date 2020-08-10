@@ -1,3 +1,6 @@
+""" Defines a management command for creating new charges
+"""
+
 from datetime import date, datetime, time
 
 from django.conf import settings
@@ -40,6 +43,8 @@ def create_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for creating new charges.
+    """
     help = "Add a charge."
 
     def add_arguments(self, parser):

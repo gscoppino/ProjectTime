@@ -1,11 +1,14 @@
+""" Django views for the timezone Django app.
+"""
+
 from django.views import generic as views
 
 from .forms import TimezoneForm
 
-# Create your views here.
 
-
-class TimezoneView(views.FormView):
+class TimezoneView(views.FormView):  # pylint: disable=too-many-ancestors
+    """ View to set the timezone for a user session
+    """
     template_name = 'timezone_form.html'
     form_class = TimezoneForm
 

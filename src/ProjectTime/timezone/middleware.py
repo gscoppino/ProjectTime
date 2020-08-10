@@ -1,8 +1,15 @@
+""" Django middlewares for timezone Django app.
+"""
+
 from django.utils import timezone as django_timezone
 from pytz import timezone
 
 
-class TimezoneMiddleware:
+class TimezoneMiddleware:  # pylint: disable=too-few-public-methods
+    """ Middleware that activates the selected timezone for a user session on
+        every request.
+    """
+
     def __init__(self, get_response):
         # One-time configuration and initialization.
         self.get_response = get_response

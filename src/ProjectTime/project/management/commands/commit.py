@@ -1,3 +1,6 @@
+""" Defines a management command for updating end times on open charges.
+"""
+
 from datetime import datetime, time
 
 from django.conf import settings
@@ -24,7 +27,7 @@ def end_charge(**options):
         charge.closed = options['close']
         charge.full_clean()
         charge.save()
-    except Charge.DoesNotExist:
+    except Charge.DoesNotExist:  # pylint: disable=no-member
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")
 
@@ -38,6 +41,8 @@ def end_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for updating end times on open charges.
+    """
     help = "Commit an end time for a charge."
 
     def add_arguments(self, parser):

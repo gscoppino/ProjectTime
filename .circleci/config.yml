@@ -20,7 +20,7 @@ jobs:
       - run: anaconda-project prepare --env-spec database
       - run: anaconda-project prepare --env-spec application
       - run: anaconda-project prepare --env-spec test-acceptance
-      - run: anaconda-project run pylint src/ProjectTime --fail-under 7
+      - run: anaconda-project run pylint src/ProjectTime --fail-under 8
       - run: anaconda-project run pg_ctl initdb
       - run:
           command: anaconda-project run postgres

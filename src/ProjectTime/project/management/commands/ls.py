@@ -1,3 +1,6 @@
+""" Defines management commands for listing projects and charges.
+"""
+
 import pandas as pd
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
@@ -95,6 +98,8 @@ def get_open_charges_dataframe(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for listing projects and charges.
+    """
     help = "List records."
 
     def add_arguments(self, parser):

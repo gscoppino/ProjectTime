@@ -1,3 +1,6 @@
+""" Defines and instantiates the Admin site for the project Django app
+"""
+
 from calendar import monthrange
 from datetime import timedelta
 from math import pi
@@ -22,6 +25,8 @@ from .models import Charge, Project
 
 
 class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
+    """ An Admin site for the project Django app
+    """
     site_title = 'ProjectTime'
     site_header = 'ProjectTime'
     index_title = 'ProjectTime Administration'

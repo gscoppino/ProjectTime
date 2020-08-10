@@ -25,7 +25,7 @@ commands:
     unix: python -m scripts.dev_install && django-admin
     env_spec: application
   manage.py:
-    unix: python -m scripts.dev_install && cd src/ProjectTime && python manage.py
+    unix: python -m scripts.dev_install && cd src/ProjectTime && python -Wa manage.py
     env_spec: application
   autopep8:
     unix: autopep8

@@ -1,3 +1,6 @@
+""" Defines a management command for closing open charges.
+"""
+
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 
@@ -14,7 +17,7 @@ def close_charge(**options):
         charge.closed = True
         charge.full_clean()
         charge.save()
-    except Charge.DoesNotExist:
+    except Charge.DoesNotExist:  # pylint: disable=no-member
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")
 
@@ -28,6 +31,8 @@ def close_charge(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for closing open charges.
+    """
     help = "Close a charge."
 
     def add_arguments(self, parser):

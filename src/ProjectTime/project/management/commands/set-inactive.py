@@ -1,3 +1,7 @@
+# pylint: disable=invalid-name
+""" Defines a management command for marking projects as inactive.
+"""
+
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 
@@ -13,7 +17,7 @@ def deactivate_project(**options):
         project.active = False
         project.full_clean()
         project.save()
-    except Project.DoesNotExist:
+    except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']}` found.")
     except ValidationError:
         raise CommandError(
@@ -25,6 +29,8 @@ def deactivate_project(**options):
 
 
 class Command(BaseCommand):
+    """ Management command for marking projects as inactive.
+    """
     help = "Mark a project as inactive."
 
     def add_arguments(self, parser):

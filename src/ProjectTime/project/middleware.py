@@ -1,9 +1,16 @@
+""" Django middlewares for the project Django app
+"""
+
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 
 
-class ProjectTimeTimezoneWarningMiddleware:
+class ProjectTimeTimezoneWarningMiddleware:  # pylint: disable=too-few-public-methods
+    """ Middleware that uses the Django messages framework to display a warning
+        when a user is logged in without having set a timezone for their
+        user session.
+    """
     message_tag = 'no_timezone_msg'
     message_whitelist = (
         reverse_lazy('admin:select-timezone'),
