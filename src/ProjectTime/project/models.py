@@ -7,12 +7,13 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import formats, timezone
 
+from .mixins import ValidateModelMixin
 from .querysets import ChargeQuerySet, ProjectQuerySet
 
 # Create your models here.
 
 
-class Project(models.Model):
+class Project(models.Model, ValidateModelMixin):
     """ A model for projects. Projects have unique names and can marked
         active/inactive. A project cannot be modified while it is marked
         inactive.
@@ -50,7 +51,7 @@ class Project(models.Model):
             status='' if self.active else ' (Inactive)')
 
 
-class Charge(models.Model):
+class Charge(models.Model, ValidateModelMixin):
     """ A model for charges. Charges are associated with projects, and have a
         start and end time. When the charge has been recorded in the canonical
         timekeeping system, it should be marked as closed. A charge cannot be

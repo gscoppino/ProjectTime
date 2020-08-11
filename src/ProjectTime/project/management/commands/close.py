@@ -15,8 +15,7 @@ def close_charge(**options):
             charge = Charge.objects.filter(closed=False).latest()
 
         charge.closed = True
-        charge.full_clean()
-        charge.save()
+        charge.validate_and_save()
     except Charge.DoesNotExist:  # pylint: disable=no-member
         if options['pk']:
             raise CommandError(f"No charge with PK `{options['pk']}` found.")

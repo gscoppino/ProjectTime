@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from ProjectTime.project.models import Charge
 
-from .general import get_start_of_today, validate_and_save
+from .general import get_start_of_today
 
 
 class ChargeFactory:
@@ -34,10 +34,10 @@ def create_test_charges(project, start_time, charge_timedeltas):
 
     for charge_time in charge_timedeltas:
         charge_end_datetime = next_charge_start_datetime + charge_time
-        charges.append(validate_and_save(Charge(
+        charges.append(Charge(
             project=project,
             start_time=next_charge_start_datetime,
             end_time=charge_end_datetime
-        )))
+        ).validate_and_save())
 
         next_charge_start_datetime = charge_end_datetime

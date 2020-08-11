@@ -15,8 +15,7 @@ def activate_project(**options):
             return "Project is already active."
 
         project.active = True
-        project.full_clean()
-        project.save()
+        project.validate_and_save()
     except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']}` found.")
     except ValidationError:

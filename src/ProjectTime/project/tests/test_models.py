@@ -10,7 +10,6 @@ from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.querysets import ChargeQuerySet, ProjectQuerySet
 
 from .utils.charge import create_test_charges
-from .utils.general import validate_and_save
 
 # Create your tests here.
 
@@ -33,13 +32,10 @@ class ModelTestCase(TestCase):
             instance=None,
             field=None,
             error_code=None,
-            clean_kwargs=None,
-            save_kwargs=None
+            full_clean__exclude=None
     ):
         with self.assertRaises(ValidationError) as context_manager:
-            validate_and_save(instance,
-                              clean_kwargs=clean_kwargs,
-                              save_kwargs=save_kwargs)
+            instance.validate_and_save(full_clean__exclude=full_clean__exclude)
 
         error_dict = context_manager.exception.error_dict
         self.assertEqual(len(error_dict.keys()), 1)
@@ -64,18 +60,18 @@ class ProjectModelTestCase(ModelTestCase):
 
     def test_project_can_be_created(self):
         test_name = 'Test'
-        project = validate_and_save(Project(name=test_name))
+        project = Project(name=test_name).validate_and_save()
 
         self.assertEqual(project.name, test_name)
         self.assertEqual(project.active, True)
 
     def test_project_is_string_serializable(self):
-        project = validate_and_save(Project(name='Test'))
+        project = Project(name='Test').validate_and_save()
 
         self.assertEqual(str(project), 'Test')
 
         project.active = False
-        validate_and_save(project)
+        project.validate_and_save()
 
         self.assertEqual(str(project), 'Test (Inactive)')
 
@@ -92,7 +88,7 @@ class ProjectModelTestCase(ModelTestCase):
     def test_project_name_must_be_unique(self):
         test_name = 'Test'
 
-        validate_and_save(Project(name=test_name))
+        Project(name=test_name).validate_and_save()
         self.assertValidationErrorOnSave(instance=Project(name=test_name),
                                          field='name',
                                          error_code='unique')
@@ -100,7 +96,7 @@ class ProjectModelTestCase(ModelTestCase):
     def test_project_name_must_be_unique__db(self):
         test_name = 'Test'
 
-        validate_and_save(Project(name=test_name))
+        Project(name=test_name).validate_and_save()
         self.assertFailsDatabaseConstraint(Project, name=test_name)
 
     def test_project_active_is_not_required(self):
@@ -112,7 +108,7 @@ class ProjectModelTestCase(ModelTestCase):
         self.assertEqual(active_field.default, True)
 
     def test_cannot_modify_project_when_inactive(self):
-        project = validate_and_save(Project(name='Test', active=False))
+        project = Project(name='Test', active=False).validate_and_save()
 
         # Should raise a generic validation error if attempting to
         # save on a inactive project
@@ -123,7 +119,7 @@ class ProjectModelTestCase(ModelTestCase):
         # But should be able to save the change if it is
         # re-opening the project
         project.active = True
-        validate_and_save(project)
+        project.validate_and_save()
         self.assertEqual(project.active, True)
 
 
@@ -131,7 +127,7 @@ class ChargeModelTestCase(ModelTestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.project = validate_and_save(Project(name='Test'))
+        cls.project = Project(name='Test').validate_and_save()
 
     def test_charge_has_custom_queryset_manager(self):
         self.assertQuerysetEqual(Charge.objects.get_queryset(),
@@ -161,10 +157,10 @@ class ChargeModelTestCase(ModelTestCase):
         today = timezone.now().replace(hour=0, minute=0, second=0)
         timedelta_zero = timedelta()
 
-        charge = validate_and_save(Charge(
+        charge = Charge(
             project=self.project,
             start_time=today
-        ))
+        ).validate_and_save()
 
         self.assertEqual(charge.project, self.project)
         self.assertEqual(charge.start_time, today)
@@ -196,9 +192,9 @@ class ChargeModelTestCase(ModelTestCase):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        inactive_project = validate_and_save(Project(
+        inactive_project = Project(
             name='Test 2',
-            active=False))
+            active=False).validate_and_save()
 
         # Should raise a keyed validation error
         self.assertValidationErrorOnSave(
@@ -232,7 +228,7 @@ class ChargeModelTestCase(ModelTestCase):
                 start_time=start_datetime,
                 end_time=start_datetime - timedelta(minutes=1)
             ),
-            clean_kwargs={'exclude': ('end_time',)},
+            full_clean__exclude=('end_time',),
             field='__all__',
             error_code='end_time_must_be_on_or_after_start_time')
 
@@ -268,7 +264,7 @@ class ChargeModelTestCase(ModelTestCase):
                 start_time=start_datetime,
                 closed=True
             ),
-            clean_kwargs={'exclude': ('closed',)},
+            full_clean__exclude=('closed',),
             field='__all__',
             error_code='cannot_close_without_end_time')
 
@@ -285,12 +281,12 @@ class ChargeModelTestCase(ModelTestCase):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        charge = validate_and_save(Charge(
+        charge = Charge(
             project=self.project,
             start_time=start_datetime,
             end_time=start_datetime + timedelta(hours=1),
             closed=True
-        ))
+        ).validate_and_save()
 
         # Should raise a generic validation error if attempting to
         # save on a closed charge
@@ -302,17 +298,17 @@ class ChargeModelTestCase(ModelTestCase):
         # But should be able to save the change if it is
         # re-opening the charge
         charge.closed = False
-        validate_and_save(charge)
+        charge.validate_and_save()
         self.assertEqual(charge.closed, False)
 
     def test_cannot_delete_project_with_associated_charge(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        validate_and_save(Charge(
+        Charge(
             project=self.project,
             start_time=start_datetime
-        ))
+        ).validate_and_save()
 
         with self.assertRaises(ProtectedError):
             self.project.delete()
@@ -323,15 +319,15 @@ class ChargeModelTestCase(ModelTestCase):
         timedelta_zero = timedelta()
         added_time = timedelta(minutes=30)
 
-        charge = validate_and_save(Charge(
+        charge = Charge(
             project=self.project,
             start_time=start_datetime
-        ))
+        ).validate_and_save()
 
         self.assertEqual(charge.time_charged, timedelta_zero)
 
         charge.end_time = start_datetime + added_time
-        validate_and_save(charge)
+        charge.validate_and_save()
 
         self.assertEqual(charge.time_charged, added_time)
 
@@ -339,16 +335,16 @@ class ChargeModelTestCase(ModelTestCase):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
-        charge = validate_and_save(Charge(
+        charge = Charge(
             project=self.project,
             start_time=start_datetime
-        ))
+        ).validate_and_save()
 
         self.assertEqual(
             str(charge), 'Test, Jan. 1, 2019, 8 a.m. - __:__:__ (0:00:00 minutes) [Open]')
 
         charge.end_time = start_datetime + timedelta(minutes=30)
-        validate_and_save(charge)
+        charge.validate_and_save()
 
         self.assertEqual(
             str(charge),
@@ -356,7 +352,7 @@ class ChargeModelTestCase(ModelTestCase):
         )
 
         charge.end_time = start_datetime + timedelta(hours=1)
-        validate_and_save(charge)
+        charge.validate_and_save()
 
         self.assertEqual(
             str(charge),
@@ -364,7 +360,7 @@ class ChargeModelTestCase(ModelTestCase):
         )
 
         charge.end_time = start_datetime + timedelta(hours=1, minutes=15)
-        validate_and_save(charge)
+        charge.validate_and_save()
 
         self.assertEqual(
             str(charge),
@@ -372,7 +368,7 @@ class ChargeModelTestCase(ModelTestCase):
         )
 
         charge.closed = True
-        validate_and_save(charge)
+        charge.validate_and_save()
 
         self.assertEqual(
             str(charge),
@@ -440,9 +436,9 @@ class ChargeModelTestCase(ModelTestCase):
         ordered_charges = []
 
         for entry in ordered_datetimes:
-            ordered_charges.append(validate_and_save(Charge(
+            ordered_charges.append(Charge(
                 project=cls.project,
                 start_time=entry
-            )))
+            ).validate_and_save())
 
         return ordered_charges
