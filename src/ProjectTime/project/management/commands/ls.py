@@ -62,6 +62,9 @@ def get_open_charges_dataframe(**options):
                    .annotate(project_name=F('project__name'))
                    .annotate_time_charged())
 
+        if options['project']:
+            charges = charges.filter(project__name=options['project'])
+
         if not options['all']:
             charges = charges.filter(closed=False)
 
@@ -107,12 +110,15 @@ class Command(BaseCommand):
 
         projects_parser = subparsers.add_parser("projects")
         projects_parser.add_argument(
-            '-a', '--all', action="store_true", help="List all projects."
+            '-a', '--all', action="store_true", help="List inactive projects as well."
         )
 
         charges_parser = subparsers.add_parser("charges")
         charges_parser.add_argument(
-            '-a', '--all', action="store_true", help="List all charges."
+            '-a', '--all', action="store_true", help="List closed charges as well."
+        )
+        charges_parser.add_argument(
+            '-p', '--project', help="Filter results to a specific project."
         )
 
     def handle(self, *args, **options):

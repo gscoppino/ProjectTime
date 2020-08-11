@@ -123,6 +123,30 @@ class CLITest(TestCase):
         self.assertIn("00:30:00 | False", result)
 
     @override_settings(PROJECT_TIME_CLI_TIMEZONE="America/New_York")
+    def test_list_charges_for_project(self):
+        project_to_see = Project(name="Project to see").validate_and_save()
+        project_to_not_see = Project(
+            name="Project to not see"
+        ).validate_and_save()
+
+        ChargeFactory.today(
+            project=project_to_see,
+            charge_time=timedelta(hours=1)
+        ).validate_and_save()
+
+        ChargeFactory.today(
+            project=project_to_not_see,
+            charge_time=timedelta(hours=1)
+        ).validate_and_save()
+
+        out = StringIO()
+        call_command('ls', 'charges', '-p', 'Project to see', stdout=out)
+        result = out.getvalue()
+
+        self.assertEqual(result.count("Project to see"), 1)
+        self.assertEqual(result.count('Project to not see'), 0)
+
+    @override_settings(PROJECT_TIME_CLI_TIMEZONE="America/New_York")
     def test_makes_project(self):
         queryset = Project.objects.filter(name="Test")
         self.assertFalse(queryset.exists())
