@@ -1,6 +1,7 @@
 """ Defines mixins used in this app.
 """
 import pandas as pd
+
 from .utils.urls import get_changelist_url
 
 
