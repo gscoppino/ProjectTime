@@ -1,4 +1,4 @@
-""" Defines a management command for creating new charges
+""" Exposes a management command for creating new charges
 """
 
 from datetime import date, datetime, time

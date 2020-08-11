@@ -1,5 +1,5 @@
 # pylint: disable=invalid-name
-""" Defines a management command for marking projects as inactive.
+""" Exposes a management command for marking projects as inactive.
 """
 
 from django.core.exceptions import ValidationError

@@ -1,4 +1,4 @@
-""" Defines management commands for listing projects and charges.
+""" Exposes management commands for listing projects and charges.
 """
 
 import pandas as pd

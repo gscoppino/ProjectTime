@@ -1,4 +1,4 @@
-""" Django QuerySets for the project Django app
+""" Defines custom QuerySet's used by models in this app
 """
 
 from django.db import models

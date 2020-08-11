@@ -1,4 +1,4 @@
-""" Django middlewares for timezone Django app.
+""" Defines app middleware
 """
 
 from django.utils import timezone as django_timezone

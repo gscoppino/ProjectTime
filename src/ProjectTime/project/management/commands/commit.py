@@ -1,4 +1,4 @@
-""" Defines a management command for updating end times on open charges.
+""" Exposes a management command for updating end times on open charges.
 """
 
 from datetime import datetime, time

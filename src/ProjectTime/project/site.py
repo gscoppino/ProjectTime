@@ -1,4 +1,4 @@
-""" Defines and instantiates the Admin site for the project Django app
+""" Defines and instantiates the Admin site for this app
 """
 
 from calendar import monthrange

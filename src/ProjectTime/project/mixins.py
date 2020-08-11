@@ -1,4 +1,4 @@
-""" Mixins for the project Django app
+""" Defines mixins used in this app.
 """
 
 from .utils.urls import get_changelist_url

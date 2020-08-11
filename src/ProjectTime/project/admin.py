@@ -1,4 +1,4 @@
-""" Defines and registers ModelAdmins for the project Django app
+""" Registers custom ModelAdmin's for Django models in this app.
 """
 
 from django.contrib import admin

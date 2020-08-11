@@ -1,4 +1,4 @@
-""" Defines a management command for creating new projects.
+""" Exposes a management command for creating new projects.
 """
 
 from django.core.exceptions import ValidationError

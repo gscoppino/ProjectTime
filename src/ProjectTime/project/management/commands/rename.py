@@ -1,4 +1,4 @@
-""" Defines a management command for renaming projects.
+""" Exposes a management command for renaming projects.
 """
 
 from django.core.exceptions import ValidationError

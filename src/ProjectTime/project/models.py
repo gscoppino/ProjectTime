@@ -1,4 +1,4 @@
-""" Django models for the project Django app
+""" Defines the Django models for this app.
 """
 
 from datetime import timedelta

@@ -1,4 +1,4 @@
-""" Defines a management command for closing open charges.
+""" Exposes a management command for closing open charges.
 """
 
 from django.core.exceptions import ValidationError
