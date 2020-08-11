@@ -1,4 +1,4 @@
-""" Defines a management command for deleting projects.
+""" Exposes a management command for deleting projects.
 """
 
 from django.core.management.base import BaseCommand, CommandError

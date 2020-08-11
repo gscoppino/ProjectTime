@@ -1,4 +1,4 @@
-""" Django middlewares for the project Django app
+""" Defines app middleware
 """
 
 from django.contrib import messages

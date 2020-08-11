@@ -1,4 +1,4 @@
-""" Django forms for the timezone Django app.
+""" Defines Django forms that are used by Django views in this app
 """
 
 from django import forms

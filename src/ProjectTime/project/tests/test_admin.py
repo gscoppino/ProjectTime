@@ -8,8 +8,6 @@ from django.utils import timezone
 from ProjectTime.project.admin import ChargeAdmin, ProjectAdmin, admin_site
 from ProjectTime.project.models import Charge, Project
 
-from .utils.general import validate_and_save
-
 
 class ProjectModelAdminTestCase(TestCase):
     def setUp(self):
@@ -24,8 +22,8 @@ class ProjectModelAdminTestCase(TestCase):
                          'admin/charge/change_form.html')
 
     def test_queryset_is_annotated_with_latest_charge(self):
-        validate_and_save(Project(name='Test'))
-        validate_and_save(Project(name='Test 2'))
+        Project(name='Test').validate_and_save()
+        Project(name='Test 2').validate_and_save()
 
         queryset = self.model_admin.get_queryset(HttpRequest())
 
@@ -50,13 +48,13 @@ class ProjectModelAdminTestCase(TestCase):
         self.assertEqual(len(readonly_fields), 0)
 
     def test_all_change_fields_are_editable_when_project_is_active(self):
-        project = validate_and_save(Project(name='Test', active=True))
+        project = Project(name='Test', active=True).validate_and_save()
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest,
                                                                project)
         self.assertEqual(len(readonly_fields), 0)
 
     def test_project_name_is_read_only_when_project_is_not_active(self):
-        project = validate_and_save(Project(name='Test', active=False))
+        project = Project(name='Test', active=False).validate_and_save()
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest,
                                                                project)
 
@@ -65,7 +63,7 @@ class ProjectModelAdminTestCase(TestCase):
 
 class ChargeModelAdminTestCase(TestCase):
     def setUp(self):
-        self.project = validate_and_save(Project(name='Test'))
+        self.project = Project(name='Test').validate_and_save()
         self.model_admin = ChargeAdmin(model=Charge, admin_site=admin_site)
 
     def test_changelist_shows_only_unclosed_charges_by_default(self):
@@ -86,10 +84,10 @@ class ChargeModelAdminTestCase(TestCase):
                          'admin/charge/change_form.html')
 
     def test_queryset_is_annotated_with_time_charged(self):
-        validate_and_save(Charge(project=self.project,
-                                 start_time=timezone.now()))
-        validate_and_save(Charge(project=self.project,
-                                 start_time=timezone.now()))
+        Charge(project=self.project,
+               start_time=timezone.now()).validate_and_save()
+        Charge(project=self.project,
+               start_time=timezone.now()).validate_and_save()
 
         queryset = self.model_admin.get_queryset(HttpRequest())
 
@@ -114,11 +112,11 @@ class ChargeModelAdminTestCase(TestCase):
 
     def test_all_change_fields_are_editable_when_project_is_active_and_charge_is_not_closed(self):
         self.project.active = True
-        validate_and_save(self.project)
+        self.project.validate_and_save()
 
-        charge = validate_and_save(Charge(project=self.project,
-                                          start_time=timezone.now(),
-                                          closed=False))
+        charge = Charge(project=self.project,
+                        start_time=timezone.now(),
+                        closed=False).validate_and_save()
 
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
                                                                charge)
@@ -126,13 +124,13 @@ class ChargeModelAdminTestCase(TestCase):
         self.assertEqual(len(readonly_fields), 0)
 
     def test_start_and_end_time_are_read_only_when_project_not_active_and_charge_closed(self):
-        charge = validate_and_save(Charge(project=self.project,
-                                          start_time=timezone.now(),
-                                          end_time=timezone.now() + timedelta(hours=1),
-                                          closed=True))
+        charge = Charge(project=self.project,
+                        start_time=timezone.now(),
+                        end_time=timezone.now() + timedelta(hours=1),
+                        closed=True).validate_and_save()
 
         self.project.active = False
-        validate_and_save(self.project)
+        self.project.validate_and_save()
 
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
                                                                charge)
@@ -141,12 +139,12 @@ class ChargeModelAdminTestCase(TestCase):
 
     def test_start_time_end_time_and_project_are_read_only_when_charge_is_closed(self):
         self.project.active = True
-        validate_and_save(self.project)
+        self.project.validate_and_save()
 
-        charge = validate_and_save(Charge(project=self.project,
-                                          start_time=timezone.now(),
-                                          end_time=timezone.now() + timedelta(hours=1),
-                                          closed=True))
+        charge = Charge(project=self.project,
+                        start_time=timezone.now(),
+                        end_time=timezone.now() + timedelta(hours=1),
+                        closed=True).validate_and_save()
 
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
                                                                charge)
@@ -155,12 +153,12 @@ class ChargeModelAdminTestCase(TestCase):
                                  ('start_time', 'end_time', 'project',))
 
     def test_start_time_end_time_and_closed_status_are_read_only_when_project_not_active(self):
-        charge = validate_and_save(Charge(project=self.project,
-                                          start_time=timezone.now(),
-                                          closed=False))
+        charge = Charge(project=self.project,
+                        start_time=timezone.now(),
+                        closed=False).validate_and_save()
 
         self.project.active = False
-        validate_and_save(self.project)
+        self.project.validate_and_save()
 
         readonly_fields = self.model_admin.get_readonly_fields(HttpRequest(),
                                                                charge)

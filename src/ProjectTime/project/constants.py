@@ -1,4 +1,4 @@
-""" Constants for the project Django app
+""" Defines constants used in this app
 """
 
 DEFAULT_PROJECT_CHANGELIST_FILTERS = {'active__exact': 1}

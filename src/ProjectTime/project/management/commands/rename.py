@@ -1,4 +1,4 @@
-""" Defines a management command for renaming projects.
+""" Exposes a management command for renaming projects.
 """
 
 from django.core.exceptions import ValidationError
@@ -14,8 +14,7 @@ def rename_project(**options):
             return "The new name is the same as the current name."
 
         project.name = options['new_name']
-        project.full_clean()
-        project.save()
+        project.validate_and_save()
     except Project.DoesNotExist:  # pylint: disable=no-member
         raise CommandError(f"No project with name `{options['name']}` found.")
     except ValidationError:

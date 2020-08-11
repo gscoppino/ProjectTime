@@ -1,4 +1,4 @@
-""" Defines a management command for deleting charges.
+""" Exposes a management command for deleting charges.
 """
 
 from django.core.management.base import BaseCommand, CommandError

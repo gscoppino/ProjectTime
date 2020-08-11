@@ -12,7 +12,7 @@ from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
 
 from .utils.charge import ChargeFactory
-from .utils.general import get_start_of_today, validate_and_save
+from .utils.general import get_start_of_today
 
 
 def get_mock_admin_context():
@@ -85,8 +85,8 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.assertEqual(response.context['foo'], 'bar')
 
     def test_all_projects_are_selected_by_default(self):
-        project_a = validate_and_save(Project(name='Project A'))
-        project_b = validate_and_save(Project(name='Project B'))
+        project_a = Project(name='Project A').validate_and_save()
+        project_b = Project(name='Project B').validate_and_save()
 
         self.performLogin()
 
@@ -98,8 +98,8 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         ])
 
     def test_correct_projects_are_selected(self):
-        project_a = validate_and_save(Project(name='Project A'))
-        project_b = validate_and_save(Project(name='Project B'))
+        project_a = Project(name='Project A').validate_and_save()
+        project_b = Project(name='Project B').validate_and_save()
 
         self.performLogin()
 
@@ -134,8 +134,8 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.assertEqual(response.context['chart_div'], '<div></div>')
 
     def test_visualization_creation_whitebox(self):
-        project_a = validate_and_save(Project(name='Project A'))
-        project_b = validate_and_save(Project(name='Project B'))
+        project_a = Project(name='Project A').validate_and_save()
+        project_b = Project(name='Project B').validate_and_save()
 
         # Create some test charges in the current month
 
@@ -150,51 +150,51 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         ]
 
         for charge in project_a_current_charges:
-            validate_and_save(ChargeFactory.today(
+            ChargeFactory.today(
                 project=project_a,
                 charge_time=charge
-            ))
+            ).validate_and_save()
 
         for charge in project_b_current_charges:
-            validate_and_save(ChargeFactory.today(
+            ChargeFactory.today(
                 project=project_b,
                 charge_time=charge
-            ))
+            ).validate_and_save()
 
         # Create some unclosed charges in the current month
-        validate_and_save(Charge(
+        Charge(
             project=project_a,
             start_time=get_start_of_today()
-        ))
+        ).validate_and_save()
 
-        validate_and_save(Charge(
+        Charge(
             project=project_b,
             start_time=get_start_of_today()
-        ))
+        ).validate_and_save()
 
         # Create charges in a past month
 
-        validate_and_save(ChargeFactory.past_month(
+        ChargeFactory.past_month(
             project=project_a,
             charge_time=timedelta(hours=1)
-        ))
+        ).validate_and_save()
 
-        validate_and_save(ChargeFactory.past_month(
+        ChargeFactory.past_month(
             project=project_b,
             charge_time=timedelta(hours=1)
-        ))
+        ).validate_and_save()
 
         # Create charges in a future month
 
-        validate_and_save(ChargeFactory.future_month(
+        ChargeFactory.future_month(
             project=project_a,
             charge_time=timedelta(hours=1)
-        ))
+        ).validate_and_save()
 
-        validate_and_save(ChargeFactory.future_month(
+        ChargeFactory.future_month(
             project=project_b,
             charge_time=timedelta(hours=1)
-        ))
+        ).validate_and_save()
 
         site = ProjectTimeAdminSite()
 

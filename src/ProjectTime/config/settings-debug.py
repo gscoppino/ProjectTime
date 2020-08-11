@@ -1,4 +1,6 @@
-""" Django settings for improved debugging.
+""" Extends the base Django settings with Django Debug Toolbar.
+    More information on Django Debug Toolbar:
+    https://django-debug-toolbar.readthedocs.io
 """
 
 from .settings import *  # pylint: disable=wildcard-import,unused-wildcard-import

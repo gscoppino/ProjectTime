@@ -1,4 +1,4 @@
-""" Django views for the timezone Django app.
+""" Defines the Django views for this app
 """
 
 from django.views import generic as views
