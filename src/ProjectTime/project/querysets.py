@@ -3,7 +3,7 @@
 
 from django.db import models
 
-from .utils.mixins import PandasQuerySetMixin
+from .mixins import PandasQuerySetMixin
 
 
 class ProjectQuerySet(models.QuerySet, PandasQuerySetMixin):
