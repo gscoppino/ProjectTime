@@ -2,12 +2,12 @@ from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
 import pandas as pd
-from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
 
+from ProjectTime.project.mixins import AdminSiteDefaultFilterMixin
 from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
 
@@ -78,7 +78,11 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
     def test_all_admin_context_is_available_on_context(self):
         self.performLogin()
 
-        with patch.object(AdminSite, 'each_context', new_callable=get_mock_admin_context):
+        with patch.object(
+            AdminSiteDefaultFilterMixin,
+            'each_context',
+            new_callable=get_mock_admin_context
+        ):
             response = self.client.get(reverse('admin:dashboard'))
 
         self.assertIn('foo', response.context)

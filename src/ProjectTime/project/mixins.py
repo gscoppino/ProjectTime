@@ -26,6 +26,12 @@ class AdminSiteDefaultFilterMixin:
                         model['object_name'].lower(),
                         filters[option])
 
+    def each_context(self, request):
+        context = super().each_context(request)
+        self.set_default_changelist_filters(context['available_apps'],
+                                            self.default_filters)
+        return context
+
     def index(self, request, extra_context=None):
         response = super().index(request, extra_context)
         self.set_default_changelist_filters(response.context_data['app_list'],
