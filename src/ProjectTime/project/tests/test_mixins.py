@@ -22,36 +22,37 @@ from ProjectTime.project.models import Charge, Project
 URL_REGEX = r'^(\/[A-Za-z0-9-_.~]+)+\/?\?[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+(&[A-Za-z0-9-_.~]+=([A-Za-z0-9-_.~]|(%[A-Za-z0-9]{2}))+)*$'
 
 
-class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
-    def test_sets_default_filter_url_in_template_context(self):
-        test_context = {
-            'app_list': [
+def get_fake_app_list():
+    return [
+        {
+            'app_label': 'project',
+            'models': [
                 {
-                    'app_label': 'project',
-                    'models': [
-                        {
-                            'object_name': 'Project',
-                            'admin_url': '/admin/test/url'
-                        },
-                        {
-                            'object_name': 'Charge',
-                            'admin_url': '/admin/test/url'
-                        }
-                    ]
+                    'object_name': 'Project',
+                    'admin_url': '/admin/test/url'
+                },
+                {
+                    'object_name': 'Charge',
+                    'admin_url': '/admin/test/url'
                 }
             ]
+        }
+    ]
+
+
+class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
+    def test_set_default_changelist_urls_on_index_page_template_context(self):
+        test_context = {
+            'app_list': get_fake_app_list()
         }
 
         class FakeAdminSite:
             def index(self, request, *args, **kwargs):
-                return TemplateResponse(request,
-                                        'fake_template_name.html',
-                                        context=copy.deepcopy(test_context))
-
-            def app_index(self, request, *args, **kwargs):
-                return TemplateResponse(request,
-                                        'fake_template_name.html',
-                                        context=copy.deepcopy(test_context))
+                return TemplateResponse(
+                    request,
+                    'fake_template_name.html',
+                    context=copy.deepcopy(test_context)
+                )
 
         class TestSite(AdminSiteDefaultFilterMixin, FakeAdminSite):
             default_filters = {
@@ -73,9 +74,58 @@ class AdminSiteDefaultFilterMixinTestCase(SimpleTestCase):
         self.assertRegex(project_model['admin_url'], URL_REGEX)
         self.assertRegex(charge_model['admin_url'], URL_REGEX)
 
+    def test_set_default_changelist_urls_on_apps_page_template_context(self):
+        test_context = {
+            'app_list': get_fake_app_list()
+        }
+
+        class FakeAdminSite:
+            def app_index(self, request, *args, **kwargs):
+                return TemplateResponse(
+                    request,
+                    'fake_template_name.html',
+                    context=copy.deepcopy(test_context)
+                )
+
+        class TestSite(AdminSiteDefaultFilterMixin, FakeAdminSite):
+            default_filters = {
+                'project.Project': {'test__exact': 'test'},
+                'project.Charge': {'test__exact': 'test'}
+            }
+
+        test_site = TestSite()
+
         response = test_site.app_index(
-            RequestFactory().get('/foo/bar'), 'fake_app_label')
+            RequestFactory().get('/foo/bar'), 'fake_app_label'
+        )
         app = next((app for app in response.context_data['app_list']
+                    if app['app_label'] == 'project'))
+
+        project_model = next((model for model in app['models']
+                              if model['object_name'] == 'Project'))
+        charge_model = next((model for model in app['models']
+                             if model['object_name'] == 'Charge'))
+
+        self.assertRegex(project_model['admin_url'], URL_REGEX)
+        self.assertRegex(charge_model['admin_url'], URL_REGEX)
+
+    def test_set_default_changelist_urls_on_template_context_for_nav_sidebar(self):
+        class FakeAdminSite:
+            def each_context(self, request):
+                return {
+                    'available_apps': get_fake_app_list()
+                }
+
+        class TestSite(AdminSiteDefaultFilterMixin, FakeAdminSite):
+            default_filters = {
+                'project.Project': {'test__exact': 'test'},
+                'project.Charge': {'test__exact': 'test'}
+            }
+
+        test_site = TestSite()
+
+        context = test_site.each_context(RequestFactory().get('/foo/bar'))
+        app = next((app for app in context['available_apps']
                     if app['app_label'] == 'project'))
 
         project_model = next((model for model in app['models']
