@@ -16,11 +16,19 @@ Including another URLconf
 
 from django.conf import settings
 from django.urls import include, path
+from rest_framework import routers
 
 from ProjectTime.project.admin import admin_site as site
+from ProjectTime.project.viewsets import ProjectViewSet, ChargeViewSet
+
+router = routers.DefaultRouter()
+router.register(r'projects', ProjectViewSet)
+router.register(r'charges', ChargeViewSet)
 
 urlpatterns = [
     path('', site.urls),
+    path('rest/', include(router.urls)),
+    path('rest/auth/', include('rest_framework.urls'))
 ]
 
 if settings.DEBUG:

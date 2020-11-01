@@ -13,6 +13,7 @@ setuptools.setup(
         'sqlparse~=0.3',
         'pytz~=2019.3',
         'django~=3.1',
+        'djangorestframework~=3.12',
         'pandas~=1.0',
         'bokeh~=2.1',
         'tabulate~=0.8'

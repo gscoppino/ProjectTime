@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'ProjectTime.project.apps.ProjectAdminConfig',
     'ProjectTime.project.apps.ProjectAppConfig',
     'ProjectTime.timezone.apps.TimezoneConfig'
@@ -74,6 +75,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ProjectTime.config.wsgi.application'
+
+# REST Framework
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 
 # Database
