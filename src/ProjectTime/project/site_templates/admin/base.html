@@ -8,5 +8,6 @@ In TZ: {{ timezone }}.
 {% block userlinks %}
 <a href="{% url 'admin:select-timezone' %}">Change Timezone</a> /
 <a href="{% url 'admin:dashboard' %}">View Dashboard</a> /
+<a href="/rest">View API</a> /
 {{ block.super }}
 {% endblock %}
