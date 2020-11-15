@@ -60,9 +60,6 @@ commands:
 # Use `anaconda-project add-variable` to add variables.
 #
 variables:
-  PROJECT_TIME_CLI_TIMEZONE:
-    default: UTC
-    description: What timezone management commands operate in
   PGDATA:
     default: db
     description: Where PostgreSQL local database files are stored
