@@ -9,6 +9,9 @@ commands:
   project-time:
     unix: python -m scripts.dev_install && project-time
     env_spec: default
+  project-time-cli:
+    unix: python -m scripts.dev_install && project-time-cli
+    env_spec: default
   postgres:
     unix: postgres
     env_spec: database
@@ -60,6 +63,7 @@ commands:
 # Use `anaconda-project add-variable` to add variables.
 #
 variables:
+  PT_SERVER: http://localhost:8000
   PROJECT_TIME_CLI_TIMEZONE:
     default: UTC
     description: What timezone management commands operate in
@@ -98,6 +102,7 @@ env_specs:
       - _python
       - _notebook
       - application-debug
+      - cli
       - lint
       - test
       - test-acceptance
@@ -118,13 +123,19 @@ env_specs:
       - djangorestframework=3.12
       - pandas=1.0
       - bokeh=2.1
-      - tabulate=0.8
   application-debug:
     inherit_from:
       - _python
       - application
     packages:
       - django-debug-toolbar=2.2
+  cli:
+    inherit_from:
+      - _python
+    packages:
+      - pandas=1.0
+      - tabulate=0.8
+      - requests
   lint:
     inherit_from:
       - _python

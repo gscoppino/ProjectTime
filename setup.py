@@ -28,7 +28,10 @@ setuptools.setup(
     packages=setuptools.find_packages('src'),
     data_files=[('.', ['anaconda-project.yml'])],
     entry_points={
-        'console_scripts': ['project-time = ProjectTime.manage:main']
+        'console_scripts': [
+            'project-time = ProjectTime.manage:main',
+            'project-time-cli = ProjectTime.cli.main:start_repl'
+        ]
     }
 )
 
