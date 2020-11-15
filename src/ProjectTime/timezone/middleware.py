@@ -2,7 +2,7 @@
 """
 
 from django.utils import timezone as django_timezone
-from pytz import timezone
+from pytz import timezone, common_timezones
 
 
 class TimezoneMiddleware:  # pylint: disable=too-few-public-methods
@@ -19,6 +19,8 @@ class TimezoneMiddleware:  # pylint: disable=too-few-public-methods
         # the view (and later middleware) are called.
         if 'timezone' in request.session:
             django_timezone.activate(timezone(request.session['timezone']))
+        elif 'tz' in request.headers and request.headers['tz'] in common_timezones:
+            django_timezone.activate(timezone(request.headers['tz']))
 
         # Call the next middleware (or the view, if this is the last middleware)
         response = self.get_response(request)
