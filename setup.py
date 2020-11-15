@@ -17,7 +17,8 @@ setuptools.setup(
         'djangorestframework~=3.12',
         'pandas~=1.0',
         'bokeh~=2.1',
-        'tabulate~=0.8'
+        'tabulate~=0.8',
+        'requests~=2.25'
     ],
     author='Giuseppe Scoppino',
     author_email='scoppino.giuseppe@gmail.com',
