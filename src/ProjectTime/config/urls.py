@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf import settings
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework.authtoken import views
 
 from ProjectTime.project.admin import admin_site as site
 from ProjectTime.project.viewsets import ProjectViewSet, ChargeViewSet
@@ -28,7 +29,7 @@ router.register(r'charges', ChargeViewSet)
 urlpatterns = [
     path('', site.urls),
     path('rest/', include(router.urls)),
-    path('rest/auth/', include('rest_framework.urls'))
+    path('rest/auth/', views.obtain_auth_token),
 ]
 
 if settings.DEBUG:
