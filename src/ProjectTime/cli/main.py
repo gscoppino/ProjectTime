@@ -2,13 +2,12 @@
 """
 
 import os
-import requests
 
 from cmd import Cmd
 from datetime import datetime
 
 import pandas as pd
-
+import requests
 
 class ProjectTimeCmdPrompt(Cmd):
     """ Class definition for the ProjectTime CLI.
@@ -16,7 +15,7 @@ class ProjectTimeCmdPrompt(Cmd):
     server = None
     server_headers = None
 
-    def do_exit(self, args: str):
+    def do_exit(self, args: str): # pylint: disable=no-self-use
         """ Exit the CLI. """
         print("Exiting...")
         raise SystemExit

@@ -33,7 +33,7 @@ class AdminUserTestCase(TestCase):
         User.objects.create_superuser('test', '', 'test')
 
     # Helper methods
-    def performLogin(self):
+    def perform_login(self):
         logged_in = self.client.login(username='test', password='test')
         if not logged_in:
             self.fail('Unable to login.')
@@ -45,7 +45,7 @@ class ProjectTimeAdminSiteTimezoneFormViewTestCase(AdminUserTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_is_ok_when_user_is_admin(self):
-        self.performLogin()
+        self.perform_login()
         response = self.client.get(reverse('admin:select-timezone'))
         self.assertEqual(response.status_code, 200)
 
@@ -54,7 +54,7 @@ class ProjectTimeAdminSiteTimezoneFormViewTestCase(AdminUserTestCase):
         self.assertTemplateUsed('timezone_form.html')
 
     def test_redirects_to_login_on_successful_submit(self):
-        self.performLogin()
+        self.perform_login()
         response = self.client.post(reverse('admin:select-timezone'), {
             'timezone': 'America/New_York'
         })
@@ -71,12 +71,12 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_is_ok_when_user_is_admin(self):
-        self.performLogin()
+        self.perform_login()
         response = self.client.get(reverse('admin:dashboard'))
         self.assertEqual(response.status_code, 200)
 
     def test_all_admin_context_is_available_on_context(self):
-        self.performLogin()
+        self.perform_login()
 
         with patch.object(
             AdminSiteDefaultFilterMixin,
@@ -92,7 +92,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         project_a = Project(name='Project A').validate_and_save()
         project_b = Project(name='Project B').validate_and_save()
 
-        self.performLogin()
+        self.perform_login()
 
         response = self.client.get(reverse('admin:dashboard'))
 
@@ -105,7 +105,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         project_a = Project(name='Project A').validate_and_save()
         project_b = Project(name='Project B').validate_and_save()
 
-        self.performLogin()
+        self.perform_login()
 
         response = self.client.get('{url}?project={project}'.format(
             url=reverse('admin:dashboard'),
@@ -128,7 +128,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         new_callable=get_mock_monthly_summary_chart
     )
     def test_visualization_creation_blackbox(self, get_mock_dataframe, get_mock_chart_components):
-        self.performLogin()
+        self.perform_login()
         response = self.client.get(reverse('admin:dashboard'))
         self.assertTrue(get_mock_dataframe.called)
         self.assertTrue(get_mock_chart_components.called)
