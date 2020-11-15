@@ -22,7 +22,7 @@ class TimezoneMiddlewareTestCase(SimpleTestCase):
         middleware.__call__(mock_request)
         self.assertEqual(timezone.get_current_timezone_name(),
                          timezone_to_activate)
-        
+
         timezone.deactivate()
 
     def test_activates_header_timezone(self):

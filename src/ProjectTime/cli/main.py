@@ -1,16 +1,23 @@
+""" A command line client to the ProjectTime REST API.
+"""
+
 import os
-import pandas as pd
 import requests
 
 from cmd import Cmd
 from datetime import datetime
 
+import pandas as pd
+
 
 class ProjectTimeCmdPrompt(Cmd):
+    """ Class definition for the ProjectTime CLI.
+    """
     server = None
     server_headers = None
 
     def do_exit(self, args: str):
+        """ Exit the CLI. """
         print("Exiting...")
         raise SystemExit
 
@@ -237,6 +244,8 @@ class ProjectTimeCmdPrompt(Cmd):
 
 
 def start_repl():
+    """ Given credentials to login with, starts the REPL for the ProjectTime CLI.
+    """
     server = os.environ.get("PT_SERVER")
     if not server:
         raise Exception(
