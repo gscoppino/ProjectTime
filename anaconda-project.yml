@@ -102,7 +102,7 @@ env_specs:
       - anaconda-project
   database:
     packages:
-      - postgresql=12.2
+      - postgresql=12.3
   application:
     inherit_from:
       - _python
