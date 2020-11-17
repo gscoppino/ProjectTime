@@ -11,7 +11,7 @@ setuptools.setup(
     install_requires=[
         'psycopg2~=2.8',
         'sqlparse~=0.3',
-        'pytz~=2020.4',
+        'pytz~=2019.3',
         'django~=3.1',
         'pandas~=1.0',
         'bokeh~=2.1',

@@ -72,7 +72,7 @@ env_specs:
       - wincertstore=0.2=py38h32f6830_1005
   application:
     locked: true
-    env_spec_hash: 1aa5ce2e3856409ac76d16d64641a995b83b78a6
+    env_spec_hash: 029c4b744be3e9aa19fb7fc695eab8cbd9f637bb
     platforms:
     - linux-64
     - osx-64
@@ -89,7 +89,7 @@ env_specs:
       - pyparsing=2.4.7=pyh9f0ad1d_0
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
-      - pytz=2020.4=pyhd8ed1ab_0
+      - pytz=2019.3=py_0
       - six=1.15.0=pyh9f0ad1d_0
       - sqlparse=0.3.1=py_0
       - typing_extensions=3.7.4.3=py_0
@@ -212,7 +212,7 @@ env_specs:
       - zstd=1.4.5=h1f3a1b7_2
   application-debug:
     locked: true
-    env_spec_hash: 85d6afd210f99a25952c3bacf79df62c444092ee
+    env_spec_hash: e940e703bfaf40abbb8ab70ad8f7dbd56d145fc0
     platforms:
     - linux-64
     - osx-64
@@ -230,7 +230,7 @@ env_specs:
       - pyparsing=2.4.7=pyh9f0ad1d_0
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
-      - pytz=2020.4=pyhd8ed1ab_0
+      - pytz=2019.3=py_0
       - six=1.15.0=pyh9f0ad1d_0
       - sqlparse=0.3.1=py_0
       - typing_extensions=3.7.4.3=py_0
@@ -353,7 +353,7 @@ env_specs:
       - zstd=1.4.5=h1f3a1b7_2
   lint:
     locked: true
-    env_spec_hash: 3e3dfb6d4ded32fedf31ad6ed19d98620f0408c0
+    env_spec_hash: 642ed7b0a7f678e67bf52c249c84c4b9928b5910
     platforms:
     - linux-64
     - osx-64
@@ -377,7 +377,7 @@ env_specs:
       - pyparsing=2.4.7=pyh9f0ad1d_0
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
-      - pytz=2020.4=pyhd8ed1ab_0
+      - pytz=2019.3=py_0
       - six=1.15.0=pyh9f0ad1d_0
       - sqlparse=0.3.1=py_0
       - toml=0.10.2=pyhd8ed1ab_0
@@ -508,7 +508,7 @@ env_specs:
       - zstd=1.4.5=h1f3a1b7_2
   test:
     locked: true
-    env_spec_hash: 30d83a6bcf3b69692381b0e603ece1bd6429f27c
+    env_spec_hash: 44f1c5f1ce9a3698fea16a61bb09546f349c35cb
     platforms:
     - linux-64
     - osx-64
@@ -525,7 +525,7 @@ env_specs:
       - pyparsing=2.4.7=pyh9f0ad1d_0
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
-      - pytz=2020.4=pyhd8ed1ab_0
+      - pytz=2019.3=py_0
       - six=1.15.0=pyh9f0ad1d_0
       - sqlparse=0.3.1=py_0
       - typing_extensions=3.7.4.3=py_0
@@ -734,7 +734,7 @@ env_specs:
       - wincertstore=0.2=py38h32f6830_1005
   default:
     locked: true
-    env_spec_hash: 24c5dd5a9c6647f5d56e346e970dc518d9478318
+    env_spec_hash: 00de41f79d753f9cdc441c5232dadc8cf466861e
     platforms:
     - linux-64
     - osx-64
@@ -790,7 +790,7 @@ env_specs:
       - python-chromedriver-binary=80.0.3987.106.0=py38h32f6830_1
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
-      - pytz=2020.4=pyhd8ed1ab_0
+      - pytz=2019.3=py_0
       - requests=2.25.0=pyhd3deb0d_0
       - robotframework-pythonlibcore=2.1.0=py_0
       - robotframework-seleniumlibrary=4.5.0=pyh9f0ad1d_0
