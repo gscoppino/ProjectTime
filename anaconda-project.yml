@@ -113,7 +113,6 @@ env_specs:
       - django=3.1
       - pandas=1.0
       - bokeh=2.1
-      - tabulate=0.8
   application-debug:
     inherit_from:
       - _python
