@@ -119,7 +119,7 @@ env_specs:
       - _python
       - application
     packages:
-      - django-debug-toolbar=2.2
+      - django-debug-toolbar=3.1
   lint:
     inherit_from:
       - _python
