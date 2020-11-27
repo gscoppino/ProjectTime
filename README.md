@@ -12,27 +12,31 @@ A tool that can be used to keep track of time spent on projects.
 
 2. Open a terminal and ensure the conda `base` environment is activated.
 
-3. Install Anaconda Project: `conda install anaconda-project`
+3. Install Anaconda Project and DoIt: `conda install anaconda-project doit`
 
-   [Anaconda Project](https://anaconda-project.readthedocs.io) is the recommended task runner, and is installable using `conda`. Anaconda Project allows for multiple Conda environments to be defined in a single file, each with their own associated package dependencies. Commands can be associated with specific environments, and can be tailored to different platforms. Anaconda Project also assists with environment setup and cross-platform environment variables, among other things.
+   [Anaconda Project](https://anaconda-project.readthedocs.io) is a basic task runner for Conda projects. Anaconda Project allows for multiple Conda environments to be defined in a single file, each with their own associated package dependencies. Tasks can be associated with specific environments, and can be tailored to different platforms. Anaconda Project also assists with environment setup and cross-platform environment variables, among other things.
 
-4. (Optional) Prepare the default environment: `anaconda-project run prepare`
+   [DoIt](https://pydoit.org) is a more advanced task runner that is used as a wrapper around Anaconda Project. It can handle orchestration of tasks and their dependencies, and avoid unnecessary rework for tasks that have been previously completed.
+
+4. (Optional) Prepare the default environment: `doit prepare`
 
    The default environment contains all development, debug, and testing dependencies, in addition to useful development tools (such as linters, formatters, and Jupyter Notebook).
-
-5. (Optional) Install the source code into the default environment: `anaconda-project run install`
 
 ## Useful Project Commands
 
 The project is built on the [Django](https://www.djangoproject.com) framework. It is backed by the [PostgreSQL](https://www.postgresql.org) database.
 
+Run `doit list` to get a list of high-level tasks that can be run via `doit <task>`. DoIt tasks represent the most common use cases for day-to-day development. For more advanced usage, `anaconda-project` tasks can be used directly, as they provide direct interfaces to the development tools (Use `anaconda-project list-commands` to see available commands). Anaconda Project tasks and DoIt tasks can be mixed and matched as needed.
+
+A list of useful lower level `anaconda-project` commands is provided for convenience.
+
 Task                            | Command
---------------------------------|-----------------------------------------------------------------
+--------------------------------|----------------------------------------------------------------------------
 Create a database               | `anaconda-project run pg_ctl initdb`
 Start the database              | `anaconda-project run postgres`
 Apply Django migrations         | `anaconda-project run manage.py migrate`
 Start the web server            | `anaconda-project run manage.py runserver`
-Start a new test server         | `anaconda-project run manage.py testserver ../../<fixture-path>`
+Start a test server             | `anaconda-project run manage.py testserver <absolute/path/to/fixture>`
 Run unit tests                  | `anaconda-project run manage.py test`
 Run unit tests w/ code coverage | `anaconda-project run coverage run manage.py test`
 Generate coverage report        | `anaconda-project run coverage report`
@@ -46,6 +50,10 @@ Create new Django migrations    | `anaconda-project run manage.py makemigrations
 Run a Jupyter notebook          | `anaconda-project run jupyter notebook`
 
 ## Extra Development Tips
+
+### Database
+
+* Pass `-E` to `postgres` to run with verbose logging, where every database query will be printed.
 
 ### Unit Testing
 
