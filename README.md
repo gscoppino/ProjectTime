@@ -20,6 +20,8 @@ A tool that can be used to keep track of time spent on projects.
 
    The default environment contains all development, debug, and testing dependencies, in addition to useful development tools (such as linters, formatters, and Jupyter Notebook).
 
+5. (Optional) Install the source code into the default environment: `anaconda-project run install`
+
 ## Useful Project Commands
 
 The project is built on the [Django](https://www.djangoproject.com) framework. It is backed by the [PostgreSQL](https://www.postgresql.org) database.
@@ -37,7 +39,7 @@ Generate coverage report        | `anaconda-project run coverage report`
 Generate coverage report (HTML) | `anaconda-project run coverage html`
 Run acceptance tests            | `anaconda-project run robot test/`
 Format Python code              | `anaconda-project run autopep8 -r -i --max-line-length 88 src/ProjectTime`
-Sort imports in Python files    | `anaconda-project run isort -rc src/ProjectTime`
+Sort imports in Python files    | `anaconda-project run isort src/ProjectTime`
 Lint Python files               | `anaconda-project run pylint src/ProjectTime`
 Start a new Django app          | `anaconda-project run django-admin startapp <app> src/ProjectTime`
 Create new Django migrations    | `anaconda-project run manage.py makemigrations`

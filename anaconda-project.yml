@@ -6,8 +6,8 @@ name: ProjectTime
 
 # lists runnable scripts, notebooks, and other code.
 commands:
-  project-time:
-    unix: python -m scripts.dev_install && project-time
+  install:
+    unix: python -m scripts.dev_install
     env_spec: default
   postgres:
     unix: postgres
@@ -34,7 +34,7 @@ commands:
     unix: isort
     env_spec: lint
   pylint:
-    unix: python -m scripts.dev_install && pylint --rcfile setup.cfg
+    unix: python -m scripts.dev_install && pylint --rcfile=setup.cfg
     env_spec: lint
   coverage:
     unix: python -m scripts.dev_install && cd src/ProjectTime && coverage
@@ -100,6 +100,7 @@ env_specs:
       - test-acceptance
     packages:
       - anaconda-project
+      - doit
   database:
     packages:
       - postgresql=12.3
