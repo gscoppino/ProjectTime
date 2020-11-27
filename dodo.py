@@ -13,6 +13,7 @@ DOIT_CONFIG = {
 cwd = Path(os.getcwd())
 project_file = Path(cwd / 'anaconda-project.yml')
 
+dev_env_dir = Path(cwd / 'envs' / 'default')
 database_env_dir = Path(cwd / 'envs' / 'database')
 application_env_dir = Path(cwd / 'envs' / 'application')
 unit_test_env_dir = Path(cwd / 'envs' / 'test')
@@ -22,7 +23,10 @@ source_code_dir = Path(cwd / 'src' / 'ProjectTime')
 database_dir = Path(cwd / 'db')
 acceptance_tests_dir = Path(cwd / 'test')
 acceptance_test_suites_dir = Path(acceptance_tests_dir / 'suites')
+notebooks_dir = Path (cwd / 'notebooks')
 
+dev_python_executable = Path(dev_env_dir / 'bin' / 'python')
+dev_package_executable = Path(dev_env_dir / 'bin' / 'project-time')
 database_executable = Path(database_env_dir / 'bin' / 'pg_ctl')
 app_executable = Path(application_env_dir / 'bin' / 'python')
 unit_test_executable = Path(unit_test_env_dir / 'bin' / 'python')
@@ -39,6 +43,16 @@ test_fixture_file = Path(acceptance_tests_dir / 'fixtures' / 'admin_user.json')
 prepare_env = ['anaconda-project', 'prepare', '--env-spec']
 run_command = ['anaconda-project', 'run']
 clean = ['rm', '-r']
+
+def task_prepare():
+    """ Prepare the development environment
+    """
+    return {
+        'file_dep': [project_file],
+        'actions': [[*prepare_env, 'default']],
+        'targets': [dev_python_executable],
+    }
+
 
 def task_prepare_db_env():
     """ Install database dependencies
@@ -109,6 +123,15 @@ def task_startdb():
         'targets': [postgres_pid_file],
     }
 
+def task_develop():
+    """ Prepare the application for development
+    """
+    return {
+        'file_dep': [dev_env_dir],
+        'actions': [[*run_command, 'install']],
+        'targets': [dev_package_executable],
+    }
+
 def task_migrate():
     """ Prepare the application for execution
     """
@@ -135,6 +158,27 @@ def task_serve():
         'actions': [
             [*run_command, 'manage.py', 'migrate'],
             LongRunning(' '.join([*run_command, 'manage.py', 'runserver'])),
+            [*run_command, 'pg_ctl', 'stop'],
+        ]
+    }
+
+def task_notebook():
+    """ Start Jupyter Notebook
+    """
+    return {
+        'file_dep': [
+            postgres_pid_file
+        ],
+        'actions': [
+            [*run_command, 'manage.py', 'migrate'],
+            LongRunning(' '.join([
+                *run_command,
+                'jupyter',
+                'notebook',
+                '-y',
+                '--notebook-dir',
+                str(notebooks_dir)
+            ])),
             [*run_command, 'pg_ctl', 'stop'],
         ]
     }
