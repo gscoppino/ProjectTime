@@ -7,51 +7,67 @@ name: ProjectTime
 # lists runnable scripts, notebooks, and other code.
 commands:
   install:
+    description: execute pip install -e to install the project into the development environment.
     unix: python -m scripts.dev_install
     env_spec: default
   postgres:
+    description: execute postgres
     unix: postgres
     env_spec: database
   pg_ctl:
+    description: execute pg_ctl
     unix: pg_ctl
     env_spec: database
   pg_dump:
+    description: execute pg_dump
     unix: pg_dump
     env_spec: database
   psql:
+    description: execute psql
     unix: psql
     env_spec: database
   django-admin:
+    description: execute django-admin
     unix: python -m scripts.dev_install && django-admin
     env_spec: application
   manage.py:
+    description: execute manage.py
     unix: python -m scripts.dev_install && cd src/ProjectTime && python -Wa manage.py
     env_spec: application
   autopep8:
+    description: execute autopep8
     unix: autopep8
     env_spec: lint
   isort:
+    description: execute isort
     unix: isort
     env_spec: lint
   pylint:
+    description: execute pylint
     unix: python -m scripts.dev_install && pylint --rcfile=setup.cfg
     env_spec: lint
   coverage:
+    description: execute coverage
     unix: python -m scripts.dev_install && cd src/ProjectTime && coverage
     env_spec: test
   robot:
+    description: execute robot
     unix: robot
     env_spec: test-acceptance
   robot.tidy:
+    description: execute robot.tidy
     unix: python -m robot.tidy
     env_spec: test-acceptance
   jupyter:
+    description: execute jupyter
     unix: python -m scripts.dev_install && jupyter
     env_spec: default
   setup.py:
+    description: execute setup.py
     unix: python setup.py
     env_spec: build-pypi
   conda:
+    description: execute conda
     unix: conda
     env_spec: conda
 
