@@ -342,11 +342,12 @@ def task_check():
     return {
         'uptodate': [False],
         'file_dep': [
+            dev_python_executable,
             lint_executable,
-            app_executable
+            app_executable,
         ],
         'actions': [
-            ['python', '-m', 'scripts.dev_install'],
+            [*run_command, 'install'],
             [*run_command, 'pylint', '--fail-under', '8', str(source_code_dir)],
             [*run_command, 'manage.py', 'check'],
         ],
