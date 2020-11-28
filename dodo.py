@@ -241,9 +241,7 @@ def task_notebook():
                 *run_command,
                 'jupyter',
                 'notebook',
-                '-y',
-                '--notebook-dir',
-                str(notebooks_dir)
+                '-y'
             ])),
             [*run_command, 'pg_ctl', 'stop'],
         ],

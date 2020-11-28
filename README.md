@@ -90,3 +90,16 @@ anaconda-project run --env-spec application-debug manage.py runserver
 
 * For PyPi: `anaconda-project run setup.py sdist bdist_wheel`
 * For Conda: `anaconda-project run conda build conda-recipe`
+
+## Interacting with Django from Jupyter Notebook
+
+When interacting with Django from a Jupyter notebook, Django must be manually configured first:
+
+```
+import os
+import django
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ProjectTime.config.settings')
+os.environ.setdefault('DJANGO_ALLOW_ASYNC_UNSAFE', 'true')
+django.setup()
+```
