@@ -162,10 +162,8 @@ def task_makemigrations():
             postgres_pid_file,
             *python_source_files,
         ],
-        'actions': [
-            [*run_command, 'manage.py', 'makemigrations'],
-            [*run_command, 'pg_ctl', 'stop'],
-        ],
+        'actions': [[*run_command, 'manage.py', 'makemigrations']],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -179,10 +177,8 @@ def task_migrate():
             postgres_pid_file,
             *python_source_files,
         ],
-        'actions': [
-            [*run_command, 'manage.py', 'migrate'],
-            [*run_command, 'pg_ctl', 'stop'],
-        ],
+        'actions': [[*run_command, 'manage.py', 'migrate']],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -198,8 +194,8 @@ def task_serve():
         'actions': [
             [*run_command, 'manage.py', 'migrate'],
             LongRunning(' '.join([*run_command, 'manage.py', 'runserver'])),
-            [*run_command, 'pg_ctl', 'stop'],
         ],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -222,8 +218,8 @@ def task_debug():
                 'manage.py',
                 'runserver'
             ])),
-            [*run_command, 'pg_ctl', 'stop'],
         ],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -243,8 +239,8 @@ def task_notebook():
                 'notebook',
                 '-y'
             ])),
-            [*run_command, 'pg_ctl', 'stop'],
         ],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -265,8 +261,8 @@ def task_testserver():
                 '--noinput',
                 str(test_fixture_file)
             ])),
-            [*run_command, 'pg_ctl', 'stop'],
         ],
+        'teardown': [[*run_command, 'pg_ctl', 'stop']],
         'verbosity': 2,
     }
 
@@ -279,8 +275,8 @@ def task_test_unit():
             unit_test_executable,
             postgres_pid_file,
         ],
-        'actions': [
-            [*run_command, 'coverage', 'run', 'manage.py', 'test', '--noinput'],
+        'actions': [[*run_command, 'coverage', 'run', 'manage.py', 'test', '--noinput']],
+        'teardown': [
             [*run_command, 'pg_ctl', 'stop'],
             [*run_command, 'coverage', 'report'],
         ],
