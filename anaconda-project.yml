@@ -114,15 +114,18 @@ platforms:
 # but can have its own unique ones also.
 env_specs:
   _python:
+    description: Reference environment for the application supported Python version
     packages:
       - python=3.8
       - pip
   _notebook:
+    description: Reference environment for Jupyter
     inherit_from:
       - _python
     packages:
       - notebook
   default:
+    description: The application development environment
     inherit_from:
       - _python
       - _notebook
@@ -133,9 +136,11 @@ env_specs:
     packages:
       - anaconda-project
   database:
+    description: The database environment
     packages:
       - postgresql=12.3
   application:
+    description: The application runtime environment
     inherit_from:
       - _python
     packages:
@@ -146,12 +151,14 @@ env_specs:
       - pandas=1.0
       - bokeh=2.1
   application-debug:
+    description: The application debug environment
     inherit_from:
       - _python
       - application
     packages:
       - django-debug-toolbar=2.2
   lint:
+    description: The environment for linting and formatting up application code
     inherit_from:
       - _python
       - application
@@ -161,12 +168,14 @@ env_specs:
       - pep8
       - autopep8
   test:
+    description: The environment for unit testing application code
     inherit_from:
       - _python
       - application
     packages:
       - coverage
   test-acceptance:
+    description: The environment for acceptance testing application code
     inherit_from:
       - _python
     packages:
@@ -175,11 +184,13 @@ env_specs:
       - python-chromedriver-binary<81
       - geckodriver
   build-pypi:
+    description: The environment for building source and binary distributions for the application code
     inherit_from:
       - _python
     packages:
       - setuptools
   conda:
+    description: The environment for building a conda distribution for the application code
     inherit_from:
       - _python
       - build-pypi
