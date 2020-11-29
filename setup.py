@@ -15,6 +15,8 @@ setuptools.setup(
         'django~=3.1',
         'pandas~=1.0',
         'bokeh~=2.1',
+        'django-heroku',
+        'gunicorn',
     ],
     author='Giuseppe Scoppino',
     author_email='scoppino.giuseppe@gmail.com',
