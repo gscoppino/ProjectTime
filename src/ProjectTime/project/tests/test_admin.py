@@ -63,10 +63,6 @@ class ChargeModelAdminTestCase(TestCase):
         # through Charge records via a more granular date picker.
         self.assertEqual(self.model_admin.date_hierarchy, 'start_time')
 
-    def test_change_list_template_is_overridden(self):
-        self.assertEqual(self.model_admin.change_list_template,
-                         'admin/charge/change_list.html')
-
     def test_queryset_is_annotated_with_time_charged(self):
         Charge(project=self.project,
                start_time=timezone.now()).validate_and_save()

@@ -11,8 +11,7 @@ from .utils.decorators import with_attrs
 
 @admin.register(Charge, site=admin_site)
 class ChargeAdmin(admin.ModelAdmin):
-    """ A ModelAdmin for charges. At the bottom of the list display, the total
-        of the hours on display is shown.
+    """ A ModelAdmin for charges.
     """
     date_hierarchy = 'start_time'
     list_display = ('project', 'start_time', 'end_time',
@@ -20,7 +19,6 @@ class ChargeAdmin(admin.ModelAdmin):
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
     ordering = ('start_time',)
-    change_list_template = 'admin/charge/change_list.html'
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
