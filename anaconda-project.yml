@@ -181,7 +181,7 @@ env_specs:
     packages:
       - robotframework=3.2
       - robotframework-seleniumlibrary=4.5
-      - python-chromedriver-binary
+      - python-chromedriver-binary <88
       - geckodriver
   build-pypi:
     description: The environment for building source and binary distributions for the application code

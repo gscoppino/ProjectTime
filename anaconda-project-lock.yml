@@ -669,7 +669,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   test-acceptance:
     locked: true
-    env_spec_hash: 9dba10697d6028543182769df130a3fdc9cd3f11
+    env_spec_hash: 53dddd16875536f808d4672617e0cc30b0ea7e74
     platforms:
     - linux-64
     - osx-64
@@ -704,7 +704,7 @@ env_specs:
       - ncurses=6.2=h58526e2_4
       - openssl=1.1.1i=h7f98852_0
       - pysocks=1.7.1=py38h578d9bd_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38h578d9bd_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38h578d9bd_0
       - python=3.8.6=hffdb5ce_5_cpython
       - readline=8.0=he28a2e2_2
       - selenium=3.141.0=py38h497a2fe_1002
@@ -725,7 +725,7 @@ env_specs:
       - ncurses=6.2=h2e338ed_4
       - openssl=1.1.1i=h35c211d_0
       - pysocks=1.7.1=py38h50d1736_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38h50d1736_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38h50d1736_0
       - python=3.8.6=h624753d_5_cpython
       - readline=8.0=h0678c8f_2
       - selenium=3.141.0=py38h5406a74_1002
@@ -743,7 +743,7 @@ env_specs:
       - geckodriver=0.29.0=hdb13177_0
       - openssl=1.1.1i=h8ffe710_0
       - pysocks=1.7.1=py38haa244fe_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38haa244fe_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38haa244fe_0
       - python=3.8.6=h7840368_5_cpython
       - selenium=3.141.0=py38h294d835_1002
       - setuptools=49.6.0=py38haa244fe_3
