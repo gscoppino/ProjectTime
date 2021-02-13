@@ -3,7 +3,7 @@ Library             SeleniumLibrary
 
 *** Keywords ***
 The user goes to the dashboard page
-    Click Link          //a[contains(text(), "View Dashboard") and @href="/dashboard"]
+    Click Link          //a[contains(text(), "View Dashboard") and @href="/admin/dashboard"]
     Title Should Be     Dashboard | ProjectTime
 
 The site displays the visualization canvas
