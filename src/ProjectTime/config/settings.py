@@ -75,6 +75,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ProjectTime.config.wsgi.application'
 
+LOGIN_URL = 'admin:login'
+
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

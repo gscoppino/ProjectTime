@@ -1,0 +1,70 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>ProjectTime | Dashboard</title>
+    </head>
+    <body>
+        <main>
+            <section>
+                <header>
+                    <h1>Active Projects</h1>
+                    <a href="{% url 'admin:project_project_add' %}">+ Add Project</a>
+                </header>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Last Charge</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for project in active_projects %}
+                        <tr>
+                            <td>{{ project.name }}</td>
+                            <td>{{ project.db__latest_charge }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            <section>
+                <header>
+                    <h1>Open Charges</h1>
+                    <a href="{% url 'admin:project_charge_add' %}">+ Add Charge</a>
+                </header>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Time Charged</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for charge in open_charges %}
+                        <tr>
+                            <td>{{ charge.project.name }}</td>
+                            <td>{{ charge.start_time }}</td>
+                            <td>{{ charge.end_time }}</td>
+                            <td>{{ charge.db__time_charged }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <caption style="caption-side: bottom">Total Time Charged: {{ open_charges.aggregate_time_charged }}</caption>
+                </table>
+            </section>
+            <section>
+                <header>
+                    <h1>Current Month Summary</h1>
+                </header>
+                <div>
+                    {{ month_summary_chart_div | safe }}
+                    <script type="text/javascript" src="{% static 'project/vendor/bokeh.min.js' %}"></script>
+                    {{ month_summary_chart_script | safe }}
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

@@ -22,6 +22,7 @@ from ProjectTime.project import views as project_views
 
 urlpatterns = [
     path('', project_views.home),
+    path('dashboard', project_views.DashboardView.as_view(), name='dashboard'),
     path('admin/', admin_site.urls),
 ]
 

@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
+from ProjectTime.project.utils import reporting as report_helpers
 
 from .utils.charge import ChargeFactory
 from .utils.general import get_start_of_today
@@ -118,12 +119,12 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         ])
 
     @patch.object(
-        ProjectTimeAdminSite,
+        report_helpers,
         'get_monthly_summary_series',
         new_callable=get_mock_monthly_summary_dataframe
     )
     @patch.object(
-        ProjectTimeAdminSite,
+        report_helpers,
         'get_monthly_summary_chart_components',
         new_callable=get_mock_monthly_summary_chart
     )
@@ -204,7 +205,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
 
         # Should return data on all projects
 
-        dataframe = site.get_monthly_summary_series(timezone.localtime())
+        dataframe = report_helpers.get_monthly_summary_series(timezone.localtime())
 
         self.assertIsInstance(dataframe, pd.DataFrame)
         self.assertEqual(len(dataframe), 2)
@@ -229,13 +230,13 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.assertIsInstance(project_a_dataframe.iloc[0].color, str)
         self.assertIsInstance(project_b_dataframe.iloc[0].color, str)
 
-        div, chart = site.get_monthly_summary_chart_components(dataframe)
+        div, chart = report_helpers.get_monthly_summary_chart_components(dataframe)
         self.assertGreater(len(div), 0)
         self.assertGreater(len(chart), 0)
 
         # Should return data on only the requested projects
 
-        dataframe = site.get_monthly_summary_series(timezone.localtime(),
+        dataframe = report_helpers.get_monthly_summary_series(timezone.localtime(),
                                                     project_ids=[project_a.pk])
 
         self.assertIsInstance(dataframe, pd.DataFrame)
@@ -251,6 +252,6 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.assertIsInstance(dataframe.iloc[0].angle, float)
         self.assertIsInstance(dataframe.iloc[0].color, str)
 
-        div, chart = site.get_monthly_summary_chart_components(dataframe)
+        div, chart = report_helpers.get_monthly_summary_chart_components(dataframe)
         self.assertGreater(len(div), 0)
         self.assertGreater(len(chart), 0)
