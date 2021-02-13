@@ -754,7 +754,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   default:
     locked: true
-    env_spec_hash: 074e8cc2057dde52943c31b57cf1460653a50ef6
+    env_spec_hash: 473ef54fdd86a140888e1eef2139461395139560
     platforms:
     - linux-64
     - osx-64
@@ -881,7 +881,7 @@ env_specs:
       - psycopg2=2.8.6=py38h2b97feb_1
       - pyrsistent=0.17.3=py38h497a2fe_2
       - pysocks=1.7.1=py38h578d9bd_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38h578d9bd_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38h578d9bd_0
       - python=3.8.6=hffdb5ce_5_cpython
       - pyyaml=5.4.1=py38h497a2fe_0
       - pyzmq=22.0.1=py38h3d7ac18_0
@@ -947,7 +947,7 @@ env_specs:
       - psycopg2=2.8.6=py38h6b4ec92_1
       - pyrsistent=0.17.3=py38h5406a74_2
       - pysocks=1.7.1=py38h50d1736_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38h50d1736_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38h50d1736_0
       - python=3.8.6=h624753d_5_cpython
       - pyyaml=5.4.1=py38h5406a74_0
       - pyzmq=22.0.1=py38hd5c72dd_0
@@ -1015,7 +1015,7 @@ env_specs:
       - psycopg2=2.8.6=py38hd8c33c5_1
       - pyrsistent=0.17.3=py38h294d835_2
       - pysocks=1.7.1=py38haa244fe_3
-      - python-chromedriver-binary=89.0.4389.23.0=py38haa244fe_0
+      - python-chromedriver-binary=87.0.4280.88.0=py38haa244fe_0
       - python=3.8.6=h7840368_5_cpython
       - pywin32=300=py38h294d835_0
       - pywinpty=0.5.7=py38h32f6830_1
