@@ -74,7 +74,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   application:
     locked: true
-    env_spec_hash: 5c9a1a97e8a3bd9558c1b985a132a91ff1d42b61
+    env_spec_hash: 0be88c7a43e4436aafb4b6a92d45d381925d4e91
     platforms:
     - linux-64
     - osx-64
@@ -127,7 +127,7 @@ env_specs:
       - ncurses=6.2=h58526e2_4
       - numpy=1.20.1=py38h18fd61f_0
       - openssl=1.1.1i=h7f98852_0
-      - pandas=1.0.5=py38hcb8c335_0
+      - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
@@ -151,8 +151,8 @@ env_specs:
       - libcxx=11.0.1=habf9029_0
       - libedit=3.1.20191231=h0678c8f_2
       - libffi=3.3=h046ec9c_2
-      - libgfortran5=9.3.0=h6c81a4c_17
-      - libgfortran=5.0.0=9_3_0_h6c81a4c_17
+      - libgfortran5=9.3.0=h6c81a4c_18
+      - libgfortran=5.0.0=9_3_0_h6c81a4c_18
       - libopenblas=0.3.12=openmp_h54245bb_1
       - libpng=1.6.37=h7cec526_2
       - libpq=12.3=h7049927_3
@@ -164,7 +164,7 @@ env_specs:
       - ncurses=6.2=h2e338ed_4
       - numpy=1.20.1=py38h64deac9_0
       - openssl=1.1.1i=h35c211d_0
-      - pandas=1.0.5=py38h5fc983b_0
+      - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
@@ -197,7 +197,7 @@ env_specs:
       - mkl=2020.4=hb70f87d_311
       - numpy=1.20.1=py38h0cc643e_0
       - openssl=1.1.1i=h8ffe710_0
-      - pandas=1.0.5=py38he6e81aa_0
+      - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
@@ -215,7 +215,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   application-debug:
     locked: true
-    env_spec_hash: 9fcf7e9d4faf8c51ecc2e85d1863c9044beab36a
+    env_spec_hash: 3ef20245ec92d31b0a9d445bf1eb8aaf0f649fe0
     platforms:
     - linux-64
     - osx-64
@@ -269,7 +269,7 @@ env_specs:
       - ncurses=6.2=h58526e2_4
       - numpy=1.20.1=py38h18fd61f_0
       - openssl=1.1.1i=h7f98852_0
-      - pandas=1.0.5=py38hcb8c335_0
+      - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
@@ -293,8 +293,8 @@ env_specs:
       - libcxx=11.0.1=habf9029_0
       - libedit=3.1.20191231=h0678c8f_2
       - libffi=3.3=h046ec9c_2
-      - libgfortran5=9.3.0=h6c81a4c_17
-      - libgfortran=5.0.0=9_3_0_h6c81a4c_17
+      - libgfortran5=9.3.0=h6c81a4c_18
+      - libgfortran=5.0.0=9_3_0_h6c81a4c_18
       - libopenblas=0.3.12=openmp_h54245bb_1
       - libpng=1.6.37=h7cec526_2
       - libpq=12.3=h7049927_3
@@ -306,7 +306,7 @@ env_specs:
       - ncurses=6.2=h2e338ed_4
       - numpy=1.20.1=py38h64deac9_0
       - openssl=1.1.1i=h35c211d_0
-      - pandas=1.0.5=py38h5fc983b_0
+      - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
@@ -339,7 +339,7 @@ env_specs:
       - mkl=2020.4=hb70f87d_311
       - numpy=1.20.1=py38h0cc643e_0
       - openssl=1.1.1i=h8ffe710_0
-      - pandas=1.0.5=py38he6e81aa_0
+      - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
@@ -357,7 +357,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   lint:
     locked: true
-    env_spec_hash: a436fd487a64745334bbd09f28e89294d0f591a9
+    env_spec_hash: 1e8137baf27660001e835014be6a315faf4523ef
     platforms:
     - linux-64
     - osx-64
@@ -419,7 +419,7 @@ env_specs:
       - ncurses=6.2=h58526e2_4
       - numpy=1.20.1=py38h18fd61f_0
       - openssl=1.1.1i=h7f98852_0
-      - pandas=1.0.5=py38hcb8c335_0
+      - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
@@ -445,8 +445,8 @@ env_specs:
       - libcxx=11.0.1=habf9029_0
       - libedit=3.1.20191231=h0678c8f_2
       - libffi=3.3=h046ec9c_2
-      - libgfortran5=9.3.0=h6c81a4c_17
-      - libgfortran=5.0.0=9_3_0_h6c81a4c_17
+      - libgfortran5=9.3.0=h6c81a4c_18
+      - libgfortran=5.0.0=9_3_0_h6c81a4c_18
       - libopenblas=0.3.12=openmp_h54245bb_1
       - libpng=1.6.37=h7cec526_2
       - libpq=12.3=h7049927_3
@@ -458,7 +458,7 @@ env_specs:
       - ncurses=6.2=h2e338ed_4
       - numpy=1.20.1=py38h64deac9_0
       - openssl=1.1.1i=h35c211d_0
-      - pandas=1.0.5=py38h5fc983b_0
+      - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
@@ -494,7 +494,7 @@ env_specs:
       - mkl=2020.4=hb70f87d_311
       - numpy=1.20.1=py38h0cc643e_0
       - openssl=1.1.1i=h8ffe710_0
-      - pandas=1.0.5=py38he6e81aa_0
+      - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
@@ -513,7 +513,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   test:
     locked: true
-    env_spec_hash: 12b9943873cc265c6bdd6571ea48125acf0c7319
+    env_spec_hash: 35399943e3114c965d2c3fa8421cdc36f0d5ae3a
     platforms:
     - linux-64
     - osx-64
@@ -567,7 +567,7 @@ env_specs:
       - ncurses=6.2=h58526e2_4
       - numpy=1.20.1=py38h18fd61f_0
       - openssl=1.1.1i=h7f98852_0
-      - pandas=1.0.5=py38hcb8c335_0
+      - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
@@ -592,8 +592,8 @@ env_specs:
       - libcxx=11.0.1=habf9029_0
       - libedit=3.1.20191231=h0678c8f_2
       - libffi=3.3=h046ec9c_2
-      - libgfortran5=9.3.0=h6c81a4c_17
-      - libgfortran=5.0.0=9_3_0_h6c81a4c_17
+      - libgfortran5=9.3.0=h6c81a4c_18
+      - libgfortran=5.0.0=9_3_0_h6c81a4c_18
       - libopenblas=0.3.12=openmp_h54245bb_1
       - libpng=1.6.37=h7cec526_2
       - libpq=12.3=h7049927_3
@@ -605,7 +605,7 @@ env_specs:
       - ncurses=6.2=h2e338ed_4
       - numpy=1.20.1=py38h64deac9_0
       - openssl=1.1.1i=h35c211d_0
-      - pandas=1.0.5=py38h5fc983b_0
+      - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
@@ -639,7 +639,7 @@ env_specs:
       - mkl=2020.4=hb70f87d_311
       - numpy=1.20.1=py38h0cc643e_0
       - openssl=1.1.1i=h8ffe710_0
-      - pandas=1.0.5=py38he6e81aa_0
+      - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
@@ -742,7 +742,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   default:
     locked: true
-    env_spec_hash: a46196df699a8342db90504e0776751efd7d7451
+    env_spec_hash: d495071beb2cbd3080dac7b4dd2d9ecc306591a2
     platforms:
     - linux-64
     - osx-64
@@ -863,7 +863,7 @@ env_specs:
       - notebook=6.2.0=py38h578d9bd_0
       - numpy=1.20.1=py38h18fd61f_0
       - openssl=1.1.1i=h7f98852_0
-      - pandas=1.0.5=py38hcb8c335_0
+      - pandas=1.2.2=py38h51da96c_0
       - pandoc=2.11.4=h7f98852_0
       - pillow=8.1.0=py38ha0e1e83_2
       - psycopg2=2.8.6=py38h2b97feb_1
@@ -911,8 +911,8 @@ env_specs:
       - libcxx=11.0.1=habf9029_0
       - libedit=3.1.20191231=h0678c8f_2
       - libffi=3.3=h046ec9c_2
-      - libgfortran5=9.3.0=h6c81a4c_17
-      - libgfortran=5.0.0=9_3_0_h6c81a4c_17
+      - libgfortran5=9.3.0=h6c81a4c_18
+      - libgfortran=5.0.0=9_3_0_h6c81a4c_18
       - libopenblas=0.3.12=openmp_h54245bb_1
       - libpng=1.6.37=h7cec526_2
       - libpq=12.3=h7049927_3
@@ -928,7 +928,7 @@ env_specs:
       - notebook=6.2.0=py38h50d1736_0
       - numpy=1.20.1=py38h64deac9_0
       - openssl=1.1.1i=h35c211d_0
-      - pandas=1.0.5=py38h5fc983b_0
+      - pandas=1.2.2=py38hb77cc89_0
       - pandoc=2.11.4=h35c211d_0
       - pillow=8.1.0=py38h4c06724_2
       - psycopg2=2.8.6=py38h6b4ec92_1
@@ -995,7 +995,7 @@ env_specs:
       - notebook=6.2.0=py38haa244fe_0
       - numpy=1.20.1=py38h0cc643e_0
       - openssl=1.1.1i=h8ffe710_0
-      - pandas=1.0.5=py38he6e81aa_0
+      - pandas=1.2.2=py38h4c96930_0
       - pandoc=2.11.4=h8ffe710_0
       - pillow=8.1.0=py38h9273828_2
       - psycopg2=2.8.6=py38hd8c33c5_1
