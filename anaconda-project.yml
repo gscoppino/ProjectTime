@@ -117,7 +117,7 @@ env_specs:
     description: Reference environment for the application supported Python version
     packages:
       - python=3.8
-      - pip
+      - pip=20.2.4
   _notebook:
     description: Reference environment for Jupyter
     inherit_from:
@@ -134,7 +134,7 @@ env_specs:
       - test
       - test-acceptance
     packages:
-      - anaconda-project
+      - anaconda-project=0.8.3
   database:
     description: The database environment
     packages:
@@ -163,38 +163,38 @@ env_specs:
       - _python
       - application
     packages:
-      - isort
-      - pylint
-      - pep8
-      - autopep8
+      - isort=5.6
+      - pylint=2.6
+      - pep8=1.7
+      - autopep8=1.5
   test:
     description: The environment for unit testing application code
     inherit_from:
       - _python
       - application
     packages:
-      - coverage
+      - coverage=5.3
   test-acceptance:
     description: The environment for acceptance testing application code
     inherit_from:
       - _python
     packages:
-      - robotframework
-      - robotframework-seleniumlibrary
-      - python-chromedriver-binary<81
+      - robotframework=3.2
+      - robotframework-seleniumlibrary=4.5
+      - python-chromedriver-binary
       - geckodriver
   build-pypi:
     description: The environment for building source and binary distributions for the application code
     inherit_from:
       - _python
     packages:
-      - setuptools
+      - setuptools=49.6.0
   conda:
     description: The environment for building a conda distribution for the application code
     inherit_from:
       - _python
       - build-pypi
     packages:
-      - conda
-      - conda-build
-      - conda-verify
+      - conda=4.9
+      - conda-build=3.20
+      - conda-verify=3.1
