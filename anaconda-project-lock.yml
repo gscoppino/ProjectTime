@@ -74,7 +74,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   application:
     locked: true
-    env_spec_hash: 0be88c7a43e4436aafb4b6a92d45d381925d4e91
+    env_spec_hash: 2ecd273e2abe563d3f070e24f2b4f330fdb37e33
     platforms:
     - linux-64
     - osx-64
@@ -82,12 +82,10 @@ env_specs:
     packages:
       all:
       - asgiref=3.3.1=pyhd8ed1ab_0
-      - bokeh=2.1.1=py38h32f6830_0
       - django=3.1.6=pyhd8ed1ab_0
       - jinja2=2.11.3=pyh44b312d_0
       - olefile=0.46=pyh9f0ad1d_1
       - packaging=20.9=pyh44b312d_0
-      - pip=20.2.4=py_0
       - pyparsing=2.4.7=pyh9f0ad1d_0
       - python-dateutil=2.8.1=py_0
       - python_abi=3.8=1_cp38
@@ -103,6 +101,7 @@ env_specs:
       linux-64:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
+      - bokeh=2.2.3=py38h578d9bd_0
       - ca-certificates=2020.12.5=ha878542_0
       - certifi=2020.12.5=py38h578d9bd_1
       - freetype=2.10.4=h0708190_1
@@ -129,6 +128,7 @@ env_specs:
       - openssl=1.1.1i=h7f98852_0
       - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
+      - pip=20.2.4=py38h06a4308_0
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
       - pyyaml=5.4.1=py38h497a2fe_0
@@ -142,6 +142,7 @@ env_specs:
       - zlib=1.2.11=h516909a_1010
       - zstd=1.4.8=ha95c52a_1
       osx-64:
+      - bokeh=2.2.3=py38h50d1736_0
       - ca-certificates=2020.12.5=h033912b_0
       - certifi=2020.12.5=py38h50d1736_1
       - freetype=2.10.4=h4cff582_1
@@ -166,6 +167,7 @@ env_specs:
       - openssl=1.1.1i=h35c211d_0
       - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
+      - pip=20.2.4=py38hecd8cb5_0
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
       - pyyaml=5.4.1=py38h5406a74_0
@@ -179,6 +181,7 @@ env_specs:
       - zlib=1.2.11=h7795811_1010
       - zstd=1.4.8=hf387650_1
       win-64:
+      - bokeh=2.2.3=py38haa244fe_0
       - ca-certificates=2020.12.5=h5b45459_0
       - certifi=2020.12.5=py38haa244fe_1
       - freetype=2.10.4=h546665d_1
@@ -199,6 +202,7 @@ env_specs:
       - openssl=1.1.1i=h8ffe710_0
       - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
+      - pip=20.2.4=py38haa95532_0
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
       - pyyaml=5.4.1=py38h294d835_0
@@ -215,7 +219,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   application-debug:
     locked: true
-    env_spec_hash: 3ef20245ec92d31b0a9d445bf1eb8aaf0f649fe0
+    env_spec_hash: ad169c6c8dc39733b1c14c78c1ede5d0dfd8036a
     platforms:
     - linux-64
     - osx-64
@@ -223,7 +227,6 @@ env_specs:
     packages:
       all:
       - asgiref=3.3.1=pyhd8ed1ab_0
-      - bokeh=2.1.1=py38h32f6830_0
       - django-debug-toolbar=2.2=py_0
       - django=3.1.6=pyhd8ed1ab_0
       - jinja2=2.11.3=pyh44b312d_0
@@ -245,6 +248,7 @@ env_specs:
       linux-64:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
+      - bokeh=2.2.3=py38h578d9bd_0
       - ca-certificates=2020.12.5=ha878542_0
       - certifi=2020.12.5=py38h578d9bd_1
       - freetype=2.10.4=h0708190_1
@@ -284,6 +288,7 @@ env_specs:
       - zlib=1.2.11=h516909a_1010
       - zstd=1.4.8=ha95c52a_1
       osx-64:
+      - bokeh=2.2.3=py38h50d1736_0
       - ca-certificates=2020.12.5=h033912b_0
       - certifi=2020.12.5=py38h50d1736_1
       - freetype=2.10.4=h4cff582_1
@@ -321,6 +326,7 @@ env_specs:
       - zlib=1.2.11=h7795811_1010
       - zstd=1.4.8=hf387650_1
       win-64:
+      - bokeh=2.2.3=py38haa244fe_0
       - ca-certificates=2020.12.5=h5b45459_0
       - certifi=2020.12.5=py38haa244fe_1
       - freetype=2.10.4=h546665d_1
@@ -357,7 +363,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   lint:
     locked: true
-    env_spec_hash: 1e8137baf27660001e835014be6a315faf4523ef
+    env_spec_hash: 45e4d2bada1aed0e1b33634a2babe7b8054ee93a
     platforms:
     - linux-64
     - osx-64
@@ -367,15 +373,13 @@ env_specs:
       - asgiref=3.3.1=pyhd8ed1ab_0
       - astroid=2.4.2=py38h32f6830_1
       - autopep8=1.5.5=pyh44b312d_0
-      - bokeh=2.1.1=py38h32f6830_0
       - django=3.1.6=pyhd8ed1ab_0
-      - isort=5.6.4=py_0
+      - isort=5.6.2=py38h32f6830_0
       - jinja2=2.11.3=pyh44b312d_0
       - mccabe=0.6.1=py_1
       - olefile=0.46=pyh9f0ad1d_1
       - packaging=20.9=pyh44b312d_0
       - pep8=1.7.1=py_0
-      - pip=20.2.4=py_0
       - pycodestyle=2.6.0=pyh9f0ad1d_0
       - pylint=2.6.0=py38h32f6830_1
       - pyparsing=2.4.7=pyh9f0ad1d_0
@@ -394,6 +398,7 @@ env_specs:
       linux-64:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
+      - bokeh=2.2.3=py38h578d9bd_0
       - ca-certificates=2020.12.5=ha878542_0
       - certifi=2020.12.5=py38h578d9bd_1
       - freetype=2.10.4=h0708190_1
@@ -421,6 +426,7 @@ env_specs:
       - openssl=1.1.1i=h7f98852_0
       - pandas=1.2.2=py38h51da96c_0
       - pillow=8.1.0=py38ha0e1e83_2
+      - pip=20.2.4=py38h06a4308_0
       - psycopg2=2.8.6=py38h2b97feb_1
       - python=3.8.6=hffdb5ce_5_cpython
       - pyyaml=5.4.1=py38h497a2fe_0
@@ -435,6 +441,7 @@ env_specs:
       - zlib=1.2.11=h516909a_1010
       - zstd=1.4.8=ha95c52a_1
       osx-64:
+      - bokeh=2.2.3=py38h50d1736_0
       - ca-certificates=2020.12.5=h033912b_0
       - certifi=2020.12.5=py38h50d1736_1
       - freetype=2.10.4=h4cff582_1
@@ -460,6 +467,7 @@ env_specs:
       - openssl=1.1.1i=h35c211d_0
       - pandas=1.2.2=py38hb77cc89_0
       - pillow=8.1.0=py38h4c06724_2
+      - pip=20.2.4=py38hecd8cb5_0
       - psycopg2=2.8.6=py38h6b4ec92_1
       - python=3.8.6=h624753d_5_cpython
       - pyyaml=5.4.1=py38h5406a74_0
@@ -474,6 +482,7 @@ env_specs:
       - zlib=1.2.11=h7795811_1010
       - zstd=1.4.8=hf387650_1
       win-64:
+      - bokeh=2.2.3=py38haa244fe_0
       - ca-certificates=2020.12.5=h5b45459_0
       - certifi=2020.12.5=py38haa244fe_1
       - colorama=0.4.4=pyh9f0ad1d_0
@@ -496,6 +505,7 @@ env_specs:
       - openssl=1.1.1i=h8ffe710_0
       - pandas=1.2.2=py38h4c96930_0
       - pillow=8.1.0=py38h9273828_2
+      - pip=20.2.4=py38haa95532_0
       - psycopg2=2.8.6=py38hd8c33c5_1
       - python=3.8.6=h7840368_5_cpython
       - pyyaml=5.4.1=py38h294d835_0
@@ -513,7 +523,7 @@ env_specs:
       - zstd=1.4.8=h4e2f164_1
   test:
     locked: true
-    env_spec_hash: 35399943e3114c965d2c3fa8421cdc36f0d5ae3a
+    env_spec_hash: bf5762b3a73262cd7ca0b3e5e1a1016d5e60b8f1
     platforms:
     - linux-64
     - osx-64
@@ -521,7 +531,6 @@ env_specs:
     packages:
       all:
       - asgiref=3.3.1=pyhd8ed1ab_0
-      - bokeh=2.1.1=py38h32f6830_0
       - django=3.1.6=pyhd8ed1ab_0
       - jinja2=2.11.3=pyh44b312d_0
       - olefile=0.46=pyh9f0ad1d_1
@@ -542,6 +551,7 @@ env_specs:
       linux-64:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
+      - bokeh=2.2.3=py38h578d9bd_0
       - ca-certificates=2020.12.5=ha878542_0
       - certifi=2020.12.5=py38h578d9bd_1
       - coverage=5.3.1=py38h497a2fe_1
@@ -582,6 +592,7 @@ env_specs:
       - zlib=1.2.11=h516909a_1010
       - zstd=1.4.8=ha95c52a_1
       osx-64:
+      - bokeh=2.2.3=py38h50d1736_0
       - ca-certificates=2020.12.5=h033912b_0
       - certifi=2020.12.5=py38h50d1736_1
       - coverage=5.3.1=py38h5406a74_1
@@ -620,6 +631,7 @@ env_specs:
       - zlib=1.2.11=h7795811_1010
       - zstd=1.4.8=hf387650_1
       win-64:
+      - bokeh=2.2.3=py38haa244fe_0
       - ca-certificates=2020.12.5=h5b45459_0
       - certifi=2020.12.5=py38haa244fe_1
       - coverage=5.3.1=py38h294d835_1
@@ -742,7 +754,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   default:
     locked: true
-    env_spec_hash: d495071beb2cbd3080dac7b4dd2d9ecc306591a2
+    env_spec_hash: 074e8cc2057dde52943c31b57cf1460653a50ef6
     platforms:
     - linux-64
     - osx-64
@@ -760,7 +772,6 @@ env_specs:
       - backports.functools_lru_cache=1.6.1=py_0
       - backports=1.0=py_2
       - bleach=3.3.0=pyh44b312d_0
-      - bokeh=2.1.1=py38h32f6830_0
       - clyent=1.2.2=py_1
       - decorator=4.4.2=py_0
       - defusedxml=0.6.0=py_0
@@ -823,6 +834,7 @@ env_specs:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
       - argon2-cffi=20.1.0=py38h497a2fe_2
+      - bokeh=2.2.3=py38h578d9bd_0
       - brotlipy=0.7.0=py38h497a2fe_1001
       - ca-certificates=2020.12.5=ha878542_0
       - certifi=2020.12.5=py38h578d9bd_1
@@ -890,6 +902,7 @@ env_specs:
       osx-64:
       - appnope=0.1.2=py38h50d1736_1
       - argon2-cffi=20.1.0=py38h5406a74_2
+      - bokeh=2.2.3=py38h50d1736_0
       - brotlipy=0.7.0=py38h5406a74_1001
       - ca-certificates=2020.12.5=h033912b_0
       - certifi=2020.12.5=py38h50d1736_1
@@ -954,6 +967,7 @@ env_specs:
       - zstd=1.4.8=hf387650_1
       win-64:
       - argon2-cffi=20.1.0=py38h294d835_2
+      - bokeh=2.2.3=py38haa244fe_0
       - brotlipy=0.7.0=py38h294d835_1001
       - ca-certificates=2020.12.5=h5b45459_0
       - certifi=2020.12.5=py38haa244fe_1

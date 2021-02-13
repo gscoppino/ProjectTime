@@ -149,7 +149,7 @@ env_specs:
       - pytz=2019.3
       - django=3.1
       - pandas=1.2
-      - bokeh=2.1
+      - bokeh=2.2
   application-debug:
     description: The application debug environment
     inherit_from:
