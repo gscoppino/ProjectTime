@@ -18,22 +18,15 @@ from django.utils import timezone
 
 from ProjectTime.timezone.views import TimezoneView
 
-from .constants import (DEFAULT_CHARGE_CHANGELIST_FILTERS,
-                        DEFAULT_PROJECT_CHANGELIST_FILTERS)
-from .mixins import AdminSiteDefaultFilterMixin
 from .models import Charge, Project
 
 
-class ProjectTimeAdminSite(AdminSiteDefaultFilterMixin, admin.AdminSite):
+class ProjectTimeAdminSite(admin.AdminSite):
     """ An Admin site for the project Django app
     """
     site_title = 'ProjectTime'
     site_header = 'ProjectTime'
     index_title = 'ProjectTime Administration'
-    default_filters = {
-        'project.Project': DEFAULT_PROJECT_CHANGELIST_FILTERS,
-        'project.Charge': DEFAULT_CHARGE_CHANGELIST_FILTERS
-    }
 
     def each_context(self, request):
         context = super().each_context(request)

@@ -2,12 +2,12 @@ from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
 import pandas as pd
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.utils import timezone
 
-from ProjectTime.project.mixins import AdminSiteDefaultFilterMixin
 from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.site import ProjectTimeAdminSite
 
@@ -79,7 +79,7 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         self.performLogin()
 
         with patch.object(
-            AdminSiteDefaultFilterMixin,
+            admin.AdminSite,
             'each_context',
             new_callable=get_mock_admin_context
         ):

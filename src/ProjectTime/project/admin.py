@@ -4,18 +4,14 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from .constants import (DEFAULT_CHARGE_CHANGELIST_FILTERS,
-                        DEFAULT_PROJECT_CHANGELIST_FILTERS)
-from .mixins import ModelAdminDefaultFilterMixin
 from .models import Charge, Project
 from .site import admin_site
 from .utils.decorators import with_attrs
 
 
 @admin.register(Charge, site=admin_site)
-class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
-    """ A ModelAdmin for charges. By default, the change list is filtered to
-        show only open charges. At the bottom of the list display, the total
+class ChargeAdmin(admin.ModelAdmin):
+    """ A ModelAdmin for charges. At the bottom of the list display, the total
         of the hours on display is shown.
     """
     date_hierarchy = 'start_time'
@@ -25,8 +21,6 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
     list_filter = ('project', 'start_time', 'closed',)
     ordering = ('start_time',)
     change_list_template = 'admin/charge/change_list.html'
-    change_form_template = 'admin/charge/change_form.html'
-    default_filters = DEFAULT_CHARGE_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_time_charged()
@@ -49,17 +43,14 @@ class ChargeAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
 
 
 @admin.register(Project, site=admin_site)
-class ProjectAdmin(ModelAdminDefaultFilterMixin, admin.ModelAdmin):
-    """ A ModelAdmin for projects. By default, the change list is filtered to
-        shown only active projects. The latest charge made on each project is
+class ProjectAdmin(admin.ModelAdmin):
+    """ A ModelAdmin for projects. The latest charge made on each project is
         displayed alongside the project information.
     """
     list_display = ('name', 'latest_charge', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
     ordering = ('name',)
-    change_form_template = "admin/charge/change_form.html"
-    default_filters = DEFAULT_PROJECT_CHANGELIST_FILTERS
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate_latest_charge()
