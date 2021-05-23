@@ -1,0 +1,37 @@
+{% extends 'project/base_nav.html' %}
+
+{% block title %}ProjectTime | Create Project{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <div class="container is-fluid mt-3">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <a href="{% url 'project:project-list' %}">Projects</a>
+                </li>
+                <li class="is-active">
+                    <a href="{% url 'project:project-create' %}" aria-current="page">Create Project</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <main class="p-4 container is-max-desktop mt-3">
+        <section class="hero">
+            <div class="pl-0 hero-body">
+                <p class="title">Create Project</p>
+                <p class="subtitle">A project is associated with charges.</p>
+            </div>
+        </section>
+        <div class="panel is-link">
+            <div class="panel-heading">
+                <p>Project Form</p>
+            </div>
+            <div class="panel-block">
+                <form method="post" style="width: 100%;">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

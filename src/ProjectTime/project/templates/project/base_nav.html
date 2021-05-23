@@ -1,0 +1,39 @@
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div class="container is-fluid mt-3">
+    <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <div class="navbar-item pl-0">
+                <h1 class="title">ProjectTime</h1>
+            </div>
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div class="navbar-menu" id="nav-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" href="{% url 'dashboard' %}">Dashboard</a>
+                <a class="navbar-item" href="{% url 'project:project-list' %}">Projects</a>
+                <a class="navbar-item" href="{% url 'admin:index' %}">Administration</a>
+            </div>
+            <div class="navbar-end">
+                <a class="navbar-item" href="{% url 'admin:logout' %}">Log Out</a>
+            </div>
+        </div>
+    </nav>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'project/nav.js' %}"></script>
+{% endblock %}

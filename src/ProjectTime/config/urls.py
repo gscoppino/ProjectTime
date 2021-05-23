@@ -21,8 +21,9 @@ from ProjectTime.project.admin import admin_site
 from ProjectTime.project import views as project_views
 
 urlpatterns = [
-    path('', project_views.home),
+    path('', project_views.IndexView.as_view(), name='login'),
     path('dashboard', project_views.DashboardView.as_view(), name='dashboard'),
+    path('ui/', include(('project.urls', 'ProjectTime'), namespace='project')),
     path('admin/', admin_site.urls),
 ]
 
