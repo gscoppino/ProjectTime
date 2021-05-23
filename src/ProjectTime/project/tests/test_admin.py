@@ -13,14 +13,6 @@ class ProjectModelAdminTestCase(TestCase):
     def setUp(self):
         self.model_admin = ProjectAdmin(model=Project, admin_site=admin_site)
 
-    def test_changelist_shows_only_active_projects_by_default(self):
-        self.assertEqual(self.model_admin.default_filters,
-                         {'active__exact': 1})
-
-    def test_change_form_template_is_overridden(self):
-        self.assertEqual(self.model_admin.change_form_template,
-                         'admin/charge/change_form.html')
-
     def test_queryset_is_annotated_with_latest_charge(self):
         Project(name='Test').validate_and_save()
         Project(name='Test 2').validate_and_save()
@@ -66,22 +58,10 @@ class ChargeModelAdminTestCase(TestCase):
         self.project = Project(name='Test').validate_and_save()
         self.model_admin = ChargeAdmin(model=Charge, admin_site=admin_site)
 
-    def test_changelist_shows_only_unclosed_charges_by_default(self):
-        self.assertEqual(self.model_admin.default_filters,
-                         {'closed__exact': 0})
-
     def test_date_hierarchy_is_set_to_start_time(self):
         # This property configures the admin to support browsing
         # through Charge records via a more granular date picker.
         self.assertEqual(self.model_admin.date_hierarchy, 'start_time')
-
-    def test_change_list_template_is_overridden(self):
-        self.assertEqual(self.model_admin.change_list_template,
-                         'admin/charge/change_list.html')
-
-    def test_change_form_template_is_overridden(self):
-        self.assertEqual(self.model_admin.change_form_template,
-                         'admin/charge/change_form.html')
 
     def test_queryset_is_annotated_with_time_charged(self):
         Charge(project=self.project,

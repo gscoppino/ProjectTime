@@ -16,7 +16,7 @@ The user uses the "${name}" link to set their timezone to "${timezone}"
     Title Should Be             ProjectTime Administration | ProjectTime
 
 The user uses the timezone prompt to set their timezone to "${timezone}"
-    Click Link                  //ul[@class="messagelist"]//li[@class="no_timezone_msg warning"]//a[contains(text(), "Change Timezone") and @href="/timezone"]
+    Click Link                  //ul[@class="messagelist"]//li[@class="no_timezone_msg warning"]//a[contains(text(), "Change Timezone") and @href="/admin/timezone"]
     Title Should Be             Change Timezone | Django site admin
     Select From List By Label   timezone    ${timezone}
     Click Button                Submit

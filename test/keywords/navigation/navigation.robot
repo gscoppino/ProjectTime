@@ -12,7 +12,7 @@ Navigate To The Home Page
     ${here} =    Run Keyword And Return Status
     ...    Title Should Be    ProjectTime Administration | ProjectTime
     Run Keyword Unless    ${here}
-    ...    Click Link          //a[contains(text(), "Home") and @href="/"]
+    ...    Click Link          //a[contains(text(), "Home") and @href="/admin/"]
     Title Should Be     ProjectTime Administration | ProjectTime
 
 Navigate To The Project List

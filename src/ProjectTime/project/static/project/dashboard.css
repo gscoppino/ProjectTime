@@ -1,0 +1,8 @@
+.caption-bottom {
+    caption-side: bottom;
+}
+
+.table-height {
+    height: 234px;
+    overflow-y: scroll;
+}

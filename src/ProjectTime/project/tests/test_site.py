@@ -1,10 +1,10 @@
 from unittest.mock import patch
 
+from django.contrib import admin
 from django.contrib.auth.models import User
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 
-from ProjectTime.project.mixins import AdminSiteDefaultFilterMixin
 from ProjectTime.project.site import ProjectTimeAdminSite
 
 
@@ -23,7 +23,7 @@ class ProjectTimeAdminSiteTestCase(SimpleTestCase):
         self.assertIn('timezone', context)
         self.assertEqual(context['timezone'], 'America/New_York')
 
-    @patch.object(AdminSiteDefaultFilterMixin, 'each_context', new=get_mock_timezone_context)
+    @patch.object(admin.AdminSite, 'each_context', new=get_mock_timezone_context)
     def test_raises_exception_on_key_conflict(self):
         site = ProjectTimeAdminSite()
         request = RequestFactory().get('/foo/bar')
