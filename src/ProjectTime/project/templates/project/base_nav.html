@@ -7,30 +7,27 @@
 
 {% block content %}
 {{ block.super }}
-<div class="container is-fluid mt-3">
-    <nav class="navbar is-transparent" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <div class="navbar-item pl-0">
-                <h1 class="title">ProjectTime</h1>
-            </div>
-            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="nav-menu">
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+<header class="grid-container full">
+    <div class="title-bar" data-responsive-toggle="responsive-menu" data-hide-for="medium">
+        <button class="menu-icon" type="button" data-toggle="responsive-menu"></button>
+        <div class="title-bar-title">ProjectTime</div>
+    </div>
+    <nav id="responsive-menu" class="top-bar" role="navigation" aria-label="main navigation">
+        <div class="top-bar-left">
+            <ul class="menu">
+                <li class="menu-text">ProjectTime</li>
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'project:project-list' %}">Projects</a></li>
+                <li><a href="{% url 'admin:index' %}">Administration</a></li>
+            </ul>
         </div>
-        <div class="navbar-menu" id="nav-menu">
-            <div class="navbar-start">
-                <a class="navbar-item" href="{% url 'dashboard' %}">Dashboard</a>
-                <a class="navbar-item" href="{% url 'project:project-list' %}">Projects</a>
-                <a class="navbar-item" href="{% url 'admin:index' %}">Administration</a>
-            </div>
-            <div class="navbar-end">
-                <a class="navbar-item" href="{% url 'admin:logout' %}">Log Out</a>
-            </div>
+        <div class="top-bar-right">
+            <ul class="menu">
+                <li><a href="{% url 'admin:logout' %}">Log Out</a></li>
+            </ul>
         </div>
     </nav>
-</div>
+</header>
 {% endblock %}
 
 {% block scripts %}

@@ -6,53 +6,48 @@
 
 {% block content %}
 {{ block.super }}
-<main class="ui center aligned grid mt-4 pt-4">
-    <div class="column">
-        <h2 class="ui blue header p-4">Log in to ProjectTime</h2>
-        <div class="ui left aligned container">
-            <form
-              class="ui large form {% if form.errors %}error{% endif %}"
-              method="post"
-              action="{% url 'login' %}">
+<main class="grid-container margin-top-3">
+    <h1>ProjectTime</h1>
+    <p class="lead">A tool that can be used to keep track of time spent on projects.</p>
+    <div class="card">
+        <div class="card-divider">
+            <h4>Log In</h4>
+        </div>
+        <div class="card-section">
+            <form data-abide novalidate method="post" action="{% url 'login' %}">
                 {% csrf_token %}
 
                 {% if next %}
-                <div class="ui info message">
-                    <small style="display: block;">
+                <div class="primary callout">
+                    <p>
                     {% if user.is_authenticated %}
                     Your account doesn't have access to this page. To proceed,
                     please login with an account that has access.
                     {% else %}
                     To see the requested page, you must first log in to the system.
                     {% endif %}
-                    </small>
+                    </p>
                 </div>
                 {% endif %}
 
-                <div class="ui error message">
-                    {% for error in form.non_field_errors %}
-                        <small style="display: block;">{{ error }}</small>
-                    {% endfor %}
+                {% if form.errors %}
+                <div data-abide-error class="alert callout">
+                    <p>There are some errors in your form.</p>
+                    {{ form.non_field_errors }}
                 </div>
+                {% endif %}
+
                 {% for field in form %}
-                <div class="field">
-                    {{ field.label_tag }}
+                <label for="{{ field.auto_id }}">
+                    {{ field.label }}
                     {{ field }}
-                </div>
+                </label>
                 {% endfor %}
 
-                <button type="submit" class="ui large fluid primary submit button">Log In</div>
+                <button class="button" type="submit" value="Log In">Log In</div>
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
         </div>
     </div>
 </main>
-<style>
-    body > .grid {
-      height: 100%;
-    }
-    .column {
-      max-width: 450px;
-    }
-</style>
 {% endblock %}

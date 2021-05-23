@@ -3,61 +3,51 @@
 {% block title %}ProjectTime | Create Project{% endblock %}
 {% block content %}
     {{ block.super }}
-    <!-- <div class="ui center aligned grid mt-4 pt-4">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li>
-                    <a href="{% url 'project:project-list' %}">Projects</a>
-                </li>
-                <li class="is-active">
-                    <a href="{% url 'project:project-create' %}" aria-current="page">Create Project</a>
-                </li>
+    <div class="grid-container margin-top-3">
+        <nav aria-label="You are here:" role="navigation">
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'project:project-list' %}">Projects</a></li>
+                <li><span class="show-for-sr">Current: </span> Create Project</li>
             </ul>
         </nav>
-    </div> -->
-    <main class="ui center aligned grid mt-4 pt-4">
-        <!-- <section class="hero">
-            <div class="pl-0 hero-body">
-                <p class="title">Create Project</p>
-                <p class="subtitle">A project is associated with charges.</p>
+    </div>
+    <main class="grid-container margin-top-3">
+        <h3>Create Project</h3>
+        <p class="lead">A project is associated with charges.</p>
+        <div class="card">
+            <div class="card-divider">
+                <h4>Project Form</h4>
             </div>
-        </section> -->
-        <div class="column">
-            <h2 class="ui blue header p-4">Project Form</h2>
-            <div class="ui left aligned container">
-                <form
-                    class="ui large form {% if form.errors %}error{% endif %}"
-                    method="post">
+            <div class="card-section">
+                <form data-abide novalidate method="post">
                     {% csrf_token %}
 
-                    {% if form.non_field_errors %}
-                        <div class="ui error message">
-                            {% for error in form.non_field_errors %}
-                                <small style="display: block;">{{ error }}</small>
-                            {% endfor %}
+                    {% if form.errors %}
+                        <div data-abide-error class="alert callout">
+                            <p>There are some errors in your form.</p>
+                            {{ form.non_field_errors }}
                         </div>
                     {% endif %}
 
                     {% for field in form %}
-                    <div class="field {% if field.errors %}error{% endif %}">
 
                         {% if field.field.widget.input_type == 'checkbox' %}
-                            <div class="ui checkbox">
-                                {{ field }}
-                                {{ field.label_tag }}
-                            </div>
-                        {% else %}
-                            {{ field.label_tag }}
                             {{ field }}
+                            {{ field.label_tag }}
+                        {% else %}
+                            <label for="{{ field.auto_id }}">
+                                {{ field.label }}
+                                {{ field }}
+                                {% for error in field.errors %}
+                                <span class="form-error is-visible">{{ error }}</span>
+                                {% endfor %}
+                            </label>
                         {% endif %}
 
-                        <small class="pt-1" style="display: block; color: grey">{{ field.help_text }}</small>
-                        {% for error in field.errors %}
-                            <small class="pt-1" style="display: block; color: red">*{{ error }}</small>
-                        {% endfor %}
-                    </div>
+                        <p class="help-text">{{ field.help_text }}</p>
+
                     {% endfor %}
-                    <button type="submit" class="ui large fluid primary submit button">Submit</button>
+                    <button type="submit" class="button">Submit</button>
                 </form>
             </div>
         </div>
