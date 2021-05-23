@@ -65,7 +65,7 @@
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4>Current Month Summary</h4>
                 </header>
-                <div class="panel-block">
+                <div class="card-section">
                     {{ month_summary_chart_div | safe }}
                     <script type="text/javascript" src="{% static 'project/vendor/bokeh.min.js' %}"></script>
                     {{ month_summary_chart_script | safe }}

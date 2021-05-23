@@ -1,10 +1,6 @@
 {% extends 'project/base.html' %}
 {% load static %}
 
-{% block styles %}
-{{ block.super }}
-{% endblock %}
-
 {% block content %}
 {{ block.super }}
 <header class="grid-container full">
@@ -28,9 +24,4 @@
         </div>
     </nav>
 </header>
-{% endblock %}
-
-{% block scripts %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'project/nav.js' %}"></script>
 {% endblock %}
