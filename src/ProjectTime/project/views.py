@@ -13,7 +13,7 @@ from ProjectTime.timezone.forms import TimezoneForm
 
 
 class IndexView(LoginView):
-    template_name = "project/login.html"
+    template_name = "project/login_form.html"
     redirect_authenticated_user = True
 
 

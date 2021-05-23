@@ -15,6 +15,7 @@ Including another URLconf
 """
 
 from django.conf import settings
+from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
 from ProjectTime.project.admin import admin_site
@@ -22,6 +23,7 @@ from ProjectTime.project import views as project_views
 
 urlpatterns = [
     path('', project_views.IndexView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(next_page='login'), name='logout'),
     path('dashboard', project_views.DashboardView.as_view(), name='dashboard'),
     path('ui/', include(('project.urls', 'ProjectTime'), namespace='project')),
     path('admin/', admin_site.urls),
