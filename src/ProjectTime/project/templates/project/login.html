@@ -6,58 +6,53 @@
 
 {% block content %}
 {{ block.super }}
-<main class="p-4 container is-max-desktop mt-3">
-    <section class="hero">
-        <div class="pl-0 hero-body">
-            <p class="title">ProjectTime</p>
-            <p class="subtitle">A tool that can be used to keep track of time spent on projects.</p>
-        </div>
-    </section>
-    <div class="panel is-info">
-        <p class="panel-heading">Login</p>
-        <div class="panel-block">
-            <form method="post" action="{% url 'login' %}" style="width: 100%">
+<main class="ui center aligned grid mt-4 pt-4">
+    <div class="column">
+        <h2 class="ui blue header p-4">Log in to ProjectTime</h2>
+        <div class="ui left aligned container">
+            <form
+              class="ui large form {% if form.errors %}error{% endif %}"
+              method="post"
+              action="{% url 'login' %}">
                 {% csrf_token %}
 
                 {% if next %}
-                <article class="message is-info">
-                    <div class="message-body">
-                        {% if user.is_authenticated %}
-                        Your account doesn't have access to this page. To proceed,
-                        please login with an account that has access.</p>
-                        {% else %}
-                        To see the requested page, you must first log in to the system.
-                        {% endif %}
-                    </div>
-                </article>
+                <div class="ui info message">
+                    <small style="display: block;">
+                    {% if user.is_authenticated %}
+                    Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.
+                    {% else %}
+                    To see the requested page, you must first log in to the system.
+                    {% endif %}
+                    </small>
+                </div>
                 {% endif %}
 
-                {% if form.errors %}
-                <article class="message is-danger">
-                    <div class="message-body">Your username and password did not match. Please try again.</div>
-                </article>
-                {% endif %}
+                <div class="ui error message">
+                    {% for error in form.non_field_errors %}
+                        <small style="display: block;">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                {% for field in form %}
+                <div class="field">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+                {% endfor %}
 
-                <div class="field">
-                    <label class="label" for="id_username">Username</label>
-                    <div class="control">
-                        <input class="input" type="text" name="username" autofocus autocapitalize="off" autocomplete="username" required id="id_username">
-                    </div>
-                </div>
-                <div class="field">
-                    <lable class="label" for="id_password">Password</lable>
-                    <div class="control">
-                        <input class="input" type="password" name="password" autocomplete="current-password" required id="id_password">
-                    </div>
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <button type="submit" class="button is-link">Login</button>
-                    </div>
-                </div>
+                <button type="submit" class="ui large fluid primary submit button">Log In</div>
                 <input type="hidden" name="next" value="{{ next }}">
             </form>
         </div>
     </div>
 </main>
+<style>
+    body > .grid {
+      height: 100%;
+    }
+    .column {
+      max-width: 450px;
+    }
+</style>
 {% endblock %}

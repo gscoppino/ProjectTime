@@ -5,11 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %}</title>
-        <link rel="stylesheet" type="text/css" href="{% static 'project/vendor/bulma.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'project/vendor/semantic.min.css' %}">
         {% block styles %}{% endblock %}
     </head>
     <body>
         {% block content %}{% endblock %}
+        <script type="text/javascript" src="{% static 'project/vendor/jquery-3.6.0.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'project/vendor/semantic.min.js' %}"></script>
         {% block scripts %}{% endblock %}
     </body>
 </html>
