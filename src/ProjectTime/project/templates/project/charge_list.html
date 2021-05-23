@@ -1,0 +1,84 @@
+{% extends 'project/base_nav.html' %}
+
+{% block title %}ProjectTime | Charges{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <main class="grid-container fluid margin-top-3">
+        <h3>Charges</h3>
+        <p class="lead">Charges are associated with projects.</p>
+        <div class="card">
+            <header class="card-divider flex-container flex-dir-row align-middle">
+                <h4>Charge List</h4>
+                <div class="flex-child-grow"></div>
+                <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
+            </header>
+            <div class="card-section">
+                <nav aria-label="pagination">
+                    <ul class="pagination text-center">
+                        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
+                            {% if page_obj.has_previous %}
+                            <a href="?page=1"> First</a>
+                            {% else %}
+                            First
+                            {% endif %}
+                        </li>
+                        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
+                            {% if page_obj.has_previous %}
+                            <a href="?page={{ page_obj.previous_page_number }}"> Previous</a>
+                            {% else %}
+                            Previous
+                            {% endif %}
+                        </li>
+                        <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</li>
+                        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
+                            {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}"> Next</a>
+                            {% else %}
+                            Next
+                            {% endif %}
+                        </li>
+                        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
+                            {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.paginator.num_pages }}"> Last</a>
+                            {% else %}
+                            Last
+                            {% endif %}
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="card-section">
+                <table class="table hover">
+                    <thead>
+                        <tr>
+                            <th>Project</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Time Charged</th>
+                            <th>Closed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for charge in page_obj %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'project:charge-update' charge.pk %}">
+                                    {{ charge.project.name }}
+                                </a>
+                            </td>
+                            <td>{{ charge.start_time }}</td>
+                            <td>{{ charge.end_time }}</td>
+                            <td>{{ charge.db__time_charged }}</td>
+                            <td>{{ charge.closed }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5">There are no charges.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+{% endblock %}

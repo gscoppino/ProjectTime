@@ -23,8 +23,8 @@ requirements:
     - sqlparse=0.3
     - pytz=2019.3
     - django=3.1
-    - pandas=1.0
-    - bokeh=2.1
+    - pandas=1.2
+    - bokeh=2.2
 
 test:
   imports:

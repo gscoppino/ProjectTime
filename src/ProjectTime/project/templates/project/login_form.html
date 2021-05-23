@@ -1,0 +1,53 @@
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block title %}ProjectTime | Login{% endblock %}
+
+
+{% block content %}
+{{ block.super }}
+<main class="grid-container margin-top-3">
+    <h1>ProjectTime</h1>
+    <p class="lead">A tool that can be used to keep track of time spent on projects.</p>
+    <div class="card">
+        <div class="card-divider">
+            <h4>Log In</h4>
+        </div>
+        <div class="card-section">
+            <form data-abide novalidate method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                {% if next %}
+                <div class="primary callout">
+                    <p>
+                    {% if user.is_authenticated %}
+                    Your account doesn't have access to this page. To proceed,
+                    please login with an account that has access.
+                    {% else %}
+                    To see the requested page, you must first log in to the system.
+                    {% endif %}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% if form.errors %}
+                <div data-abide-error class="alert callout">
+                    <p>There are some errors in your form.</p>
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                {% for field in form %}
+                <label for="{{ field.auto_id }}">
+                    {{ field.label }}
+                    {{ field }}
+                </label>
+                {% endfor %}
+
+                <button class="button" type="submit" value="Log In">Log In</div>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+</main>
+{% endblock %}

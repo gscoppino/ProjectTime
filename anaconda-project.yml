@@ -6,53 +6,85 @@ name: ProjectTime
 
 # lists runnable scripts, notebooks, and other code.
 commands:
-  project-time:
-    unix: python -m scripts.dev_install && project-time
+  install:
+    description: pip installs the application
+    unix: python -m scripts.dev_install
+    windows: python -m scripts.dev_install
     env_spec: default
   postgres:
+    description: invokes the postgres binary
     unix: postgres
+    windows: postgres
     env_spec: database
   pg_ctl:
+    description: invokes the pg_ctl binary
     unix: pg_ctl
+    windows: pg_ctl
     env_spec: database
   pg_dump:
+    description: invokes the pg_dump binary
     unix: pg_dump
+    windows: pg_dump
     env_spec: database
   psql:
+    description: invokes the psql binary
     unix: psql
+    windows: psql
     env_spec: database
   django-admin:
+    description: installs the application and invokes the django-admin binary
     unix: python -m scripts.dev_install && django-admin
+    windows: python -m scripts.dev_install && django-admin
     env_spec: application
   manage.py:
+    description: installs the application and invokes the projects manage.py file
     unix: python -m scripts.dev_install && cd src/ProjectTime && python -Wa manage.py
+    windows: python -m scripts.dev_install && cd src\ProjectTime && python -Wa manage.py
     env_spec: application
   autopep8:
+    description: invokes the autopep8 binary
     unix: autopep8
+    windows: autopep8
     env_spec: lint
   isort:
+    description: invokes the isort binary
     unix: isort
+    windows: isort
     env_spec: lint
   pylint:
+    description: installs the application and invokes the pylint binary
     unix: python -m scripts.dev_install && pylint --rcfile setup.cfg
+    windows: python -m scripts.dev_install && pylint --rcfile setup.cfg
     env_spec: lint
   coverage:
+    description: installs the application and invokes the coverage binary
     unix: python -m scripts.dev_install && cd src/ProjectTime && coverage
+    windows: python -m scripts.dev_install && cd src\ProjectTime && coverage
     env_spec: test
   robot:
+    description: invokes the robot binary
     unix: robot
+    windows: robot
     env_spec: test-acceptance
   robot.tidy:
+    description: invokes the robot.tidy python module
     unix: python -m robot.tidy
+    windows: python -m robot.tidy
     env_spec: test-acceptance
   jupyter:
+    description: invokes the jupyter binary
     unix: python -m scripts.dev_install && jupyter
+    windows: python -m scripts.dev_install && jupyter
     env_spec: default
   setup.py:
+    description: invokes the projects setup.py file
     unix: python setup.py
+    windows: python setup.py
     env_spec: build-pypi
   conda:
+    description: invokes the conda binary
     unix: conda
+    windows: conda
     env_spec: conda
 
 #
@@ -82,15 +114,18 @@ platforms:
 # but can have its own unique ones also.
 env_specs:
   _python:
+    description: Reference environment for the application supported Python version
     packages:
       - python=3.8
-      - pip
+      - pip=20.2.4
   _notebook:
+    description: Reference environment for Jupyter
     inherit_from:
       - _python
     packages:
       - notebook
   default:
+    description: The application development environment
     inherit_from:
       - _python
       - _notebook
@@ -99,11 +134,13 @@ env_specs:
       - test
       - test-acceptance
     packages:
-      - anaconda-project
+      - anaconda-project=0.8.3
   database:
+    description: The database environment
     packages:
       - postgresql=12.3
   application:
+    description: The application runtime environment
     inherit_from:
       - _python
     packages:
@@ -111,47 +148,53 @@ env_specs:
       - sqlparse=0.3
       - pytz=2019.3
       - django=3.1
-      - pandas=1.0
-      - bokeh=2.1
+      - pandas=1.2
+      - bokeh=2.2
   application-debug:
+    description: The application debug environment
     inherit_from:
       - _python
       - application
     packages:
       - django-debug-toolbar=2.2
   lint:
+    description: The environment for linting and formatting up application code
     inherit_from:
       - _python
       - application
     packages:
-      - isort
-      - pylint
-      - pep8
-      - autopep8
+      - isort=5.6
+      - pylint=2.6
+      - pep8=1.7
+      - autopep8=1.5
   test:
+    description: The environment for unit testing application code
     inherit_from:
       - _python
       - application
     packages:
-      - coverage
+      - coverage=5.3
   test-acceptance:
+    description: The environment for acceptance testing application code
     inherit_from:
       - _python
     packages:
-      - robotframework
-      - robotframework-seleniumlibrary
-      - python-chromedriver-binary<81
+      - robotframework=3.2
+      - robotframework-seleniumlibrary=4.5
+      - python-chromedriver-binary
       - geckodriver
   build-pypi:
+    description: The environment for building source and binary distributions for the application code
     inherit_from:
       - _python
     packages:
-      - setuptools
+      - setuptools=49.6.0
   conda:
+    description: The environment for building a conda distribution for the application code
     inherit_from:
       - _python
       - build-pypi
     packages:
-      - conda
-      - conda-build
-      - conda-verify
+      - conda=4.9
+      - conda-build=3.20
+      - conda-verify=3.1

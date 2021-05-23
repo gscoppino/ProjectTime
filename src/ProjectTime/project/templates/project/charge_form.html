@@ -1,0 +1,73 @@
+{% extends 'project/base_nav.html' %}
+
+{% block title %}
+    {% if not object %}
+    ProjectTime | Create Charge
+    {% else %}
+    ProjectTime | Update Charge for "{{object.project.name}}"
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {{ block.super }}
+    <div class="grid-container margin-top-3">
+        <nav aria-label="You are here:" role="navigation">
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'project:charge-list' %}">Charges</a></li>
+                <li><span class="show-for-sr">Current: </span>
+                    {% if not object %}
+                    Create Charge
+                    {% else %}
+                    Update Charge for "{{ object.project.name }}"
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <main class="grid-container margin-top-3">
+        <h3>
+            {% if not object %}
+            Create Charge
+            {% else %}
+            Update Charge
+            {% endif %}
+        </h3>
+        <p class="lead">A charge is associated with a project.</p>
+        <div class="card">
+            <div class="card-divider">
+                <h4>Charge Form</h4>
+            </div>
+            <div class="card-section">
+                <form data-abide novalidate method="post">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div data-abide-error class="alert callout">
+                            <p>There are some errors in your form.</p>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+
+                        {% if field.field.widget.input_type == 'checkbox' %}
+                            {{ field }}
+                            {{ field.label_tag }}
+                        {% else %}
+                            <label for="{{ field.auto_id }}">
+                                {{ field.label }}
+                                {{ field }}
+                                {% for error in field.errors %}
+                                <span class="form-error is-visible">{{ error }}</span>
+                                {% endfor %}
+                            </label>
+                        {% endif %}
+
+                        <p class="help-text">{{ field.help_text }}</p>
+
+                    {% endfor %}
+                    <button type="submit" class="button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

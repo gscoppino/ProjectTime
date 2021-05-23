@@ -1,0 +1,167 @@
+{% extends 'project/base_nav.html' %}
+{% load static %}
+
+
+{% block title %}ProjectTime | Dashboard{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'project/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+{{ block.super }}
+<div class="grid-container fluid margin-top-3">
+    {% if timezone_form %}
+    <article class="warning callout">
+        <p>Please select a timezone.</p>
+        <form data-abide novalidate class="margin-top-2" method="post" action="{% url 'admin:select-timezone' %}">
+            {% csrf_token %}
+            <div class="grid-x grid-margin-x">
+                <div class="cell medium-6">
+                    <label for="{{ field.auto_id }}">
+                        {{ timezone_form.timezone.label }}
+                        {{ timezone_form.timezone }}
+                    </label>
+                </div>
+                <div class="cell medium-6">
+                    <button type="submit" class="button">Submit</button>
+                </div>
+            </div>
+        </form>
+    </article>
+    {% endif %}
+
+    <div class="grid-x grid-margin-x">
+        <section class="cell auto">
+            <section class="card">
+                <header class="card-divider flex-container flex-dir-row align-middle">
+                    <h4>Active Projects</h4>
+                    <div class="flex-child-grow"></div>
+                    <a class="margin-left-4 button" href="{% url 'project:project-create' %}">+ Create Project</a>
+                </header>
+                <div class="card-section">
+                    <div class="table-scroll table-height">
+                        <table class="table hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Last Charge</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for project in active_projects %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'project:project-update' project.pk %}">{{ project.name }}</a>
+                                    </td>
+                                    <td>{{ project.db__latest_charge }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2">There are no active projects.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <section class="card">
+                <header class="card-divider flex-container flex-dir-row align-middle">
+                    <h4>Open Charges</h4>
+                    <div class="flex-child-grow"></div>
+                    <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
+                </header>
+                <div class="card-section">
+                    <div class="table-scroll table-height">
+                        <table class="table hover">
+                            <thead>
+                                <tr>
+                                    <th>Project</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Time Charged</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for charge in open_charges %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'project:charge-update' charge.pk %}">
+                                            {{ charge.project.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ charge.start_time }}</td>
+                                    <td>{{ charge.end_time }}</td>
+                                    <td>{{ charge.db__time_charged }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">There are no open charges.</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <caption class="caption-bottom text-right">Total Time Charged: {{ open_charges.aggregate_time_charged }}</caption>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section class="cell shrink">
+            <section class="card">
+                <header class="card-divider flex-container flex-dir-row align-middle">
+                    <h4>Current Month Summary</h4>
+                </header>
+                <div class="card-section">
+                    {{ month_summary_chart_div | safe }}
+                    <script type="text/javascript" src="{% static 'project/vendor/bokeh.min.js' %}"></script>
+                    {{ month_summary_chart_script | safe }}
+                </div>
+            </section>
+            <section class="card" style="display:none">
+                <header class="card-divider flex-container flex-dir-row align-middle">
+                    <h4>Quick Charge</h4>
+                </header>
+                <div class="card-section">
+                    <form data-abide novalidate method="post">
+                        {% csrf_token %}
+
+                        <label>Project Name
+                            <div>
+                                <datalist id="project-list">
+                                    {% for project in active_projects %}
+                                    <option value="{{ project.name }}">
+                                        Last Charge: {{ project.db__latest_charge }}
+                                    </option>
+                                    {% endfor %}
+                                </datalist>
+                                <input list="project-list" type="input">
+                            </div>
+                        </label>
+
+                        <label>Date
+                            <input type="date">
+                        </label>
+
+                        <label>Start Time
+                            <input type="time">
+                        </label>
+
+                        <label>End Time
+                            <input type="time">
+                        </label>
+
+                        <input type="checkbox">
+                        <label>Closed</label>
+
+                        <div>
+                            <button type="submit" class="button">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </section>
+    </div>
+</div>
+{% endblock %}
