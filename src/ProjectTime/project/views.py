@@ -1,10 +1,11 @@
+from typing import List
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls.base import reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from ProjectTime.project.models import Project, Charge
 from ProjectTime.project.utils import reporting as report_helpers
@@ -30,8 +31,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         open_charges = (Charge.objects
             .filter(closed=False)
-            .order_by('start_time')
             .select_related('project')
+            .order_by('start_time')
             .annotate_time_charged()
         )
 
@@ -68,4 +69,35 @@ class ProjectListView(ListView):
 class ProjectCreateView(CreateView):
     model = Project
     fields = ('name', 'active',)
+    success_url = reverse_lazy('dashboard')
+
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    fields = ('name', 'active',)
+    success_url = reverse_lazy('dashboard')
+
+
+class ChargeListView(ListView):
+    model = Charge
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (super()
+            .get_queryset()
+            .select_related('project')
+            .order_by('start_time')
+            .annotate_time_charged()
+        )
+
+
+class ChargeCreateView(CreateView):
+    model = Charge
+    fields = ('project', 'start_time', 'end_time', 'closed',)
+    success_url = reverse_lazy('dashboard')
+
+
+class ChargeUpdateView(UpdateView):
+    model = Charge
+    fields = ('project', 'start_time', 'end_time', 'closed',)
     success_url = reverse_lazy('dashboard')

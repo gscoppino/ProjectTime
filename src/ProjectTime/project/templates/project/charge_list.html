@@ -1,16 +1,16 @@
 {% extends 'project/base_nav.html' %}
 
-{% block title %}ProjectTime | Projects{% endblock %}
+{% block title %}ProjectTime | Charges{% endblock %}
 {% block content %}
     {{ block.super }}
     <main class="grid-container fluid margin-top-3">
-        <h3>Projects</h3>
-        <p class="lead">Projects are associated with charges.</p>
+        <h3>Charges</h3>
+        <p class="lead">Charges are associated with projects.</p>
         <div class="card">
             <header class="card-divider flex-container flex-dir-row align-middle">
-                <h4>Project List</h4>
+                <h4>Charge List</h4>
                 <div class="flex-child-grow"></div>
-                <a class="margin-left-4 button" href="{% url 'project:project-create' %}">+ Create Project</a>
+                <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
             </header>
             <div class="card-section">
                 <nav aria-label="pagination">
@@ -51,23 +51,29 @@
                 <table class="table hover">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Active</th>
-                            <th>Last Charge</th>
+                            <th>Project</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Time Charged</th>
+                            <th>Closed</th>
                         </tr>
                     </thead>
                     <tbody>
-                    {% for project in page_obj %}
+                    {% for charge in page_obj %}
                         <tr>
                             <td>
-                                <a href="{% url 'project:project-update' project.pk %}">{{ project.name }}</a>
+                                <a href="{% url 'project:charge-update' charge.pk %}">
+                                    {{ charge.project.name }}
+                                </a>
                             </td>
-                            <td>{{ project.active }}</td>
-                            <td>{{ project.db__latest_charge }}</td>
+                            <td>{{ charge.start_time }}</td>
+                            <td>{{ charge.end_time }}</td>
+                            <td>{{ charge.db__time_charged }}</td>
+                            <td>{{ charge.closed }}</td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="3">There are no projects.</td>
+                            <td colspan="5">There are no charges.</td>
                         </tr>
                     {% endfor %}
                     </tbody>

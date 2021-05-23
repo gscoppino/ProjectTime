@@ -2,9 +2,9 @@
 
 {% block title %}
     {% if not object %}
-    ProjectTime | Create Project
+    ProjectTime | Create Charge
     {% else %}
-    ProjectTime | Update Project "{{object.name}}"
+    ProjectTime | Update Charge for "{{object.project.name}}"
     {% endif %}
 {% endblock %}
 {% block content %}
@@ -12,12 +12,12 @@
     <div class="grid-container margin-top-3">
         <nav aria-label="You are here:" role="navigation">
             <ul class="breadcrumbs">
-                <li><a href="{% url 'project:project-list' %}">Projects</a></li>
+                <li><a href="{% url 'project:charge-list' %}">Charges</a></li>
                 <li><span class="show-for-sr">Current: </span>
                     {% if not object %}
-                    Create Project
+                    Create Charge
                     {% else %}
-                    Update Project "{{ object.name }}"
+                    Update Charge for "{{ object.project.name }}"
                     {% endif %}
                 </li>
             </ul>
@@ -26,15 +26,15 @@
     <main class="grid-container margin-top-3">
         <h3>
             {% if not object %}
-            Create Project
+            Create Charge
             {% else %}
-            Update Project
+            Update Charge
             {% endif %}
         </h3>
-        <p class="lead">A project is associated with charges.</p>
+        <p class="lead">A charge is associated with a project.</p>
         <div class="card">
             <div class="card-divider">
-                <h4>Project Form</h4>
+                <h4>Charge Form</h4>
             </div>
             <div class="card-section">
                 <form data-abide novalidate method="post">

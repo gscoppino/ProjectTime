@@ -52,8 +52,14 @@
                             <tbody>
                             {% for project in active_projects %}
                                 <tr>
-                                    <td>{{ project.name }}</td>
+                                    <td>
+                                        <a href="{% url 'project:project-update' project.pk %}">{{ project.name }}</a>
+                                    </td>
                                     <td>{{ project.db__latest_charge }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="2">There are no active projects.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -65,7 +71,7 @@
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4>Open Charges</h4>
                     <div class="flex-child-grow"></div>
-                    <a class="margin-left-4 button" href="{% url 'admin:project_charge_add' %}">+ Create Charge</a>
+                    <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
                 </header>
                 <div class="card-section">
                     <div class="table-scroll table-height">
@@ -81,10 +87,18 @@
                             <tbody>
                             {% for charge in open_charges %}
                                 <tr>
-                                    <td>{{ charge.project.name }}</td>
+                                    <td>
+                                        <a href="{% url 'project:charge-update' charge.pk %}">
+                                            {{ charge.project.name }}
+                                        </a>
+                                    </td>
                                     <td>{{ charge.start_time }}</td>
                                     <td>{{ charge.end_time }}</td>
                                     <td>{{ charge.db__time_charged }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="4">There are no open charges.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
