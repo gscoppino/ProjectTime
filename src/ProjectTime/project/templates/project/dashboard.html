@@ -11,13 +11,13 @@
 
 {% block content %}
 {{ block.super }}
-<div class="grid-container fluid margin-top-3">
+<div class="grid-container fluid margin-top-1">
     {% if timezone_form %}
     <article class="warning callout">
         <p>Please select a timezone.</p>
-        <form data-abide novalidate class="margin-top-2" method="post" action="{% url 'admin:select-timezone' %}">
+        <form data-abide novalidate class="margin-top-2" method="post" action="{% url 'project:set-timezone' %}">
             {% csrf_token %}
-            <div class="grid-x grid-margin-x">
+            <div class="grid-x grid-margin-x align-bottom">
                 <div class="cell medium-6">
                     <label for="{{ field.auto_id }}">
                         {{ timezone_form.timezone.label }}
