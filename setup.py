@@ -10,11 +10,11 @@ setuptools.setup(
     python_requires='~=3.8',
     install_requires=[
         'psycopg2~=2.8',
-        'sqlparse~=0.3',
+        'sqlparse~=0.4',
         'pytz~=2019.3',
         'django~=3.1',
         'pandas~=1.2',
-        'bokeh~=2.2',
+        'bokeh~=2.3',
     ],
     author='Giuseppe Scoppino',
     author_email='scoppino.giuseppe@gmail.com',

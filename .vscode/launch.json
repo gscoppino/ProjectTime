@@ -7,7 +7,7 @@
         {
             "name": "ProjectTime (Debug)",
             "type": "python",
-            "pythonPath": "${workspaceFolder}/envs/application-debug/bin/python",
+            "python": "${workspaceFolder}/envs/application-debug/bin/python",
             "pythonArgs": ["-Wa"],
             "request": "launch",
             "program": "${workspaceFolder}/src/ProjectTime/manage.py",
