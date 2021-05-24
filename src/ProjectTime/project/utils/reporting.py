@@ -65,7 +65,9 @@ def get_monthly_summary_chart_components(series):
                     toolbar_location=None,
                     tools="hover",
                     tooltips="@charge: @value hour(s)",
-                    x_range=(-0.5, 1.0))
+                    x_range=(-0.5, 1.0),
+                    width=400,
+                    height=400)
 
     chart.wedge(source=series,
                 x=0,

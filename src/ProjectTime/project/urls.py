@@ -1,4 +1,5 @@
 from django.urls import path
+from ProjectTime.timezone.views import TimezoneView
 from ProjectTime.project.views import (
     ChargeCreateView,
     ChargeListView,
@@ -12,6 +13,7 @@ from ProjectTime.project.views import (
 
 urlpatterns = [
     path('dashboard', DashboardView.as_view(), name='dashboard'),
+    path('set-timezone', TimezoneView.as_view(success_url='dashboard'), name='set-timezone'),
     path('project', ProjectListView.as_view(), name='project-list'),
     path('project/create', ProjectCreateView.as_view(), name='project-create'),
     path('project/<int:pk>/update', ProjectUpdateView.as_view(), name='project-update'),
