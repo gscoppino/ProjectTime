@@ -9,7 +9,7 @@
 {% endblock %}
 {% block content %}
     {{ block.super }}
-    <div class="grid-container margin-top-3">
+    <div class="grid-container margin-top-2">
         <nav aria-label="You are here:" role="navigation">
             <ul class="breadcrumbs">
                 <li><a href="{% url 'project:charge-list' %}">Charges</a></li>
@@ -23,7 +23,7 @@
             </ul>
         </nav>
     </div>
-    <main class="grid-container margin-top-3">
+    <main class="grid-container margin-top-1">
         <h3>
             {% if not object %}
             Create Charge
