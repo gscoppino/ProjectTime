@@ -6,7 +6,6 @@ from django.utils import timezone
 
 from .models import Charge, Project
 from .site import admin_site
-from .utils.decorators import with_attrs
 
 
 @admin.register(Charge, site=admin_site)
@@ -35,7 +34,7 @@ class ChargeAdmin(admin.ModelAdmin):
 
         return ()
 
-    @with_attrs(admin_order_field='db__time_charged')
+    @admin.display(ordering='db__time_charged')
     def time_charged(self, obj):
         return obj.db__time_charged
 
@@ -59,7 +58,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return ('name',)
 
-    @with_attrs(admin_order_field='db__latest_charge')
+    @admin.display(ordering='db__latest_charge')
     def latest_charge(self, obj):
         if not obj.db__latest_charge:
             return None
