@@ -1,6 +1,11 @@
 {% extends 'project/base.html' %}
 {% load static %}
 
+{% block styles %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'project/nav.css' %}">
+{% endblock %}
+
 {% block content %}
 {{ block.super }}
 <header class="grid-container full">
