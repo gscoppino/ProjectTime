@@ -16,7 +16,7 @@ A tool that can be used to keep track of time spent on projects.
 
    [Anaconda Project](https://anaconda-project.readthedocs.io) is the recommended task runner, and is installable using `conda`. Anaconda Project allows for multiple Conda environments to be defined in a single file, each with their own associated package dependencies. Commands can be associated with specific environments, and can be tailored to different platforms. Anaconda Project also assists with environment setup and cross-platform environment variables, among other things.
 
-4. (Optional) Prepare the default environment: `anaconda-project run prepare`
+4. (Optional) Prepare the default environment: `anaconda-project run install`
 
    The default environment contains all development, debug, and testing dependencies, in addition to useful development tools (such as linters, formatters, and Jupyter Notebook).
 

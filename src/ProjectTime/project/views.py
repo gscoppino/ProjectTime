@@ -1,13 +1,12 @@
-from typing import List
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.forms import ModelForm, SplitDateTimeField, SplitDateTimeWidget
 from django.urls.base import reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
+from ProjectTime.project.forms import ChargeModelForm
 from ProjectTime.project.models import Project, Charge
 from ProjectTime.project.utils import reporting as report_helpers
 from ProjectTime.timezone.forms import TimezoneForm
@@ -25,17 +24,17 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         active_projects = (Project.objects
-            .filter(active=True)
-            .order_by('name')
-            .annotate_latest_charge()
-        )
+                           .filter(active=True)
+                           .order_by('name')
+                           .annotate_latest_charge()
+                           )
 
         open_charges = (Charge.objects
-            .filter(closed=False)
-            .select_related('project')
-            .order_by('start_time')
-            .annotate_time_charged()
-        )
+                        .filter(closed=False)
+                        .select_related('project')
+                        .order_by('start_time')
+                        .annotate_time_charged()
+                        )
 
         month_summary_chart_script, month_summary_chart_div = (
             report_helpers.get_monthly_summary_chart_components(
@@ -44,7 +43,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         )
 
         has_timezone = self.request.session.get('timezone')
-
 
         context['active_projects'] = active_projects
         context['open_charges'] = open_charges
@@ -61,10 +59,10 @@ class ProjectListView(ListView):
 
     def get_queryset(self):
         return (super()
-            .get_queryset()
-            .order_by('name')
-            .annotate_latest_charge()
-        )
+                .get_queryset()
+                .order_by('name')
+                .annotate_latest_charge()
+                )
 
 
 class ProjectCreateView(CreateView):
@@ -85,30 +83,11 @@ class ChargeListView(ListView):
 
     def get_queryset(self):
         return (super()
-            .get_queryset()
-            .select_related('project')
-            .order_by('start_time')
-            .annotate_time_charged()
-        )
-
-DATE_TIME_WIDGET_PARAMS = {
-    'date_attrs': {'type': 'date'},
-    'time_attrs': {'type': 'time'}
-}
-
-
-class ChargeModelForm(ModelForm):
-    class Meta:
-        model = Charge
-        fields = ('project', 'start_time', 'end_time', 'closed',)
-        field_classes = {
-            'start_time': SplitDateTimeField,
-            'end_time': SplitDateTimeField
-        }
-        widgets = {
-            'start_time': SplitDateTimeWidget(**DATE_TIME_WIDGET_PARAMS),
-            'end_time': SplitDateTimeWidget(**DATE_TIME_WIDGET_PARAMS)
-        }
+                .get_queryset()
+                .select_related('project')
+                .order_by('start_time')
+                .annotate_time_charged()
+                )
 
 
 class ChargeCreateView(CreateView):
