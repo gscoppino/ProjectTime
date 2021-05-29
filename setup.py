@@ -12,7 +12,7 @@ setuptools.setup(
         'psycopg2~=2.8',
         'sqlparse~=0.4',
         'pytz~=2019.3',
-        'django~=3.1',
+        'django~=3.2',
         'pandas~=1.2',
         'bokeh~=2.3',
     ],
