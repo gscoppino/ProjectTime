@@ -68,8 +68,7 @@ def get_monthly_summary_chart_components(series):
                    tools="hover",
                    tooltips="@charge: @value hour(s)",
                    outline_line_color="white",
-                   width=480,
-                   output_backend='svg')
+                   sizing_mode="stretch_width")
 
     chart.wedge(source=series,
                 x=0,
