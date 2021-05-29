@@ -13,6 +13,11 @@
         <script type="text/javascript" src="{% static 'project/vendor/jquery-3.6.0.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'project/vendor/foundation.min.js' %}"></script>
         {% block scripts %}{% endblock %}
+        <script>
+            // "Fix" the Foundation Abide plugins time regex to allow seconds to be optional
+            // https://github.com/foundation/foundation-sites/issues/5106
+            Foundation.Abide.defaults.patterns['time'] = /^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){1,2}$/
+        </script>
         <script>$(document).foundation()</script>
     </body>
 </html>
