@@ -93,7 +93,7 @@ class ChargeListView(ListView):
 
 DATE_TIME_WIDGET_PARAMS = {
     'date_attrs': {'type': 'date'},
-    'time_attrs': {'type': 'time', 'step': '1'}
+    'time_attrs': {'type': 'time'}
 }
 
 
@@ -129,12 +129,3 @@ class ChargeUpdateView(UpdateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
-
-    def get_initial(self):
-        initial = super().get_initial()
-
-        if not self.object.end_time:
-            now = timezone.localtime()
-            initial['end_time'] = now
-
-        return initial
