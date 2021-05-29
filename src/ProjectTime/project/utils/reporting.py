@@ -80,6 +80,8 @@ def get_monthly_summary_chart_components(series):
                 fill_color='color',
                 legend_field='charge')
 
+    chart.toolbar.active_drag = None
+    chart.toolbar.active_scroll = None
     chart.axis.axis_label = None
     chart.axis.visible = False
     chart.grid.grid_line_color = None
