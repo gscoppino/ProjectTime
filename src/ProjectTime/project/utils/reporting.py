@@ -67,11 +67,9 @@ def get_monthly_summary_chart_components(series):
                    toolbar_location=None,
                    tools="hover",
                    tooltips="@charge: @value hour(s)",
-                   x_range=(-0.5, 1.0),
-                   width_policy="fixed",
-                   height_policy="fixed",
-                   width=400,
-                   height=400)
+                   outline_line_color="white",
+                   width=480,
+                   output_backend='svg')
 
     chart.wedge(source=series,
                 x=0,
@@ -86,5 +84,6 @@ def get_monthly_summary_chart_components(series):
     chart.axis.axis_label = None
     chart.axis.visible = False
     chart.grid.grid_line_color = None
+    chart.legend.location = 'top_left'
 
     return components(chart)
