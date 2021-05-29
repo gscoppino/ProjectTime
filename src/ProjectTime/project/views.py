@@ -1,6 +1,7 @@
 from typing import List
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import ModelForm, SplitDateTimeField, SplitDateTimeWidget
 from django.urls.base import reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import TemplateView
@@ -90,14 +91,50 @@ class ChargeListView(ListView):
             .annotate_time_charged()
         )
 
+DATE_TIME_WIDGET_PARAMS = {
+    'date_attrs': {'type': 'date'},
+    'time_attrs': {'type': 'time', 'step': '1'}
+}
+
+
+class ChargeModelForm(ModelForm):
+    class Meta:
+        model = Charge
+        fields = ('project', 'start_time', 'end_time', 'closed',)
+        field_classes = {
+            'start_time': SplitDateTimeField,
+            'end_time': SplitDateTimeField
+        }
+        widgets = {
+            'start_time': SplitDateTimeWidget(**DATE_TIME_WIDGET_PARAMS),
+            'end_time': SplitDateTimeWidget(**DATE_TIME_WIDGET_PARAMS)
+        }
+
 
 class ChargeCreateView(CreateView):
     model = Charge
-    fields = ('project', 'start_time', 'end_time', 'closed',)
+    form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        now = timezone.localtime()
+        initial['start_time'] = now
+
+        return initial
 
 
 class ChargeUpdateView(UpdateView):
     model = Charge
-    fields = ('project', 'start_time', 'end_time', 'closed',)
+    form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        if not self.object.end_time:
+            now = timezone.localtime()
+            initial['end_time'] = now
+
+        return initial
