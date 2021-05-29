@@ -14,8 +14,8 @@
 <div class="grid-container fluid margin-top-1">
     {% if timezone_form %}
     <article class="warning callout">
-        <p>Please select a timezone.</p>
-        <form data-abide novalidate class="margin-top-2" method="post" action="{% url 'project:set-timezone' %}">
+        <p>{{ timezone_form.timezone.help_text }}</p>
+        <form data-abide novalidate class="margin-top-1" method="post" action="{% url 'project:set-timezone' %}">
             {% csrf_token %}
             <div class="grid-x grid-margin-x align-bottom">
                 <div class="cell medium-6">
@@ -33,14 +33,14 @@
     {% endif %}
 
     <div class="grid-x grid-margin-x">
-        <section class="cell small-12 medium-auto">
+        <section class="cell medium-12 large-auto">
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4>Active Projects</h4>
                     <div class="flex-child-grow"></div>
                     <a class="margin-left-4 button" href="{% url 'project:project-create' %}">+ Create Project</a>
                 </header>
-                <div class="card-section">
+                <div class="card-section padding-0">
                     <div class="table-scroll table-height">
                         <table class="table stack hover">
                             <thead>
@@ -73,7 +73,7 @@
                     <div class="flex-child-grow"></div>
                     <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
                 </header>
-                <div class="card-section">
+                <div class="card-section padding-0">
                     <div class="table-scroll table-height">
                         <table class="table stack hover">
                             <thead>
@@ -108,12 +108,12 @@
                 </div>
             </section>
         </section>
-        <section class="cell small-12 medium-shrink">
+        <section class="cell medium-12 large-shrink">
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4>Current Month Summary</h4>
                 </header>
-                <div class="card-section">
+                <div class="card-section padding-0">
                     {{ month_summary_chart_div | safe }}
                     <script type="text/javascript" src="{% static 'project/vendor/bokeh-2.3.2.min.js' %}"></script>
                     {{ month_summary_chart_script | safe }}
@@ -123,7 +123,7 @@
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4>Quick Charge</h4>
                 </header>
-                <div class="card-section">
+                <div class="card-section padding-0">
                     <form data-abide novalidate method="post">
                         {% csrf_token %}
 
