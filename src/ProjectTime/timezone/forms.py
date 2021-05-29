@@ -10,4 +10,5 @@ class TimezoneForm(forms.Form):
     """
     timezone = forms.ChoiceField(
         choices=[(tz, tz) for tz in common_timezones],
-        initial='America/New_York')
+        initial='America/New_York',
+        help_text="*Required: Select a timezone from the list.")
