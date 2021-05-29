@@ -11,6 +11,7 @@ from math import pi
 
 from ProjectTime.project.models import Charge
 
+
 def get_monthly_summary_series(date, project_ids=None):
     charges = Charge.objects.filter(end_time__isnull=False)
     if project_ids:
@@ -20,25 +21,25 @@ def get_monthly_summary_series(date, project_ids=None):
     limit_day = timedelta(days=1, microseconds=-1)
 
     charges = (charges
-                .filter(start_time__range=(
-                    date.replace(day=1,
+               .filter(start_time__range=(
+                   date.replace(day=1,
                                 hour=0,
                                 minute=0,
                                 second=0,
                                 microsecond=0),
-                    date.replace(day=end_of_month,
+                   date.replace(day=end_of_month,
                                 hour=0,
                                 minute=0,
                                 second=0,
                                 microsecond=0) + limit_day
-                ))
-                .select_related('project')
-                .values('project')
-                .order_by('project_id')
-                .annotate(project_name=F('project__name'))
-                .annotate(total_time_charged=Sum(
-                    F('end_time') - F('start_time')
-                )))
+               ))
+               .select_related('project')
+               .values('project')
+               .order_by('project_id')
+               .annotate(project_name=F('project__name'))
+               .annotate(total_time_charged=Sum(
+                   F('end_time') - F('start_time')
+               )))
 
     chart_data = ({
         charge['project_name']:
@@ -55,19 +56,22 @@ def get_monthly_summary_series(date, project_ids=None):
     category_count = len(chart_data)
     if category_count <= 20:
         series['color'] = (Category20c[len(chart_data)]
-                            if category_count >= 3
-                            else Category20c[3][0:category_count])
+                           if category_count >= 3
+                           else Category20c[3][0:category_count])
 
     return series
 
+
 def get_monthly_summary_chart_components(series):
     chart = figure(title="Monthly Summary",
-                    toolbar_location=None,
-                    tools="hover",
-                    tooltips="@charge: @value hour(s)",
-                    x_range=(-0.5, 1.0),
-                    width=400,
-                    height=400)
+                   toolbar_location=None,
+                   tools="hover",
+                   tooltips="@charge: @value hour(s)",
+                   x_range=(-0.5, 1.0),
+                   width_policy="fixed",
+                   height_policy="fixed",
+                   width=400,
+                   height=400)
 
     chart.wedge(source=series,
                 x=0,
