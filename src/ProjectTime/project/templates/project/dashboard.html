@@ -36,7 +36,7 @@
         <section class="cell medium-12 large-auto">
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
-                    <h4>Active Projects</h4>
+                    <h4 class="margin-0">Active Projects</h4>
                     <div class="flex-child-grow"></div>
                     <a class="margin-left-4 button" href="{% url 'project:project-create' %}">+ Create Project</a>
                 </header>
@@ -69,7 +69,7 @@
             </section>
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
-                    <h4>Open Charges</h4>
+                    <h4 class="margin-0">Open Charges</h4>
                     <div class="flex-child-grow"></div>
                     <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
                 </header>
@@ -111,7 +111,7 @@
         <section class="cell medium-12 large-shrink">
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
-                    <h4>Current Month Summary</h4>
+                    <h4 class="margin-0">Current Month Summary</h4>
                 </header>
                 <div class="card-section padding-0">
                     {{ month_summary_chart_div | safe }}
@@ -121,7 +121,7 @@
             </section>
             <section class="card" style="display:none">
                 <header class="card-divider flex-container flex-dir-row align-middle">
-                    <h4>Quick Charge</h4>
+                    <h4 class="margin-0">Quick Charge</h4>
                 </header>
                 <div class="card-section padding-0">
                     <form data-abide novalidate method="post">
