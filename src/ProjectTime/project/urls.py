@@ -4,6 +4,7 @@ from ProjectTime.project.views import (
     ChargeCreateView,
     ChargeListView,
     ChargeUpdateView,
+    ChargeCloseView,
     DashboardView,
     ProjectCreateView,
     ProjectUpdateView,
@@ -20,4 +21,5 @@ urlpatterns = [
     path('charge', ChargeListView.as_view(), name='charge-list'),
     path('charge/create', ChargeCreateView.as_view(), name='charge-create'),
     path('charge/<int:pk>/update', ChargeUpdateView.as_view(), name='charge-update'),
+    path('charge/<int:pk>/close', ChargeCloseView.as_view(), name='close-charge'),
 ]

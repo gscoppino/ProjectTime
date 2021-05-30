@@ -82,6 +82,7 @@
                                     <th>Start</th>
                                     <th>End</th>
                                     <th>Time Charged</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,6 +96,14 @@
                                     <td>{{ charge.start_time }}</td>
                                     <td>{{ charge.end_time }}</td>
                                     <td>{{ charge.db__time_charged }}</td>
+                                    <td>
+                                        {% if charge.start_time and charge.end_time %}
+                                        <form method="post" action="{% url 'project:close-charge' charge.pk %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="hollow button small margin-0">Close</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% empty %}
                                 <tr>
