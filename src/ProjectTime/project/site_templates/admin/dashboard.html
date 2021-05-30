@@ -4,23 +4,23 @@
 {% block title %}Dashboard{{ block.super }}{% endblock %}
 
 {% block content %}
-
 <h1>Monthly Summary</h1>
+<div style="display:flex;">
+    <form style="min-width: 150px;">
+        <h2>Select Project(s):</h2>
+        {% for project in projects %}
+        <div>
+            <label for="{{ project.name }}">{{ project.name }}</label>
+            <input type="checkbox" name="project" id="{{ project.name }}" value="{{ project.id }}"
+                {% if project.selected %}checked{% endif %}>
+        </div>
+        {% endfor %}
 
-<form>
-    <h2>Select Project(s):</h2>
-    {% for project in projects %}
-    <div>
-        <label for="{{ project.name }}">{{ project.name }}</label>
-        <input type="checkbox" name="project" id="{{ project.name }}" value="{{ project.id }}"
-            {% if project.selected %}checked{% endif %}>
-    </div>
-    {% endfor %}
-
-    <button type="submit">Filter</button>
-</form>
-
-{{ chart_div | safe }}
+        <button type="submit">Filter</button>
+    </form>
+    <div style="flex: 1"></div>
+    {{ chart_div | safe }}
+</div>
 
 <script type="text/javascript" src="{% static 'project/vendor/bokeh-2.3.2.min.js' %}"></script>
 {{ chart_script | safe }}

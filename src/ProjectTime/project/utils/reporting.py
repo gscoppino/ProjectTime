@@ -62,13 +62,13 @@ def get_monthly_summary_series(date, project_ids=None):
     return series
 
 
-def get_monthly_summary_chart_components(series):
-    chart = figure(title="Monthly Summary",
+def get_monthly_summary_chart_components(series, **kwargs):
+    chart = figure(title=None,
                    toolbar_location=None,
                    tools="hover",
                    tooltips="@charge: @value hour(s)",
                    outline_line_color="white",
-                   sizing_mode="stretch_width")
+                   **kwargs)
 
     chart.wedge(source=series,
                 x=0,
@@ -80,8 +80,6 @@ def get_monthly_summary_chart_components(series):
                 fill_color='color',
                 legend_field='charge')
 
-    chart.toolbar.active_drag = None
-    chart.toolbar.active_scroll = None
     chart.axis.axis_label = None
     chart.axis.visible = False
     chart.grid.grid_line_color = None
