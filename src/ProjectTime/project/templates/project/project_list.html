@@ -11,39 +11,7 @@
                 <a class="margin-left-4 button" href="{% url 'project:project-create' %}">+ Create Project</a>
             </header>
             <div class="card-section">
-                <nav aria-label="pagination">
-                    <ul class="pagination text-center">
-                        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
-                            {% if page_obj.has_previous %}
-                            <a href="?page=1"> First</a>
-                            {% else %}
-                            First
-                            {% endif %}
-                        </li>
-                        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
-                            {% if page_obj.has_previous %}
-                            <a href="?page={{ page_obj.previous_page_number }}"> Previous</a>
-                            {% else %}
-                            Previous
-                            {% endif %}
-                        </li>
-                        <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</li>
-                        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
-                            {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}"> Next</a>
-                            {% else %}
-                            Next
-                            {% endif %}
-                        </li>
-                        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
-                            {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.paginator.num_pages }}"> Last</a>
-                            {% else %}
-                            Last
-                            {% endif %}
-                        </li>
-                    </ul>
-                </nav>
+                {% include "project/pagination.html" %}
             </div>
             <div class="card-section padding-0">
                 <table class="table stack hover">

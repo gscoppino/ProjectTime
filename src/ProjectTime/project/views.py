@@ -62,14 +62,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
 class ProjectListView(ListView):
     model = Project
+    ordering = 'name'
     paginate_by = 10
 
     def get_queryset(self):
-        return (super()
-                .get_queryset()
-                .order_by('name')
-                .annotate_latest_charge()
-                )
+        return super().get_queryset().annotate_latest_charge()
 
 
 class ProjectCreateView(CreateView):

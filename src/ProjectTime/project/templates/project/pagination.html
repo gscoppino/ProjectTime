@@ -1,0 +1,42 @@
+<p class="text-center">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</p>
+<nav aria-label="pagination">
+    <ul class="pagination text-center">
+        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
+            {% if page_obj.has_previous %}
+            <a href="?page=1"> First</a>
+            {% else %}
+            First
+            {% endif %}
+        </li>
+        <li class="pagination-previous {% if not page_obj.has_previous %}disabled{% endif %}">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}"> Previous</a>
+            {% else %}
+            Previous
+            {% endif %}
+        </li>
+        {% for page_number in page_obj.paginator.get_elided_page_range %}
+        <li>
+            {% if page_number != page_obj.paginator.ELLIPSIS %}
+            <a href="?page={{ page_number }}">{{ page_number }}</a>
+            {% else %}
+            {{ page_number }}
+            {% endif %}
+        </li>
+        {% endfor %}
+        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}"> Next</a>
+            {% else %}
+            Next
+            {% endif %}
+        </li>
+        <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.paginator.num_pages }}"> Last</a>
+            {% else %}
+            Last
+            {% endif %}
+        </li>
+    </ul>
+</nav>
