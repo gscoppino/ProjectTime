@@ -86,13 +86,13 @@ class ProjectUpdateView(UpdateView):
 
 class ChargeListView(ListView):
     model = Charge
+    ordering = 'start_time'
     paginate_by = 10
 
     def get_queryset(self):
         return (super()
                 .get_queryset()
                 .select_related('project')
-                .order_by('start_time')
                 .annotate_time_charged()
                 )
 
