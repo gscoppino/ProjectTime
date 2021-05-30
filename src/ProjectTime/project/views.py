@@ -1,8 +1,9 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls.base import reverse_lazy
+from django.http.response import HttpResponseRedirect
+from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic.base import TemplateView
+from django.views.generic.base import View, TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -114,3 +115,14 @@ class ChargeUpdateView(UpdateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
+
+
+class ChargeCloseView(View):
+    http_method_names = ['post']
+
+    def post(self, _, pk):
+        charge = Charge.objects.get(pk=pk)
+        charge.closed = True
+        charge.full_clean()
+        charge.save()
+        return HttpResponseRedirect(reverse('dashboard'))
