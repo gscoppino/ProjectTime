@@ -67,7 +67,7 @@
                             <td>{{ charge.start_time }}</td>
                             <td>{{ charge.end_time }}</td>
                             <td>{{ charge.db__time_charged }}</td>
-                            <td>{{ charge.closed }}</td>
+                            <td>{{ charge.closed | yesno | capfirst }}</td>
                         </tr>
                     {% empty %}
                         <tr>

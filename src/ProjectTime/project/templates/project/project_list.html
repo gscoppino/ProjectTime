@@ -60,7 +60,7 @@
                             <td>
                                 <a href="{% url 'project:project-update' project.pk %}">{{ project.name }}</a>
                             </td>
-                            <td>{{ project.active }}</td>
+                            <td>{{ project.active | yesno | capfirst }}</td>
                             <td>{{ project.db__latest_charge }}</td>
                         </tr>
                     {% empty %}
