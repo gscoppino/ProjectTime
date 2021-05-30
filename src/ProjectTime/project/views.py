@@ -36,9 +36,14 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                         .annotate_time_charged()
                         )
 
+        month_summary_chart_height = 600
         month_summary_chart_script, month_summary_chart_div = (
             report_helpers.get_monthly_summary_chart_components(
-                report_helpers.get_monthly_summary_series(timezone.localtime())
+                report_helpers.get_monthly_summary_series(
+                    timezone.localtime()
+                ),
+                sizing_mode="stretch_width",
+                height=month_summary_chart_height,
             )
         )
 
@@ -48,6 +53,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context['open_charges'] = open_charges
         context['month_summary_chart_script'] = month_summary_chart_script
         context['month_summary_chart_div'] = month_summary_chart_div
+        context['month_summary_chart_height'] = month_summary_chart_height
         context['timezone_form'] = TimezoneForm() if not has_timezone else None
 
         return context

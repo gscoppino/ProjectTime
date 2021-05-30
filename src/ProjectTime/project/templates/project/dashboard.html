@@ -113,7 +113,7 @@
                 <header class="card-divider flex-container flex-dir-row align-middle">
                     <h4 class="margin-0">Current Month Summary</h4>
                 </header>
-                <div class="card-section padding-0">
+                <div class="card-section padding-0" style="height: {{ month_summary_chart_height }}px;">
                     {{ month_summary_chart_div | safe }}
                     <script type="text/javascript" src="{% static 'project/vendor/bokeh-2.3.2.min.js' %}"></script>
                     {{ month_summary_chart_script | safe }}

@@ -57,8 +57,17 @@ class ProjectTimeAdminSite(admin.AdminSite):
             for project in Project.objects.values('id', 'name').order_by('name')
         ])
 
-        series = report_helpers.get_monthly_summary_series(timezone.localtime(), project_ids)
-        script, div = report_helpers.get_monthly_summary_chart_components(series)
+        series = report_helpers.get_monthly_summary_series(
+            timezone.localtime(),
+            project_ids
+        )
+        script, div = report_helpers.get_monthly_summary_chart_components(
+            series,
+            sizing_mode="stretch_width",
+            width_policy="max",
+            max_width=1400
+
+        )
 
         context = {
             **self.each_context(request),
