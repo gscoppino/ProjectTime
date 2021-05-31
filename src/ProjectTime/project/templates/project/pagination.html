@@ -15,13 +15,9 @@
             Previous
             {% endif %}
         </li>
-        {% for page_number in page_obj.paginator.get_elided_page_range %}
+        {% for page_number in page_obj.paginator.page_range %}
         <li>
-            {% if page_number != page_obj.paginator.ELLIPSIS %}
             <a href="?page={{ page_number }}">{{ page_number }}</a>
-            {% else %}
-            {{ page_number }}
-            {% endif %}
         </li>
         {% endfor %}
         <li class="pagination-next {% if not page_obj.has_next %}disabled{% endif %}">
