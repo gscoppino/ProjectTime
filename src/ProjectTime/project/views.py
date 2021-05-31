@@ -6,9 +6,13 @@ from django.utils import timezone
 from django.views.generic.base import View, TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django_filters.views import FilterView
+from django_tables2 import SingleTableMixin
 
-from ProjectTime.project.forms import ChargeModelForm
 from ProjectTime.project.models import Project, Charge
+from ProjectTime.project.tables import ChargeTable, ProjectTable
+from ProjectTime.project.filters import ProjectFilter, ChargeFilter
+from ProjectTime.project.forms import ChargeModelForm
 from ProjectTime.project.utils import reporting as report_helpers
 from ProjectTime.timezone.forms import TimezoneForm
 
@@ -60,13 +64,19 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class ProjectListView(ListView):
+class ProjectListView(SingleTableMixin, FilterView):
     model = Project
-    ordering = 'name'
-    paginate_by = 10
+    table_class = ProjectTable
+    table_pagination = {'per_page': 10}
+    filterset_class = ProjectFilter
 
     def get_queryset(self):
         return super().get_queryset().annotate_latest_charge()
+
+    def get_table_kwargs(self):
+        kwargs = super().get_table_kwargs()
+        kwargs.update({'order_by': 'name'})
+        return kwargs
 
 
 class ProjectCreateView(CreateView):
@@ -81,17 +91,19 @@ class ProjectUpdateView(UpdateView):
     success_url = reverse_lazy('dashboard')
 
 
-class ChargeListView(ListView):
+class ChargeListView(SingleTableMixin, FilterView):
     model = Charge
-    ordering = 'start_time'
-    paginate_by = 10
+    table_class = ChargeTable
+    table_pagination = {'per_page': 10}
+    filterset_class = ChargeFilter
 
     def get_queryset(self):
-        return (super()
-                .get_queryset()
-                .select_related('project')
-                .annotate_time_charged()
-                )
+        return super().get_queryset().select_related('project').annotate_time_charged()
+
+    def get_table_kwargs(self):
+        kwargs = super().get_table_kwargs()
+        kwargs.update({'order_by': 'start_time'})
+        return kwargs
 
 
 class ChargeCreateView(CreateView):

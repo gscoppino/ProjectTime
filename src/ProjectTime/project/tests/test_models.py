@@ -400,7 +400,7 @@ class ChargeModelTestCase(ModelTestCase):
         self.assertQuerysetEqual(
             Charge.objects.annotate_time_charged().order_by('start_time'),
             charge_timedeltas,
-            transform=lambda charge: charge.db__time_charged
+            transform=lambda charge: charge.db_time_charged
         )
 
     def test_get_charge_list_aggregate_time(self):

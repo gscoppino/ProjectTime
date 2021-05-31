@@ -72,7 +72,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   application:
     locked: true
-    env_spec_hash: f1fcbcb926108562ccdcea5fefb6100bda10c29d
+    env_spec_hash: c876fa8f3c645f098168fba3f5a9f28b10b686d2
     platforms:
     - linux-64
     - osx-64
@@ -80,6 +80,7 @@ env_specs:
     packages:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
+      - django-filter=2.4.0=py_0
       - django=3.2.3=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
@@ -101,8 +102,8 @@ env_specs:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
       - bokeh=2.3.2=py38h578d9bd_0
-      - ca-certificates=2020.12.5=ha878542_0
-      - certifi=2020.12.5=py38h578d9bd_1
+      - ca-certificates=2021.5.30=ha878542_0
+      - certifi=2021.5.30=py38h578d9bd_0
       - freetype=2.10.4=h0708190_1
       - jbig=2.1=h7f98852_2003
       - jpeg=9d=h36c2ea0_0
@@ -145,8 +146,8 @@ env_specs:
       - zstd=1.5.0=ha95c52a_0
       osx-64:
       - bokeh=2.3.2=py38h50d1736_0
-      - ca-certificates=2020.12.5=h033912b_0
-      - certifi=2020.12.5=py38h50d1736_1
+      - ca-certificates=2021.5.30=h033912b_0
+      - certifi=2021.5.30=py38h50d1736_0
       - freetype=2.10.4=h4cff582_1
       - jbig=2.1=h0d85af4_2003
       - jpeg=9d=hbcb3906_0
@@ -187,8 +188,8 @@ env_specs:
       - zstd=1.5.0=h582d3a0_0
       win-64:
       - bokeh=2.3.2=py38haa244fe_0
-      - ca-certificates=2020.12.5=h5b45459_0
-      - certifi=2020.12.5=py38haa244fe_1
+      - ca-certificates=2021.5.30=h5b45459_0
+      - certifi=2021.5.30=py38haa244fe_0
       - freetype=2.10.4=h546665d_1
       - intel-openmp=2021.2.0=h57928b3_616
       - jbig=2.1=h8d14728_2003
@@ -226,9 +227,11 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
+      pip:
+      - django-tables2==2.4.0
   application-debug:
     locked: true
-    env_spec_hash: 232889d804d55d59212aaa2a527d4977cedc9dfe
+    env_spec_hash: b6ff9cc25089a30d0ffb26bfa8e1b2e633da5781
     platforms:
     - linux-64
     - osx-64
@@ -237,6 +240,7 @@ env_specs:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - django-debug-toolbar=3.2.1=pyhd8ed1ab_0
+      - django-filter=2.4.0=py_0
       - django=3.2.3=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
@@ -258,8 +262,8 @@ env_specs:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
       - bokeh=2.3.2=py38h578d9bd_0
-      - ca-certificates=2020.12.5=ha878542_0
-      - certifi=2020.12.5=py38h578d9bd_1
+      - ca-certificates=2021.5.30=ha878542_0
+      - certifi=2021.5.30=py38h578d9bd_0
       - freetype=2.10.4=h0708190_1
       - jbig=2.1=h7f98852_2003
       - jpeg=9d=h36c2ea0_0
@@ -302,8 +306,8 @@ env_specs:
       - zstd=1.5.0=ha95c52a_0
       osx-64:
       - bokeh=2.3.2=py38h50d1736_0
-      - ca-certificates=2020.12.5=h033912b_0
-      - certifi=2020.12.5=py38h50d1736_1
+      - ca-certificates=2021.5.30=h033912b_0
+      - certifi=2021.5.30=py38h50d1736_0
       - freetype=2.10.4=h4cff582_1
       - jbig=2.1=h0d85af4_2003
       - jpeg=9d=hbcb3906_0
@@ -344,8 +348,8 @@ env_specs:
       - zstd=1.5.0=h582d3a0_0
       win-64:
       - bokeh=2.3.2=py38haa244fe_0
-      - ca-certificates=2020.12.5=h5b45459_0
-      - certifi=2020.12.5=py38haa244fe_1
+      - ca-certificates=2021.5.30=h5b45459_0
+      - certifi=2021.5.30=py38haa244fe_0
       - freetype=2.10.4=h546665d_1
       - intel-openmp=2021.2.0=h57928b3_616
       - jbig=2.1=h8d14728_2003
@@ -383,9 +387,11 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
+      pip:
+      - django-tables2==2.4.0
   lint:
     locked: true
-    env_spec_hash: d31a6035d5340e2bde7f195d988b8aa03ec70bee
+    env_spec_hash: ea40e53daf8332d596a3d84a681614ff91a954a2
     platforms:
     - linux-64
     - osx-64
@@ -394,6 +400,7 @@ env_specs:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - autopep8=1.5.7=pyhd8ed1ab_0
+      - django-filter=2.4.0=py_0
       - django=3.2.3=pyhd8ed1ab_0
       - isort=5.8.0=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
@@ -421,8 +428,8 @@ env_specs:
       - _openmp_mutex=4.5=1_gnu
       - astroid=2.5.6=py38h578d9bd_0
       - bokeh=2.3.2=py38h578d9bd_0
-      - ca-certificates=2020.12.5=ha878542_0
-      - certifi=2020.12.5=py38h578d9bd_1
+      - ca-certificates=2021.5.30=ha878542_0
+      - certifi=2021.5.30=py38h578d9bd_0
       - freetype=2.10.4=h0708190_1
       - jbig=2.1=h7f98852_2003
       - jpeg=9d=h36c2ea0_0
@@ -469,8 +476,8 @@ env_specs:
       osx-64:
       - astroid=2.5.6=py38h50d1736_0
       - bokeh=2.3.2=py38h50d1736_0
-      - ca-certificates=2020.12.5=h033912b_0
-      - certifi=2020.12.5=py38h50d1736_1
+      - ca-certificates=2021.5.30=h033912b_0
+      - certifi=2021.5.30=py38h50d1736_0
       - freetype=2.10.4=h4cff582_1
       - jbig=2.1=h0d85af4_2003
       - jpeg=9d=hbcb3906_0
@@ -515,8 +522,8 @@ env_specs:
       win-64:
       - astroid=2.5.6=py38haa244fe_0
       - bokeh=2.3.2=py38haa244fe_0
-      - ca-certificates=2020.12.5=h5b45459_0
-      - certifi=2020.12.5=py38haa244fe_1
+      - ca-certificates=2021.5.30=h5b45459_0
+      - certifi=2021.5.30=py38haa244fe_0
       - colorama=0.4.4=pyh9f0ad1d_0
       - freetype=2.10.4=h546665d_1
       - intel-openmp=2021.2.0=h57928b3_616
@@ -558,9 +565,11 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
+      pip:
+      - django-tables2==2.4.0
   test:
     locked: true
-    env_spec_hash: ee4715f142787359348dfa7fa41efdc7d675b6ac
+    env_spec_hash: 10025b3a5afc615e2ad53476425e9c88a25d4750
     platforms:
     - linux-64
     - osx-64
@@ -568,6 +577,7 @@ env_specs:
     packages:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
+      - django-filter=2.4.0=py_0
       - django=3.2.3=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
@@ -589,8 +599,8 @@ env_specs:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
       - bokeh=2.3.2=py38h578d9bd_0
-      - ca-certificates=2020.12.5=ha878542_0
-      - certifi=2020.12.5=py38h578d9bd_1
+      - ca-certificates=2021.5.30=ha878542_0
+      - certifi=2021.5.30=py38h578d9bd_0
       - coverage=5.5=py38h497a2fe_0
       - freetype=2.10.4=h0708190_1
       - jbig=2.1=h7f98852_2003
@@ -634,8 +644,8 @@ env_specs:
       - zstd=1.5.0=ha95c52a_0
       osx-64:
       - bokeh=2.3.2=py38h50d1736_0
-      - ca-certificates=2020.12.5=h033912b_0
-      - certifi=2020.12.5=py38h50d1736_1
+      - ca-certificates=2021.5.30=h033912b_0
+      - certifi=2021.5.30=py38h50d1736_0
       - coverage=5.5=py38h96a0964_0
       - freetype=2.10.4=h4cff582_1
       - jbig=2.1=h0d85af4_2003
@@ -677,8 +687,8 @@ env_specs:
       - zstd=1.5.0=h582d3a0_0
       win-64:
       - bokeh=2.3.2=py38haa244fe_0
-      - ca-certificates=2020.12.5=h5b45459_0
-      - certifi=2020.12.5=py38haa244fe_1
+      - ca-certificates=2021.5.30=h5b45459_0
+      - certifi=2021.5.30=py38haa244fe_0
       - coverage=5.5=py38h294d835_0
       - freetype=2.10.4=h546665d_1
       - intel-openmp=2021.2.0=h57928b3_616
@@ -717,6 +727,8 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
+      pip:
+      - django-tables2==2.4.0
   test-acceptance:
     locked: true
     env_spec_hash: 88c62448421564be4242e80a28a59249370dfdc4
@@ -804,7 +816,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   default:
     locked: true
-    env_spec_hash: 5cd1cb0b45494eda1f234b7851c2d13a9fd4bcad
+    env_spec_hash: 0c8507cdf17ebb5c564f32bf9647931c331aa6c0
     platforms:
     - linux-64
     - osx-64
@@ -822,6 +834,7 @@ env_specs:
       - decorator=5.0.9=pyhd8ed1ab_0
       - defusedxml=0.7.1=pyhd8ed1ab_0
       - django-debug-toolbar=3.2.1=pyhd8ed1ab_0
+      - django-filter=2.4.0=py_0
       - django=3.2.3=pyhd8ed1ab_0
       - entrypoints=0.3=pyhd8ed1ab_1003
       - idna=3.1=pyhd3deb0d_0
@@ -882,13 +895,13 @@ env_specs:
       - astroid=2.5.6=py38h578d9bd_0
       - bokeh=2.3.2=py38h578d9bd_0
       - brotlipy=0.7.0=py38h497a2fe_1001
-      - ca-certificates=2020.12.5=ha878542_0
-      - certifi=2020.12.5=py38h578d9bd_1
+      - ca-certificates=2021.5.30=ha878542_0
+      - certifi=2021.5.30=py38h578d9bd_0
       - cffi=1.14.5=py38ha65f79e_0
       - coverage=5.5=py38h497a2fe_0
       - cryptography=3.4.7=py38ha5dfef3_0
       - freetype=2.10.4=h0708190_1
-      - importlib-metadata=4.3.0=py38h578d9bd_0
+      - importlib-metadata=4.3.1=py38h578d9bd_0
       - ipykernel=5.5.5=py38hd0cf306_0
       - ipython=7.24.0=py38hd0cf306_0
       - jbig=2.1=h7f98852_2003
@@ -951,13 +964,13 @@ env_specs:
       - astroid=2.5.6=py38h50d1736_0
       - bokeh=2.3.2=py38h50d1736_0
       - brotlipy=0.7.0=py38h5406a74_1001
-      - ca-certificates=2020.12.5=h033912b_0
-      - certifi=2020.12.5=py38h50d1736_1
+      - ca-certificates=2021.5.30=h033912b_0
+      - certifi=2021.5.30=py38h50d1736_0
       - cffi=1.14.5=py38ha97d567_0
       - coverage=5.5=py38h96a0964_0
       - cryptography=3.4.7=py38h1fa4640_0
       - freetype=2.10.4=h4cff582_1
-      - importlib-metadata=4.3.0=py38h50d1736_0
+      - importlib-metadata=4.3.1=py38h50d1736_0
       - ipykernel=5.5.5=py38h6c79ece_0
       - ipython=7.24.0=py38h6c79ece_0
       - jbig=2.1=h0d85af4_2003
@@ -1017,14 +1030,14 @@ env_specs:
       - astroid=2.5.6=py38haa244fe_0
       - bokeh=2.3.2=py38haa244fe_0
       - brotlipy=0.7.0=py38h294d835_1001
-      - ca-certificates=2020.12.5=h5b45459_0
-      - certifi=2020.12.5=py38haa244fe_1
+      - ca-certificates=2021.5.30=h5b45459_0
+      - certifi=2021.5.30=py38haa244fe_0
       - cffi=1.14.5=py38hd8c33c5_0
       - colorama=0.4.4=pyh9f0ad1d_0
       - coverage=5.5=py38h294d835_0
       - cryptography=3.4.7=py38hd7da0ea_0
       - freetype=2.10.4=h546665d_1
-      - importlib-metadata=4.3.0=py38haa244fe_0
+      - importlib-metadata=4.3.1=py38haa244fe_0
       - intel-openmp=2021.2.0=h57928b3_616
       - ipykernel=5.5.5=py38h43734a8_0
       - ipython=7.24.0=py38h43734a8_0
@@ -1082,6 +1095,8 @@ env_specs:
       - zeromq=4.3.4=h0e60522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
+      pip:
+      - django-tables2==2.4.0
   database:
     locked: true
     env_spec_hash: d063e7755412bf620dcf0ec62647a1fcc3a23a03

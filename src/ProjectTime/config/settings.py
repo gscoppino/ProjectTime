@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_tables2',
+    'django_filters',
     'ProjectTime.project.apps.ProjectAdminConfig',
     'ProjectTime.project.apps.ProjectAppConfig',
     'ProjectTime.timezone.apps.TimezoneConfig'

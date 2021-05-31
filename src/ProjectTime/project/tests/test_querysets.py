@@ -30,7 +30,7 @@ class ProjectQuerySetTestCase(TestCase):
         annotated_project = (Project.objects.annotate_latest_charge()
                              .get(pk=self.project.pk))
 
-        self.assertEqual(annotated_project.db__latest_charge, tomorrow)
+        self.assertEqual(annotated_project.db_latest_charge, tomorrow)
 
 
 class ChargeQuerySetTestCase(TestCase):
@@ -54,7 +54,7 @@ class ChargeQuerySetTestCase(TestCase):
         annotated_charge = (Charge.objects.annotate_time_charged()
                             .get(pk=charge.pk))
 
-        self.assertEqual(annotated_charge.db__time_charged, timedelta(hours=8))
+        self.assertEqual(annotated_charge.db_time_charged, timedelta(hours=8))
 
     def test_get_aggregated_time_charged(self):
         start_of_today = timezone.now().replace(

@@ -55,7 +55,7 @@
                                     <td>
                                         <a href="{% url 'project:project-update' project.pk %}">{{ project.name }}</a>
                                     </td>
-                                    <td>{{ project.db__latest_charge }}</td>
+                                    <td>{{ project.db_latest_charge }}</td>
                                 </tr>
                             {% empty %}
                                 <tr>
@@ -95,7 +95,7 @@
                                     </td>
                                     <td>{{ charge.start_time }}</td>
                                     <td>{{ charge.end_time }}</td>
-                                    <td>{{ charge.db__time_charged }}</td>
+                                    <td>{{ charge.db_time_charged }}</td>
                                     <td>
                                         {% if charge.start_time and charge.end_time %}
                                         <form method="post" action="{% url 'project:close-charge' charge.pk %}">
@@ -141,7 +141,7 @@
                                 <datalist id="project-list">
                                     {% for project in active_projects %}
                                     <option value="{{ project.name }}">
-                                        Last Charge: {{ project.db__latest_charge }}
+                                        Last Charge: {{ project.db_latest_charge }}
                                     </option>
                                     {% endfor %}
                                 </datalist>

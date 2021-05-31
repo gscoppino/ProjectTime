@@ -13,6 +13,8 @@ setuptools.setup(
         'sqlparse~=0.4',
         'pytz~=2019.3',
         'django~=3.2',
+        'django-filter~=2.4',
+        'django-tables2~=2.4',
         'pandas~=1.2',
         'bokeh~=2.3',
         'django-heroku',

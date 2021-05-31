@@ -20,15 +20,15 @@ class ProjectModelAdminTestCase(TestCase):
         queryset = self.model_admin.get_queryset(HttpRequest())
 
         for project in queryset:
-            self.assertTrue(hasattr(project, 'db__latest_charge'))
+            self.assertTrue(hasattr(project, 'db_latest_charge'))
 
     def test_latest_charge_is_set_as_computed_field(self):
         self.assertTrue('latest_charge' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
-        obj.db__latest_charge = timezone.now()
+        obj.db_latest_charge = timezone.now()
         self.assertEqual(self.model_admin.latest_charge(obj),
                          timezone.now().date())
-        obj.db__latest_charge = 'Test'
+        obj.db_latest_charge = 'Test'
 
     def test_latest_charge_computed_field_has_ordering_specified(self):
         self.assertTrue(hasattr(self.model_admin.latest_charge,
@@ -72,12 +72,12 @@ class ChargeModelAdminTestCase(TestCase):
         queryset = self.model_admin.get_queryset(HttpRequest())
 
         for charge in queryset:
-            self.assertTrue(hasattr(charge, 'db__time_charged'))
+            self.assertTrue(hasattr(charge, 'db_time_charged'))
 
     def test_time_charged_is_set_as_computed_field(self):
         self.assertTrue('time_charged' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
-        obj.db__time_charged = 'Test'
+        obj.db_time_charged = 'Test'
         self.assertEqual(self.model_admin.time_charged(obj), 'Test')
 
     def test_time_charged_computed_field_has_ordering_specified(self):

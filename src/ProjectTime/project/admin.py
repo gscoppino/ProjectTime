@@ -34,9 +34,9 @@ class ChargeAdmin(admin.ModelAdmin):
 
         return ()
 
-    @admin.display(ordering='db__time_charged')
+    @admin.display(ordering='db_time_charged')
     def time_charged(self, obj):
-        return obj.db__time_charged
+        return obj.db_time_charged
 
 
 @admin.register(Project, site=admin_site)
@@ -58,9 +58,9 @@ class ProjectAdmin(admin.ModelAdmin):
 
         return ('name',)
 
-    @admin.display(ordering='db__latest_charge')
+    @admin.display(ordering='db_latest_charge')
     def latest_charge(self, obj):
-        if not obj.db__latest_charge:
+        if not obj.db_latest_charge:
             return None
 
-        return timezone.localtime(obj.db__latest_charge).date()
+        return timezone.localtime(obj.db_latest_charge).date()
