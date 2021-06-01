@@ -286,29 +286,18 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
         with self.assertRaises(ProtectedError):
             self.project.delete()
 
-    def test_get_earliest_charge(self):
+    def test_charges_are_sorted_by_start_time(self):
         start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        Charge(
+            project=self.project,
+            start_time=start_datetime
+        ).validate_and_save()
 
         earlier_charge = Charge(
             project=self.project,
-            start_time=start_datetime
-        ).validate_and_save()
-
-        Charge(
-            project=self.project,
-            start_time=start_datetime + timedelta(hours=1)
-        ).validate_and_save()
-
-        self.assertEqual(Charge.objects.earliest(), earlier_charge)
-
-    def test_get_latest_charge(self):
-        start_datetime = timezone.make_aware(
-            datetime(2019, 1, 1, hour=8, minute=0, second=0))
-
-        Charge(
-            project=self.project,
-            start_time=start_datetime
+            start_time=start_datetime - timedelta(hours=1)
         ).validate_and_save()
 
         later_charge = Charge(
@@ -316,4 +305,5 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
             start_time=start_datetime + timedelta(hours=1)
         ).validate_and_save()
 
+        self.assertEqual(Charge.objects.earliest(), earlier_charge)
         self.assertEqual(Charge.objects.latest(), later_charge)
