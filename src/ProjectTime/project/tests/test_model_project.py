@@ -20,11 +20,12 @@ class SimpleProjectModelTestCase(ValidationMixin, SimpleTestCase):
     def test_project_name_field_cannot_exceed_255_characters(self):
         with self.assertRaises(ValidationError) as context_manager:
             Project(name=''.zfill(256)).full_clean()
-            self.assertValidationMessagePresent(
-                context_manager.exception.error_dict,
-                field='name',
-                error_code='max_length'
-            )
+
+        self.assertValidationMessagePresent(
+            context_manager.exception.error_dict,
+            field='name',
+            error_code='max_length'
+        )
 
     def test_project_active_field_has_explicit_domain_name(self):
         field = get_model_field(Project, 'active')
@@ -73,11 +74,12 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
 
         with self.assertRaises(ValidationError) as context_manager:
             Project(name=test_name).validate_and_save()
-            self.assertValidationMessagePresent(
-                context_manager.exception.error_dict,
-                field='name',
-                error_code='unique'
-            )
+
+        self.assertValidationMessagePresent(
+            context_manager.exception.error_dict,
+            field='name',
+            error_code='unique'
+        )
 
     def test_project_name_must_be_unique_in_database(self):
         test_name = 'Test'
@@ -93,11 +95,12 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
         # save on a inactive project
         with self.assertRaises(ValidationError) as context_manager:
             project.validate_and_save()
-            self.assertValidationMessagePresent(
-                context_manager.exception.error_dict,
-                field='__all__',
-                error_code='cannot_modify_when_inactive'
-            )
+
+        self.assertValidationMessagePresent(
+            context_manager.exception.error_dict,
+            field='__all__',
+            error_code='cannot_modify_when_inactive'
+        )
 
         # But should be able to save the change if it is
         # re-opening the project
