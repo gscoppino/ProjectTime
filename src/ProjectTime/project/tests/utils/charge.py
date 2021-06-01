@@ -26,18 +26,3 @@ class ChargeFactory:
         return Charge(project=project,
                       start_time=future_month,
                       end_time=future_month + charge_time)
-
-
-def create_test_charges(project, start_time, charge_timedeltas):
-    next_charge_start_datetime = start_time
-    charges = []
-
-    for charge_time in charge_timedeltas:
-        charge_end_datetime = next_charge_start_datetime + charge_time
-        charges.append(Charge(
-            project=project,
-            start_time=next_charge_start_datetime,
-            end_time=charge_end_datetime
-        ).validate_and_save())
-
-        next_charge_start_datetime = charge_end_datetime

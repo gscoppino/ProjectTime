@@ -8,7 +8,6 @@ from django.utils import timezone
 
 from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.querysets import ChargeQuerySet
-from ProjectTime.project.tests.utils.charge import create_test_charges
 from ProjectTime.project.tests.utils.general import (ValidationMixin,
                                                      get_model_field)
 
@@ -288,69 +287,33 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
             self.project.delete()
 
     def test_get_earliest_charge(self):
-        ordered_charges = self.get_ordered_test_charge_list()
-        self.assertEqual(Charge.objects.earliest(), ordered_charges[0])
+        start_datetime = timezone.make_aware(
+            datetime(2019, 1, 1, hour=8, minute=0, second=0))
+
+        earlier_charge = Charge(
+            project=self.project,
+            start_time=start_datetime
+        ).validate_and_save()
+
+        Charge(
+            project=self.project,
+            start_time=start_datetime + timedelta(hours=1)
+        ).validate_and_save()
+
+        self.assertEqual(Charge.objects.earliest(), earlier_charge)
 
     def test_get_latest_charge(self):
-        ordered_charges = self.get_ordered_test_charge_list()
-        self.assertEqual(Charge.objects.latest(), ordered_charges[-1])
-
-    def test_get_annotated_charge_list(self):
-        charge_timedeltas = (
-            timedelta(seconds=30),
-            timedelta(minutes=15),
-            timedelta(hours=1),
-        )
-
-        create_test_charges(
-            self.project,
-            timezone.make_aware(datetime(
-                2019, 1, 1, hour=0, minute=0, second=0
-            )),
-            charge_timedeltas)
-
-        self.assertQuerysetEqual(
-            Charge.objects.annotate_time_charged().order_by('start_time'),
-            charge_timedeltas,
-            transform=lambda charge: charge.db_time_charged
-        )
-
-    def test_get_charge_list_aggregate_time(self):
-        charge_timedeltas = (
-            timedelta(seconds=30),
-            timedelta(minutes=15),
-            timedelta(hours=1),
-        )
-
-        create_test_charges(
-            self.project,
-            timezone.make_aware(datetime(
-                2019, 1, 1, hour=0, minute=0, second=0
-            )),
-            charge_timedeltas)
-
-        self.assertEqual(Charge.objects.aggregate_time_charged(),
-                         sum(charge_timedeltas, timedelta()))
-
-    ### Helper Methods ###
-
-    @classmethod
-    def get_ordered_test_charge_list(cls):
-        baseline = timezone.make_aware(
+        start_datetime = timezone.make_aware(
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
-        plus_one_hour = baseline + timedelta(hours=1)
-        minus_one_hour = baseline - timedelta(hours=1)
-        plus_one_day = baseline + timedelta(days=1)
-        minus_one_day = baseline - timedelta(days=1)
 
-        ordered_datetimes = (minus_one_day, minus_one_hour,
-                             baseline, plus_one_hour, plus_one_day,)
-        ordered_charges = []
+        Charge(
+            project=self.project,
+            start_time=start_datetime
+        ).validate_and_save()
 
-        for entry in ordered_datetimes:
-            ordered_charges.append(Charge(
-                project=cls.project,
-                start_time=entry
-            ).validate_and_save())
+        later_charge = Charge(
+            project=self.project,
+            start_time=start_datetime + timedelta(hours=1)
+        ).validate_and_save()
 
-        return ordered_charges
+        self.assertEqual(Charge.objects.latest(), later_charge)
