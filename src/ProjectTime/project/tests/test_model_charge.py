@@ -3,13 +3,14 @@ from datetime import datetime, timedelta
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from django.db.models import ProtectedError
-from django.test import TestCase, SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
 from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.querysets import ChargeQuerySet
 from ProjectTime.project.tests.utils.charge import create_test_charges
-from ProjectTime.project.tests.utils.general import ValidationMixin, get_model_field
+from ProjectTime.project.tests.utils.general import (ValidationMixin,
+                                                     get_model_field)
 
 
 class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):

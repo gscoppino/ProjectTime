@@ -1,20 +1,20 @@
 """ Defines the routable views for this app
 """
 
-from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
 
-from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.tables import ChargeTable, ProjectTable
-from ProjectTime.project.filters import ProjectFilter, ChargeFilter
+from ProjectTime.project.filters import ChargeFilter, ProjectFilter
 from ProjectTime.project.forms import ChargeModelForm
+from ProjectTime.project.models import Charge, Project
+from ProjectTime.project.tables import ChargeTable, ProjectTable
 from ProjectTime.project.utils import reporting as report_helpers
 from ProjectTime.timezone.forms import TimezoneForm
 

@@ -1,10 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
-from django.test import TestCase, SimpleTestCase
+from django.test import SimpleTestCase, TestCase
 
 from ProjectTime.project.models import Project
 from ProjectTime.project.querysets import ProjectQuerySet
-from ProjectTime.project.tests.utils.general import ValidationMixin, get_model_field
+from ProjectTime.project.tests.utils.general import (ValidationMixin,
+                                                     get_model_field)
 
 
 class SimpleProjectModelTestCase(ValidationMixin, SimpleTestCase):

@@ -1,13 +1,13 @@
-import pandas as pd
+from calendar import monthrange
+from datetime import timedelta
+from math import pi
 
+import pandas as pd
 from bokeh.embed import components
 from bokeh.palettes import Category20c
 from bokeh.plotting import figure
 from bokeh.transform import cumsum
-from calendar import monthrange
-from datetime import timedelta
 from django.db.models import F, Sum
-from math import pi
 
 from ProjectTime.project.models import Charge
 

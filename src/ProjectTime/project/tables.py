@@ -3,7 +3,8 @@
 
 import django_tables2 as tables
 from django.urls.base import reverse
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 class ProjectTable(tables.Table):

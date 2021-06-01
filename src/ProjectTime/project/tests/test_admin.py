@@ -5,9 +5,9 @@ from django.http import HttpRequest
 from django.test import TestCase
 from django.utils import timezone
 
-from ProjectTime.project.site import admin_site
 from ProjectTime.project.admin import ChargeAdmin, ProjectAdmin
 from ProjectTime.project.models import Charge, Project
+from ProjectTime.project.site import admin_site
 
 
 class ProjectModelAdminTestCase(TestCase):
