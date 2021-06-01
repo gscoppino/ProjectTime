@@ -17,10 +17,10 @@ class SimpleProjectModelTestCase(ValidationMixin, SimpleTestCase):
         self.assertGreater(len(field.help_text), 0)
 
     def test_project_name_field_cannot_exceed_255_characters(self):
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Project(name=''.zfill(256)).full_clean()
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='name',
                 error_code='max_length'
             )
@@ -70,10 +70,10 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
 
         Project(name=test_name).validate_and_save()
 
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Project(name=test_name).validate_and_save()
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='name',
                 error_code='unique'
             )
@@ -90,10 +90,10 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
 
         # Should raise a generic validation error if attempting to
         # save on a inactive project
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             project.validate_and_save()
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='__all__',
                 error_code='cannot_modify_when_inactive'
             )

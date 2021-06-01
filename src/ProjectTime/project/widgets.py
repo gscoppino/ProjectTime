@@ -1,3 +1,6 @@
+""" Defines the widgets used by fields in this app
+"""
+
 from django.forms import SplitDateTimeWidget
 
 

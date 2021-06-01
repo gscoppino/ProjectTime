@@ -1,3 +1,6 @@
+""" Defines the filters used by views in this app
+"""
+
 import django_filters as filters
 from ProjectTime.project.models import Project, Charge
 

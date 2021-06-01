@@ -122,7 +122,9 @@ class ProjectTimeAdminSiteDashboardTemplateViewTestCase(AdminUserTestCase):
         'get_monthly_summary_chart_components',
         new_callable=get_mock_monthly_summary_chart
     )
-    def test_dashboard_view_adds_chart_visualization_elements_to_template_context(self, get_mock_dataframe, get_mock_chart_components):
+    def test_dashboard_view_adds_chart_visualization_elements_to_template_context(
+        self, get_mock_dataframe, get_mock_chart_components
+    ):
         """ This is more of a black box test, the report helpers
             are tested in more detail in their dedicated suite
         """

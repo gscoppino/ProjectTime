@@ -97,7 +97,7 @@ class ChargeModelAdminTestCase(TestCase):
 
         self.assertEqual(len(readonly_fields), 0)
 
-    def test_charge_admin_has_all_change_fields_editable_when_project_is_active_and_charge_is_not_closed(self):
+    def test_charge_admin_has_all_fields_editable_when_project_is_active_and_charge_is_not_closed(self):
         self.project.active = True
         self.project.validate_and_save()
 

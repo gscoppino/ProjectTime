@@ -1,10 +1,12 @@
+""" Defines the routable views for this app
+"""
+
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic.base import View, TemplateView
-from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin

@@ -74,7 +74,9 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         self.assertFalse(mock_method.called)
 
     @patch.object(messages, 'warning', new_callable=mock_add_warning_message)
-    def test_timezone_middleware_does_not_warn_user_when_request_in_warning_whitelist(self, mock_method):
+    def test_timezone_middleware_does_not_warn_user_when_request_in_warning_whitelist(
+        self, mock_method
+    ):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = User()
         mock_request.session = {}
@@ -93,7 +95,9 @@ class ProjectTimeTimezoneWarningMiddlewareTestCase(SimpleTestCase):
         self.assertFalse(mock_method.called)
 
     @patch.object(messages, 'warning', new_callable=mock_add_warning_message)
-    def test_timezone_middleware_does_not_warn_user_when_user_is_not_authenticated(self, mock_method):
+    def test_timezone_middleware_does_not_warn_user_when_user_is_not_authenticated(
+        self, mock_method
+    ):
         mock_request = RequestFactory().get('/foo/bar')
         mock_request.user = AnonymousUser()
         mock_request.session = {}

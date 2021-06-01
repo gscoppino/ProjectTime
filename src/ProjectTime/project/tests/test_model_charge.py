@@ -33,7 +33,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
 
         inactive_project = Project(name='Test 2', active=False)
 
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Charge(
                 project=inactive_project,
                 start_time=start_datetime,
@@ -41,7 +41,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             ).full_clean()
 
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='project',
                 error_code='project_must_be_active'
             )
@@ -95,7 +95,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         # Should raise a keyed validation error
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Charge(
                 project=self.project,
                 start_time=start_datetime,
@@ -103,14 +103,14 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             ).full_clean()
 
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='end_time',
                 error_code='end_time_must_be_on_or_after_start_time'
             )
 
         # Should raise a generic validation error if the end time field
         # is excluded
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Charge(
                 project=self.project,
                 start_time=start_datetime,
@@ -118,7 +118,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             ).full_clean(exclude=('end_time',))
 
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='__all__',
                 error_code='end_time_must_be_on_or_after_start_time'
             )
@@ -128,7 +128,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             datetime(2019, 1, 1, hour=8, minute=0, second=0))
 
         # Should raise a keyed validation error
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Charge(
                 project=self.project,
                 start_time=start_datetime,
@@ -136,14 +136,14 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             ).full_clean()
 
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='closed',
                 error_code='cannot_close_without_end_time'
             )
 
         # Should raise a generic validation error if the end time field
         # is excluded
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             Charge(
                 project=self.project,
                 start_time=start_datetime,
@@ -151,7 +151,7 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
             ).full_clean(exclude=('closed',))
 
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='__all__',
                 error_code='cannot_close_without_end_time'
             )
@@ -257,10 +257,10 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
 
         # Should raise a generic validation error if attempting to
         # save on a closed charge
-        with self.assertRaises(ValidationError) as cm:
+        with self.assertRaises(ValidationError) as context_manager:
             charge.validate_and_save()
             self.assertValidationMessagePresent(
-                cm.exception.error_dict,
+                context_manager.exception.error_dict,
                 field='__all__',
                 error_code='cannot_modify_when_closed'
             )
