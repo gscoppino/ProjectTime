@@ -60,6 +60,7 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
         test_name = 'Test'
         project = Project(name=test_name).validate_and_save()
 
+        self.assertIsNotNone(project.pk)
         self.assertEqual(project.name, test_name)
         self.assertEqual(project.active, True)
 

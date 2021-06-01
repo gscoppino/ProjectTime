@@ -136,6 +136,7 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
             start_time=today
         ).validate_and_save()
 
+        self.assertIsNotNone(charge.pk)
         self.assertEqual(charge.project, self.project)
         self.assertEqual(charge.start_time, today)
         self.assertEqual(charge.end_time, None)
