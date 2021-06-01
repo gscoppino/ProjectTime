@@ -25,7 +25,8 @@ jobs:
           command: anaconda-project run postgres
           background: true
       - run: sleep 10
-      - run: anaconda-project run manage.py test
+      - run: anaconda-project run coverage run manage.py test
+      - run: anaconda-project run coverage report --fail-under=80
       - run:
           command: anaconda-project run manage.py testserver --addrport 8000 --noinput ../../test/fixtures/admin_user.json
           background: true
