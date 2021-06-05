@@ -118,8 +118,6 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
         self.assertIsNotNone(charge.pk)
         self.assertEqual(charge.project, self.project)
         self.assertEqual(charge.start_time, today)
-        self.assertEqual(charge.end_time, None)
-        self.assertEqual(charge.time_charged, timedelta_zero)
 
     def test_charge_project_must_be_active_project(self):
         start_datetime = timezone.make_aware(
