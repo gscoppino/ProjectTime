@@ -72,7 +72,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   application:
     locked: true
-    env_spec_hash: c876fa8f3c645f098168fba3f5a9f28b10b686d2
+    env_spec_hash: 050dfd002360c8844027f54d8597edd1d5ef9123
     platforms:
     - linux-64
     - osx-64
@@ -81,7 +81,8 @@ env_specs:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - django-filter=2.4.0=py_0
-      - django=3.2.3=pyhd8ed1ab_0
+      - django-tables2=2.4.0=pyhd8ed1ab_0
+      - django=3.2.4=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
       - packaging=20.9=pyh44b312d_0
@@ -92,7 +93,7 @@ env_specs:
       - pytz=2019.3=py_0
       - six=1.16.0=pyh6c4a22f_0
       - sqlparse=0.4.1=pyh9f0ad1d_0
-      - typing_extensions=3.7.4.3=py_0
+      - typing_extensions=3.10.0.0=pyha770c72_0
       - wheel=0.36.2=pyhd3deb0d_0
       unix:
       - libblas=3.9.0=9_openblas
@@ -227,11 +228,9 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
-      pip:
-      - django-tables2==2.4.0
   application-debug:
     locked: true
-    env_spec_hash: b6ff9cc25089a30d0ffb26bfa8e1b2e633da5781
+    env_spec_hash: 88bd5db01923f314d223d408d1499aef464858fb
     platforms:
     - linux-64
     - osx-64
@@ -241,7 +240,8 @@ env_specs:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - django-debug-toolbar=3.2.1=pyhd8ed1ab_0
       - django-filter=2.4.0=py_0
-      - django=3.2.3=pyhd8ed1ab_0
+      - django-tables2=2.4.0=pyhd8ed1ab_0
+      - django=3.2.4=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
       - packaging=20.9=pyh44b312d_0
@@ -252,7 +252,7 @@ env_specs:
       - pytz=2019.3=py_0
       - six=1.16.0=pyh6c4a22f_0
       - sqlparse=0.4.1=pyh9f0ad1d_0
-      - typing_extensions=3.7.4.3=py_0
+      - typing_extensions=3.10.0.0=pyha770c72_0
       - wheel=0.36.2=pyhd3deb0d_0
       unix:
       - libblas=3.9.0=9_openblas
@@ -387,11 +387,9 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
-      pip:
-      - django-tables2==2.4.0
   lint:
     locked: true
-    env_spec_hash: ea40e53daf8332d596a3d84a681614ff91a954a2
+    env_spec_hash: 0bfefdf250a0cf2636413a51f78515e2cf539a9c
     platforms:
     - linux-64
     - osx-64
@@ -401,7 +399,8 @@ env_specs:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - autopep8=1.5.7=pyhd8ed1ab_0
       - django-filter=2.4.0=py_0
-      - django=3.2.3=pyhd8ed1ab_0
+      - django-tables2=2.4.0=pyhd8ed1ab_0
+      - django=3.2.4=pyhd8ed1ab_0
       - isort=5.8.0=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - mccabe=0.6.1=py_1
@@ -417,7 +416,7 @@ env_specs:
       - six=1.16.0=pyh6c4a22f_0
       - sqlparse=0.4.1=pyh9f0ad1d_0
       - toml=0.10.2=pyhd8ed1ab_0
-      - typing_extensions=3.7.4.3=py_0
+      - typing_extensions=3.10.0.0=pyha770c72_0
       - wheel=0.36.2=pyhd3deb0d_0
       unix:
       - libblas=3.9.0=9_openblas
@@ -426,7 +425,7 @@ env_specs:
       linux-64:
       - _libgcc_mutex=0.1=conda_forge
       - _openmp_mutex=4.5=1_gnu
-      - astroid=2.5.6=py38h578d9bd_0
+      - astroid=2.5.7=py38h578d9bd_0
       - bokeh=2.3.2=py38h578d9bd_0
       - ca-certificates=2021.5.30=ha878542_0
       - certifi=2021.5.30=py38h578d9bd_0
@@ -474,7 +473,7 @@ env_specs:
       - zlib=1.2.11=h516909a_1010
       - zstd=1.5.0=ha95c52a_0
       osx-64:
-      - astroid=2.5.6=py38h50d1736_0
+      - astroid=2.5.7=py38h50d1736_0
       - bokeh=2.3.2=py38h50d1736_0
       - ca-certificates=2021.5.30=h033912b_0
       - certifi=2021.5.30=py38h50d1736_0
@@ -520,7 +519,7 @@ env_specs:
       - zlib=1.2.11=h7795811_1010
       - zstd=1.5.0=h582d3a0_0
       win-64:
-      - astroid=2.5.6=py38haa244fe_0
+      - astroid=2.5.7=py38haa244fe_0
       - bokeh=2.3.2=py38haa244fe_0
       - ca-certificates=2021.5.30=h5b45459_0
       - certifi=2021.5.30=py38haa244fe_0
@@ -565,11 +564,9 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
-      pip:
-      - django-tables2==2.4.0
   test:
     locked: true
-    env_spec_hash: 10025b3a5afc615e2ad53476425e9c88a25d4750
+    env_spec_hash: ff1cdd6a90fd0912fa6e004d505de67f8e233854
     platforms:
     - linux-64
     - osx-64
@@ -578,7 +575,8 @@ env_specs:
       all:
       - asgiref=3.3.4=pyhd8ed1ab_0
       - django-filter=2.4.0=py_0
-      - django=3.2.3=pyhd8ed1ab_0
+      - django-tables2=2.4.0=pyhd8ed1ab_0
+      - django=3.2.4=pyhd8ed1ab_0
       - jinja2=3.0.1=pyhd8ed1ab_0
       - olefile=0.46=pyh9f0ad1d_1
       - packaging=20.9=pyh44b312d_0
@@ -589,7 +587,7 @@ env_specs:
       - pytz=2019.3=py_0
       - six=1.16.0=pyh6c4a22f_0
       - sqlparse=0.4.1=pyh9f0ad1d_0
-      - typing_extensions=3.7.4.3=py_0
+      - typing_extensions=3.10.0.0=pyha770c72_0
       - wheel=0.36.2=pyhd3deb0d_0
       unix:
       - libblas=3.9.0=9_openblas
@@ -727,8 +725,6 @@ env_specs:
       - yaml=0.2.5=he774522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
-      pip:
-      - django-tables2==2.4.0
   test-acceptance:
     locked: true
     env_spec_hash: 88c62448421564be4242e80a28a59249370dfdc4
@@ -816,7 +812,7 @@ env_specs:
       - wincertstore=0.2=py38haa244fe_1006
   default:
     locked: true
-    env_spec_hash: 0c8507cdf17ebb5c564f32bf9647931c331aa6c0
+    env_spec_hash: 25915e586b055dd03d0ba282de86e4885f4684b7
     platforms:
     - linux-64
     - osx-64
@@ -835,7 +831,8 @@ env_specs:
       - defusedxml=0.7.1=pyhd8ed1ab_0
       - django-debug-toolbar=3.2.1=pyhd8ed1ab_0
       - django-filter=2.4.0=py_0
-      - django=3.2.3=pyhd8ed1ab_0
+      - django-tables2=2.4.0=pyhd8ed1ab_0
+      - django=3.2.4=pyhd8ed1ab_0
       - entrypoints=0.3=pyhd8ed1ab_1003
       - idna=3.1=pyhd3deb0d_0
       - ipython_genutils=0.2.0=py_1
@@ -857,7 +854,7 @@ env_specs:
       - pep8=1.7.1=py_0
       - pickleshare=0.7.5=py_1003
       - pip=21.1.2=pyhd8ed1ab_0
-      - prometheus_client=0.10.1=pyhd8ed1ab_0
+      - prometheus_client=0.11.0=pyhd8ed1ab_0
       - prompt-toolkit=3.0.18=pyha770c72_0
       - pycodestyle=2.7.0=pyhd8ed1ab_0
       - pycparser=2.20=pyh9f0ad1d_2
@@ -876,7 +873,7 @@ env_specs:
       - testpath=0.5.0=pyhd8ed1ab_0
       - toml=0.10.2=pyhd8ed1ab_0
       - traitlets=5.0.5=py_0
-      - typing_extensions=3.7.4.3=py_0
+      - typing_extensions=3.10.0.0=pyha770c72_0
       - urllib3=1.26.5=pyhd8ed1ab_0
       - wcwidth=0.2.5=pyh9f0ad1d_2
       - webencodings=0.5.1=py_1
@@ -901,9 +898,9 @@ env_specs:
       - coverage=5.5=py38h497a2fe_0
       - cryptography=3.4.7=py38ha5dfef3_0
       - freetype=2.10.4=h0708190_1
-      - importlib-metadata=4.4.0=py38h578d9bd_0
+      - importlib-metadata=4.5.0=py38h578d9bd_0
       - ipykernel=5.5.5=py38hd0cf306_0
-      - ipython=7.24.0=py38hd0cf306_0
+      - ipython=7.24.1=py38hd0cf306_0
       - jbig=2.1=h7f98852_2003
       - jedi=0.18.0=py38h578d9bd_2
       - jpeg=9d=h36c2ea0_0
@@ -936,7 +933,7 @@ env_specs:
       - openjpeg=2.4.0=hb52868f_1
       - openssl=1.1.1k=h7f98852_0
       - pandas=1.2.4=py38h1abd341_0
-      - pandoc=2.14=h7f98852_0
+      - pandoc=2.14.0.1=h7f98852_0
       - pillow=8.2.0=py38ha0e1e83_1
       - psycopg2=2.8.6=py38h497a2fe_3
       - pylint=2.7.2=py38h578d9bd_0
@@ -970,9 +967,9 @@ env_specs:
       - coverage=5.5=py38h96a0964_0
       - cryptography=3.4.7=py38h1fa4640_0
       - freetype=2.10.4=h4cff582_1
-      - importlib-metadata=4.4.0=py38h50d1736_0
+      - importlib-metadata=4.5.0=py38h50d1736_0
       - ipykernel=5.5.5=py38h6c79ece_0
-      - ipython=7.24.0=py38h6c79ece_0
+      - ipython=7.24.1=py38h6c79ece_0
       - jbig=2.1=h0d85af4_2003
       - jedi=0.18.0=py38h50d1736_2
       - jpeg=9d=hbcb3906_0
@@ -1003,7 +1000,7 @@ env_specs:
       - openjpeg=2.4.0=h6e7aa92_1
       - openssl=1.1.1k=h0d85af4_0
       - pandas=1.2.4=py38h1f261ad_0
-      - pandoc=2.14=h0d85af4_0
+      - pandoc=2.14.0.1=h0d85af4_0
       - pillow=8.2.0=py38h83525de_1
       - psycopg2=2.8.6=py38h05cbfbd_3
       - pylint=2.7.2=py38h50d1736_0
@@ -1037,10 +1034,10 @@ env_specs:
       - coverage=5.5=py38h294d835_0
       - cryptography=3.4.7=py38hd7da0ea_0
       - freetype=2.10.4=h546665d_1
-      - importlib-metadata=4.4.0=py38haa244fe_0
+      - importlib-metadata=4.5.0=py38haa244fe_0
       - intel-openmp=2021.2.0=h57928b3_616
       - ipykernel=5.5.5=py38h43734a8_0
-      - ipython=7.24.0=py38h43734a8_0
+      - ipython=7.24.1=py38h43734a8_0
       - jbig=2.1=h8d14728_2003
       - jedi=0.18.0=py38haa244fe_2
       - jpeg=9d=h8ffe710_0
@@ -1066,7 +1063,7 @@ env_specs:
       - openjpeg=2.4.0=hb211442_1
       - openssl=1.1.1k=h8ffe710_0
       - pandas=1.2.4=py38h60cbd38_0
-      - pandoc=2.14=h8ffe710_0
+      - pandoc=2.14.0.1=h8ffe710_0
       - pillow=8.2.0=py38h9273828_1
       - psycopg2=2.8.6=py38hd8c33c5_3
       - pylint=2.7.2=py38haa244fe_0
@@ -1095,8 +1092,6 @@ env_specs:
       - zeromq=4.3.4=h0e60522_0
       - zlib=1.2.11=h62dcd97_1010
       - zstd=1.5.0=h6255e5f_0
-      pip:
-      - django-tables2==2.4.0
   database:
     locked: true
     env_spec_hash: d063e7755412bf620dcf0ec62647a1fcc3a23a03

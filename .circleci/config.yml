@@ -35,4 +35,4 @@ jobs:
       - run: anaconda-project run robot -v SERVER_PORT:8000 -d smoke_test_artifacts test/suites/smoke_tests.robot
       - run: anaconda-project run robot -v SERVER_PORT:8000 -d workflow_test_artifacts test/suites/workflow_tests.robot
       - run: anaconda-project run setup.py sdist bdist_wheel
-      # - run: anaconda-project run conda build conda-recipe
+      - run: anaconda-project run conda build conda-recipe
