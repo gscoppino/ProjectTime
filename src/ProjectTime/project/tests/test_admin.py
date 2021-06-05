@@ -30,6 +30,12 @@ class ProjectModelAdminTestCase(TestCase):
         self.assertEqual(self.model_admin.latest_charge(obj),
                          obj.db_latest_charge.date())
 
+    def test_project_admin_list_display_when_no_charge(self):
+        self.assertTrue('latest_charge' in self.model_admin.list_display)
+        obj = types.SimpleNamespace()
+        obj.db_latest_charge = None
+        self.assertIsNone(self.model_admin.latest_charge(obj))
+
     def test_project_admin_latest_charge_field_is_sortable_in_list(self):
         self.assertTrue(hasattr(self.model_admin.latest_charge,
                                 'admin_order_field'))
