@@ -1,4 +1,8 @@
+""" Defines the fields used by forms in this app
+"""
+
 from django.forms import SplitDateTimeField
+
 from ProjectTime.project.widgets import HTML5SplitDateTimeWidget
 
 

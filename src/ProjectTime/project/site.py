@@ -6,10 +6,9 @@ from django.template.response import TemplateResponse
 from django.urls import path, reverse_lazy
 from django.utils import timezone
 
-from ProjectTime.timezone.views import TimezoneView
-from ProjectTime.project.utils import reporting as report_helpers
-
 from ProjectTime.project.models import Project
+from ProjectTime.project.utils import reporting as report_helpers
+from ProjectTime.timezone.views import TimezoneView
 
 
 class ProjectTimeAdminSite(admin.AdminSite):

@@ -18,8 +18,8 @@ from django.conf import settings
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
-from ProjectTime.project.admin import admin_site
 from ProjectTime.project import views as project_views
+from ProjectTime.project.admin import admin_site
 
 urlpatterns = [
     path('', project_views.IndexView.as_view(), name='login'),

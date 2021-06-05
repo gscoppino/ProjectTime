@@ -9,18 +9,13 @@ class ValidateModelMixin:  # pylint: disable=too-few-public-methods
         before saving changes.
     """
 
-    def validate_and_save(self, *args, full_clean__exclude=None, **kwargs):
+    def validate_and_save(self, *args, **kwargs):
         """ Validate and save changes to the model instance.
             Returns the model instance afterwards, so can be used like so:
-            ```
+
             model_instance = AModel(field=value, f2=v2).validate_and_save()
-            ```
-            Fields to be excluded from validation can be passed like so:
-            ```
-            model_instance.validate_and_save(full_clean__exclude=('f2))
-            ```
         """
-        self.full_clean(exclude=full_clean__exclude)
+        self.full_clean()
         self.save(*args, **kwargs)
         return self
 

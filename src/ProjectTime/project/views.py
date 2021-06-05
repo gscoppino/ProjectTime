@@ -1,18 +1,20 @@
-from django.contrib.auth.views import LoginView
+""" Defines the routable views for this app
+"""
+
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.http.response import HttpResponseRedirect
 from django.urls.base import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic.base import View, TemplateView
-from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView
 from django_filters.views import FilterView
 from django_tables2 import SingleTableMixin
 
-from ProjectTime.project.models import Project, Charge
-from ProjectTime.project.tables import ChargeTable, ProjectTable
-from ProjectTime.project.filters import ProjectFilter, ChargeFilter
+from ProjectTime.project.filters import ChargeFilter, ProjectFilter
 from ProjectTime.project.forms import ChargeModelForm
+from ProjectTime.project.models import Charge, Project
+from ProjectTime.project.tables import ChargeTable, ProjectTable
 from ProjectTime.project.utils import reporting as report_helpers
 from ProjectTime.timezone.forms import TimezoneForm
 
@@ -64,7 +66,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class ProjectListView(SingleTableMixin, FilterView):
+class ProjectListView(LoginRequiredMixin, SingleTableMixin, FilterView):
     model = Project
     table_class = ProjectTable
     table_pagination = {'per_page': 10}
@@ -79,19 +81,19 @@ class ProjectListView(SingleTableMixin, FilterView):
         return kwargs
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     fields = ('name', 'active',)
     success_url = reverse_lazy('dashboard')
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = ('name', 'active',)
     success_url = reverse_lazy('dashboard')
 
 
-class ChargeListView(SingleTableMixin, FilterView):
+class ChargeListView(LoginRequiredMixin, SingleTableMixin, FilterView):
     model = Charge
     table_class = ChargeTable
     table_pagination = {'per_page': 10}
@@ -106,7 +108,7 @@ class ChargeListView(SingleTableMixin, FilterView):
         return kwargs
 
 
-class ChargeCreateView(CreateView):
+class ChargeCreateView(LoginRequiredMixin, CreateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
@@ -120,18 +122,17 @@ class ChargeCreateView(CreateView):
         return initial
 
 
-class ChargeUpdateView(UpdateView):
+class ChargeUpdateView(LoginRequiredMixin, UpdateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
 
 
-class ChargeCloseView(View):
+class ChargeCloseView(LoginRequiredMixin, View):
     http_method_names = ['post']
 
     def post(self, _, pk):
         charge = Charge.objects.get(pk=pk)
         charge.closed = True
-        charge.full_clean()
-        charge.save()
+        charge.validate_and_save()
         return HttpResponseRedirect(reverse('dashboard'))

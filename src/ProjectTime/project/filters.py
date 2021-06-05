@@ -1,5 +1,9 @@
+""" Defines the filters used by views in this app
+"""
+
 import django_filters as filters
-from ProjectTime.project.models import Project, Charge
+
+from ProjectTime.project.models import Charge, Project
 
 
 class ProjectFilter(filters.FilterSet):

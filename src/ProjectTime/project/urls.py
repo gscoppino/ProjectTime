@@ -1,16 +1,10 @@
 from django.urls import path
-from ProjectTime.timezone.views import TimezoneView
-from ProjectTime.project.views import (
-    ChargeCreateView,
-    ChargeListView,
-    ChargeUpdateView,
-    ChargeCloseView,
-    DashboardView,
-    ProjectCreateView,
-    ProjectUpdateView,
-    ProjectListView,
-)
 
+from ProjectTime.project.views import (ChargeCloseView, ChargeCreateView,
+                                       ChargeListView, ChargeUpdateView,
+                                       DashboardView, ProjectCreateView,
+                                       ProjectListView, ProjectUpdateView)
+from ProjectTime.timezone.views import TimezoneView
 
 urlpatterns = [
     path('dashboard', DashboardView.as_view(), name='dashboard'),

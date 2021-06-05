@@ -1,14 +1,15 @@
-import pandas as pd
-
 from datetime import timedelta
+
+import pandas as pd
 from django.test import TestCase
 from django.utils import timezone
 
-from ProjectTime.project.models import Project, Charge
+from ProjectTime.project.models import Charge, Project
 from ProjectTime.project.utils import reporting as report_helpers
 
 from .utils.charge import ChargeFactory
 from .utils.general import get_start_of_today
+
 
 class ReportingHelpersTestCase(TestCase):
     def test_visualization_creation_whitebox(self):

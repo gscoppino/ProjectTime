@@ -1,6 +1,10 @@
+""" Defines the forms used by views in this app
+"""
+
 from django.forms import ModelForm
-from ProjectTime.project.models import Charge
+
 from ProjectTime.project.fields import HTML5SplitDateTimeField
+from ProjectTime.project.models import Charge
 
 
 class ChargeModelForm(ModelForm):
