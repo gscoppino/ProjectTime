@@ -2,12 +2,11 @@ from unittest.mock import MagicMock, patch
 
 import pandas as pd
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
-from django.test import TestCase
 
 from ProjectTime.project.models import Project
 from ProjectTime.project.utils import reporting as report_helpers
+from ProjectTime.project.tests.utils.testcase import AdminUserTestCase
 
 
 def get_mock_admin_context():
@@ -20,18 +19,6 @@ def get_mock_monthly_summary_dataframe():
 
 def get_mock_monthly_summary_chart():
     return MagicMock(return_value=('script', '<div></div>'))
-
-
-class AdminUserTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_superuser('test', '', 'test')
-
-    # Helper methods
-    def performLogin(self):
-        logged_in = self.client.login(username='test', password='test')
-        if not logged_in:
-            self.fail('Unable to login.')
 
 
 class ProjectTimeAdminSiteTimezoneFormViewTestCase(AdminUserTestCase):

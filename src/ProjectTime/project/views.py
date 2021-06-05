@@ -66,7 +66,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class ProjectListView(SingleTableMixin, FilterView):
+class ProjectListView(LoginRequiredMixin, SingleTableMixin, FilterView):
     model = Project
     table_class = ProjectTable
     table_pagination = {'per_page': 10}
@@ -81,19 +81,19 @@ class ProjectListView(SingleTableMixin, FilterView):
         return kwargs
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     fields = ('name', 'active',)
     success_url = reverse_lazy('dashboard')
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = ('name', 'active',)
     success_url = reverse_lazy('dashboard')
 
 
-class ChargeListView(SingleTableMixin, FilterView):
+class ChargeListView(LoginRequiredMixin, SingleTableMixin, FilterView):
     model = Charge
     table_class = ChargeTable
     table_pagination = {'per_page': 10}
@@ -108,7 +108,7 @@ class ChargeListView(SingleTableMixin, FilterView):
         return kwargs
 
 
-class ChargeCreateView(CreateView):
+class ChargeCreateView(LoginRequiredMixin, CreateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
@@ -122,18 +122,17 @@ class ChargeCreateView(CreateView):
         return initial
 
 
-class ChargeUpdateView(UpdateView):
+class ChargeUpdateView(LoginRequiredMixin, UpdateView):
     model = Charge
     form_class = ChargeModelForm
     success_url = reverse_lazy('dashboard')
 
 
-class ChargeCloseView(View):
+class ChargeCloseView(LoginRequiredMixin, View):
     http_method_names = ['post']
 
     def post(self, _, pk):
         charge = Charge.objects.get(pk=pk)
         charge.closed = True
-        charge.full_clean()
-        charge.save()
+        charge.validate_and_save()
         return HttpResponseRedirect(reverse('dashboard'))
