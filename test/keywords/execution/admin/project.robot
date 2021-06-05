@@ -1,7 +1,7 @@
 *** Settings ***
 Library             SeleniumLibrary
 
-Resource            ../navigation/navigation.robot
+Resource            ../../navigation/admin.robot
 
 *** Keywords ***
 The site displays the projects list

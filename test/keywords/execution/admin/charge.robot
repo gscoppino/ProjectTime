@@ -1,7 +1,7 @@
 *** Settings ***
 Library             SeleniumLibrary
 
-Resource            ../navigation/navigation.robot
+Resource            ../../navigation/admin.robot
 
 *** Keywords ***
 The site displays the charges list
@@ -34,4 +34,3 @@ The user creates a charge for "${name}" with start date "${start_date}", a start
     Input Text                  end_time_1      ${end_time}
     Click Button                Save
     Title Should Be             Select charge to change | ProjectTime
-
