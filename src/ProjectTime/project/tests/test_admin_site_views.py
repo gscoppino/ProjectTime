@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from unittest.mock import MagicMock, patch
 
 import pandas as pd

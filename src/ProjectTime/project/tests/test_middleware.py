@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from unittest.mock import MagicMock, patch
 
 from django.contrib import messages

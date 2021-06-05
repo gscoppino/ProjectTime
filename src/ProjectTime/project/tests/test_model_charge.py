@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from datetime import datetime, timedelta
 
 from django.core.exceptions import ValidationError

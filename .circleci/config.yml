@@ -20,14 +20,14 @@ jobs:
       - run: anaconda-project prepare --env-spec application
       - run: anaconda-project prepare --env-spec test
       - run: anaconda-project prepare --env-spec test-acceptance
-      - run: anaconda-project run pylint src/ProjectTime --fail-under 8
+      - run: anaconda-project run pylint src/ProjectTime --fail-under 8.5
       - run: anaconda-project run pg_ctl initdb
       - run:
           command: anaconda-project run postgres
           background: true
       - run: sleep 10
       - run: anaconda-project run coverage run manage.py test
-      - run: anaconda-project run coverage report --fail-under=80
+      - run: anaconda-project run coverage report --fail-under=90
       - run:
           command: anaconda-project run manage.py testserver --addrport 8000 --noinput ../../test/fixtures/admin_user.json
           background: true

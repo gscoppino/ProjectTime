@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from datetime import timedelta
 
 import pandas as pd
@@ -77,7 +79,8 @@ class ReportingHelpersTestCase(TestCase):
 
         # Should return data on all projects
 
-        dataframe = report_helpers.get_monthly_summary_series(timezone.localtime())
+        dataframe = report_helpers.get_monthly_summary_series(
+            timezone.localtime())
 
         self.assertIsInstance(dataframe, pd.DataFrame)
         self.assertEqual(len(dataframe), 2)
@@ -102,14 +105,15 @@ class ReportingHelpersTestCase(TestCase):
         self.assertIsInstance(project_a_dataframe.iloc[0].color, str)
         self.assertIsInstance(project_b_dataframe.iloc[0].color, str)
 
-        div, chart = report_helpers.get_monthly_summary_chart_components(dataframe)
+        div, chart = report_helpers.get_monthly_summary_chart_components(
+            dataframe)
         self.assertGreater(len(div), 0)
         self.assertGreater(len(chart), 0)
 
         # Should return data on only the requested projects
 
         dataframe = report_helpers.get_monthly_summary_series(timezone.localtime(),
-                                                    project_ids=[project_a.pk])
+                                                              project_ids=[project_a.pk])
 
         self.assertIsInstance(dataframe, pd.DataFrame)
         self.assertEqual(len(dataframe), 1)
@@ -124,6 +128,7 @@ class ReportingHelpersTestCase(TestCase):
         self.assertIsInstance(dataframe.iloc[0].angle, float)
         self.assertIsInstance(dataframe.iloc[0].color, str)
 
-        div, chart = report_helpers.get_monthly_summary_chart_components(dataframe)
+        div, chart = report_helpers.get_monthly_summary_chart_components(
+            dataframe)
         self.assertGreater(len(div), 0)
         self.assertGreater(len(chart), 0)

@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from datetime import timedelta
 from django.urls import reverse
 from django.utils import timezone

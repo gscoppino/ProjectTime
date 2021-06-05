@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 import types
 from datetime import timedelta
 
