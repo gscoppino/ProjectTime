@@ -1,3 +1,4 @@
+import pandas as pd
 from datetime import timedelta
 
 from django.test import TestCase
@@ -31,6 +32,9 @@ class ProjectQuerySetTestCase(TestCase):
                              .get(pk=self.project.pk))
 
         self.assertEqual(annotated_project.db_latest_charge, tomorrow)
+
+    def test_project_queryset_can_be_converted_to_pandas(self):
+        self.assertIsInstance(Project.objects.to_pandas(), pd.DataFrame)
 
 
 class ChargeQuerySetTestCase(TestCase):
@@ -77,3 +81,6 @@ class ChargeQuerySetTestCase(TestCase):
 
         total_time_charged = Charge.objects.aggregate_time_charged()
         self.assertEqual(total_time_charged, timedelta(hours=9))
+
+    def test_charge_queryset_can_be_converted_to_pandas(self):
+        self.assertIsInstance(Charge.objects.to_pandas(), pd.DataFrame)
