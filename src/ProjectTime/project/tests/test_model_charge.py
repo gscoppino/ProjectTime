@@ -43,14 +43,6 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
         field = get_model_field(Charge, 'end_time')
         self.assertGreater(len(field.help_text), 0)
 
-    def test_charge_end_time_field_is_not_required(self):
-        end_time_field = get_model_field(Charge, 'end_time')
-        self.assertTrue(end_time_field.blank)
-
-    def test_charge_end_time_field_is_nullable(self):
-        end_time_field = get_model_field(Charge, 'end_time')
-        self.assertTrue(end_time_field.null)
-
     def test_charge_closed_field_has_explicit_domain_name(self):
         field = get_model_field(Charge, 'closed')
         self.assertEqual(field.verbose_name, 'closed')
@@ -58,18 +50,6 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
     def test_charge_closed_field_has_description(self):
         field = get_model_field(Charge, 'closed')
         self.assertGreater(len(field.help_text), 0)
-
-    def test_charge_closed_field__is_not_required(self):
-        closed_field = get_model_field(Charge, 'closed')
-        self.assertTrue(closed_field.blank)
-
-    def test_charge_closed_field_is_not_nullable(self):
-        closed_field = get_model_field(Charge, 'closed')
-        self.assertFalse(closed_field.null)
-
-    def test_charge_closed_field_is_set_to_false_unless_otherwise_specified(self):
-        closed_field = get_model_field(Charge, 'closed')
-        self.assertFalse(closed_field.default)
 
     def test_charge_has_descriptive_string_representation(self):
         start_datetime = timezone.make_aware(
@@ -140,7 +120,6 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
         self.assertEqual(charge.start_time, today)
         self.assertEqual(charge.end_time, None)
         self.assertEqual(charge.time_charged, timedelta_zero)
-        self.assertEqual(charge.closed, False)
 
     def test_charge_project_must_be_active_project(self):
         start_datetime = timezone.make_aware(
@@ -165,6 +144,74 @@ class ChargeModelTestCase(ValidationMixin, TestCase):
             field='project',
             error_code='project_must_be_active'
         )
+
+    def test_charge_end_time_field_is_not_required(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+
+        Charge(
+            project=self.project,
+            start_time=today
+        ).validate_and_save()
+
+    def test_charge_end_time_field_defaults_to_null(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+
+        charge = Charge(
+            project=self.project,
+            start_time=today
+        ).validate_and_save()
+
+        self.assertIsNone(charge.end_time)
+
+    def test_charge_end_time_field_is_set_to_given_value(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+        end_time = today + timedelta(minutes=1)
+        charge = Charge(
+            project=self.project,
+            start_time=today,
+            end_time=end_time
+        ).validate_and_save()
+
+        self.assertEqual(charge.end_time, end_time)
+
+    def test_charge_closed_field_is_not_required(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+
+        Charge(
+            project=self.project,
+            start_time=today
+        ).validate_and_save()
+
+    def test_charge_closed_field_defaults_to_false(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+
+        charge = Charge(
+            project=self.project,
+            start_time=today
+        ).validate_and_save()
+
+        self.assertFalse(charge.closed)
+
+    def test_charge_closed_field_is_set_to_given_value(self):
+        today = timezone.now().replace(hour=0, minute=0, second=0)
+
+        charge = Charge(
+            project=self.project,
+            start_time=today,
+            end_time=today+timedelta(minutes=1),
+            closed=False
+        ).validate_and_save()
+
+        self.assertFalse(charge.closed)
+
+        charge = Charge(
+            project=self.project,
+            start_time=today,
+            end_time=today+timedelta(minutes=1),
+            closed=True
+        ).validate_and_save()
+
+        self.assertTrue(charge.closed)
 
     def test_charge_cannot_be_created_with_end_time_before_start_time(self):
         start_datetime = timezone.make_aware(

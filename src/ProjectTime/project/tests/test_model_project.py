@@ -35,14 +35,6 @@ class SimpleProjectModelTestCase(ValidationMixin, SimpleTestCase):
         field = get_model_field(Project, 'active')
         self.assertGreater(len(field.help_text), 0)
 
-    def test_project_active_field_is_not_required(self):
-        active_field = get_model_field(Project, 'active')
-        self.assertEqual(active_field.blank, True)
-
-    def test_project_active_field_is_set_to_true_unless_otherwise_specified(self):
-        active_field = get_model_field(Project, 'active')
-        self.assertEqual(active_field.default, True)
-
     def test_project_has_descriptive_string_representation(self):
         project = Project(name='Test')
         self.assertEqual(str(project), 'Test')
@@ -62,7 +54,6 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
 
         self.assertIsNotNone(project.pk)
         self.assertEqual(project.name, test_name)
-        self.assertEqual(project.active, True)
 
     def test_project_name_cannot_exceed_255_characters_in_database(self):
         with self.assertRaises(DataError):
@@ -88,6 +79,20 @@ class ProjectModelTestCase(ValidationMixin, TestCase):
         Project(name=test_name).validate_and_save()
         with self.assertRaises(IntegrityError):
             Project.objects.create(name=test_name)
+
+    def test_project_active_field_is_not_required(self):
+        Project(name='Test').validate_and_save()
+
+    def test_project_active_field_defaults_to_true(self):
+        project = Project(name='Test').validate_and_save()
+        self.assertTrue(project.active)
+
+    def test_project_active_field_is_set_to_given_value(self):
+        project = Project(name='Test', active=True).validate_and_save()
+        self.assertTrue(project.active)
+
+        project = Project(name='Test 2', active=False).validate_and_save()
+        self.assertFalse(project.active)
 
     def test_project_cannot_be_modified_when_inactive(self):
         project = Project(name='Test', active=False).validate_and_save()
