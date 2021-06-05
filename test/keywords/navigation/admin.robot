@@ -6,7 +6,7 @@ Navigate To A Blank Page
     Go To    about:blank
 
 Navigate To The Site Root
-    Go To    ${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}
+    Go To    ${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}${SERVER_PATH}admin
 
 Navigate To The Home Page
     ${here} =    Run Keyword And Return Status
