@@ -16,6 +16,14 @@ Navigate To The Project List
     Navigate To The Home Page
     Click Link    Projects
 
+Navigate To The Add Project Page
+    Navigate To The Project List
+    Click Link    Create
+
 Navigate To The Charges List
     Navigate To The Home Page
     Click Link    Charges
+
+Navigate To The Add Charge Page
+    Navigate To The Charges List
+    Click Link    Create

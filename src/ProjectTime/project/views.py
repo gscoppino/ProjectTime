@@ -84,13 +84,13 @@ class ProjectListView(LoginRequiredMixin, SingleTableMixin, FilterView):
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     fields = ('name', 'active',)
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('project:project-list')
 
 
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     fields = ('name', 'active',)
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('project:project-list')
 
 
 class ChargeListView(LoginRequiredMixin, SingleTableMixin, FilterView):
@@ -111,7 +111,7 @@ class ChargeListView(LoginRequiredMixin, SingleTableMixin, FilterView):
 class ChargeCreateView(LoginRequiredMixin, CreateView):
     model = Charge
     form_class = ChargeModelForm
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('project:charge-list')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -125,7 +125,7 @@ class ChargeCreateView(LoginRequiredMixin, CreateView):
 class ChargeUpdateView(LoginRequiredMixin, UpdateView):
     model = Charge
     form_class = ChargeModelForm
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('project:charge-list')
 
 
 class ChargeCloseView(LoginRequiredMixin, View):
