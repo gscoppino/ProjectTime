@@ -31,6 +31,22 @@ Admin Can Create A Project
     The site displays the projects list
     The site displays "Test Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
 
+Admin Changes The Name Of An Existing Project
+    The user logs in to the site with username "admin" and password "admin"
+    The user creates a project named "Test Project (${SUITE_NAME}-${TEST_NAME})"
+    The user goes to the projects list
+    The user clicks the "Test Project (${SUITE_NAME}-${TEST_NAME})" link
+    The site displays the text "Update Project \"Test Project (${SUITE_NAME}-${TEST_NAME})\""
+    The site displays "Test Project (${SUITE_NAME}-${TEST_NAME})" in the "name" text field
+    The site displays the "active" checkbox as checked
+    The site displays the "Submit" button
+    The user clears the "name" text field
+    The user types "New Project (${SUITE_NAME}-${TEST_NAME})" into the "name" text field
+    The user clicks the "Submit" button
+    The site displays the projects list
+    The site displays "New Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
+    The site does not display "Test Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
+
 Admin Can Create A Charge
     The user logs in to the site with username "admin" and password "admin"
     The user uses the timezone prompt to set their timezone to "America/New_York"
@@ -43,3 +59,15 @@ Admin Can Create A Charge
     The user clicks the "Submit" button
     The site displays the charges list
     The site displays "Test Project (${SUITE_NAME}-${TEST_NAME})" in the charges list
+
+Admin Adds An End Time To An Existing Charge
+    The user logs in to the site with username "admin" and password "admin"
+    The user uses the timezone prompt to set their timezone to "America/New_York"
+    The user creates a project named "Test Project (${SUITE_NAME}-${TEST_NAME})"
+    The user creates a charge for "Test Project (${SUITE_NAME}-${TEST_NAME})" with start date "1970-01-01" and start time "09:00:00"
+    The user goes to the charges list
+    The user clicks the "Test Project (${SUITE_NAME}-${TEST_NAME})" link
+    The user types "1970-01-01" into the "end_time_0" text field
+    The user types "17:00:00" into the "end_time_1" text field
+    The user clicks the "Submit" button
+    The site displays the charges list

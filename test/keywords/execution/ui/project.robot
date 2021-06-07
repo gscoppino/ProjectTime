@@ -10,6 +10,9 @@ The site displays the projects list
 The site displays "${project name}" in the projects list
     Element Should Contain    tag:table    ${project name}
 
+The site does not display "${project name}" in the projects list
+    Element Should Not Contain    tag:table    ${project name}
+
 The user goes to the projects list
     Navigate To The Project List
 
