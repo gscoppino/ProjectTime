@@ -22,7 +22,7 @@ Suite Teardown    Run Keywords
 ...               Close All Browsers
 
 *** Test Cases ***
-Admin Can Create A Project
+User Can Create A Project
     The user logs in to the site with username "admin" and password "admin"
     The user goes to the projects list
     The user clicks the "Create" link
@@ -31,7 +31,7 @@ Admin Can Create A Project
     The site displays the projects list
     The site displays "Test Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
 
-Admin Changes The Name Of An Existing Project
+User Changes The Name Of An Existing Project
     The user logs in to the site with username "admin" and password "admin"
     The user creates a project named "Test Project (${SUITE_NAME}-${TEST_NAME})"
     The user goes to the projects list
@@ -47,7 +47,7 @@ Admin Changes The Name Of An Existing Project
     The site displays "New Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
     The site does not display "Test Project (${SUITE_NAME}-${TEST_NAME})" in the projects list
 
-Admin Can Create A Charge
+User Can Create A Charge
     The user logs in to the site with username "admin" and password "admin"
     The user uses the timezone prompt to set their timezone to "America/New_York"
     The user creates a project named "Test Project (${SUITE_NAME}-${TEST_NAME})"
@@ -60,7 +60,7 @@ Admin Can Create A Charge
     The site displays the charges list
     The site displays "Test Project (${SUITE_NAME}-${TEST_NAME})" in the charges list
 
-Admin Adds An End Time To An Existing Charge
+User Adds An End Time To An Existing Charge
     The user logs in to the site with username "admin" and password "admin"
     The user uses the timezone prompt to set their timezone to "America/New_York"
     The user creates a project named "Test Project (${SUITE_NAME}-${TEST_NAME})"
