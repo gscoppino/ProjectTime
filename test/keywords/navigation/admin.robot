@@ -22,9 +22,9 @@ Navigate To The Add Project Page
 
 Navigate To The Charges List
     Navigate To The Home Page
-    Click Link    Charges
+    Click Link    Time increments
 
 Navigate To The Add Charge Page
     Navigate To The Charges List
-    Click Link    Add charge
-    Title Should Be    Add charge | ProjectTime
+    Click Link    Add time increment
+    Title Should Be    Add time increment | ProjectTime

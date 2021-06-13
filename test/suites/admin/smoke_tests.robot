@@ -62,15 +62,15 @@ Admin Can View The Add Project Page
 
 Admin Can View The Charge List
     The user logs in to the site with username "admin" and password "admin"
-    The site displays the "Charges" link
-    The user clicks the "Charges" link
-    The site displays the text "Select charge to change"
+    The site displays the "Time increments" link
+    The user clicks the "Time increments" link
+    The site displays the text "Select time increment to change"
 
 Admin Can View The Add Charge Page
     The user logs in to the site with username "admin" and password "admin"
     The user goes to the charges list
-    The user clicks the "Add charge" link
-    The site displays the text "Add charge"
+    The user clicks the "Add time increment" link
+    The site displays the text "Add time increment"
     The site displays the "project" selection field
     The site displays the "start_time_0" text field
     The site displays the "start_time_1" text field

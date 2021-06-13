@@ -14,7 +14,7 @@ class ChargeAdmin(admin.ModelAdmin):
     """
     date_hierarchy = 'start_time'
     list_display = ('project', 'start_time', 'end_time',
-                    'time_charged', 'closed',)
+                    'time_spent', 'closed',)
     list_editable = ('closed',)
     list_filter = ('project', 'start_time', 'closed',)
     ordering = ('start_time',)
@@ -35,7 +35,7 @@ class ChargeAdmin(admin.ModelAdmin):
         return ()
 
     @admin.display(ordering='db_time_charged')
-    def time_charged(self, obj):
+    def time_spent(self, obj):
         return obj.db_time_charged
 
 
@@ -44,7 +44,7 @@ class ProjectAdmin(admin.ModelAdmin):
     """ A ModelAdmin for projects. The latest charge made on each project is
         displayed alongside the project information.
     """
-    list_display = ('name', 'latest_charge', 'active',)
+    list_display = ('name', 'last_time_increment', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
     ordering = ('name',)
@@ -59,7 +59,7 @@ class ProjectAdmin(admin.ModelAdmin):
         return ('name',)
 
     @admin.display(ordering='db_latest_charge')
-    def latest_charge(self, obj):
+    def last_time_increment(self, obj):
         if not obj.db_latest_charge:
             return None
 

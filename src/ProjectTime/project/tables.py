@@ -30,7 +30,7 @@ class ChargeTable(tables.Table):
             args=(record.pk,))
     )
 
-    db_time_charged = tables.Column(verbose_name='Time Charged')
+    db_time_charged = tables.Column(verbose_name='Time Spent')
 
     class Meta:
         model = Charge

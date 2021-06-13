@@ -2,9 +2,9 @@
 
 {% block title %}
     {% if not object %}
-    ProjectTime | Create Charge
+    ProjectTime | Create Time Increment
     {% else %}
-    ProjectTime | Update Charge for "{{object.project.name}}"
+    ProjectTime | Update Time Increment for "{{object.project.name}}"
     {% endif %}
 {% endblock %}
 {% block content %}
@@ -12,12 +12,12 @@
     <div class="grid-container margin-top-2">
         <nav aria-label="You are here:" role="navigation">
             <ul class="breadcrumbs">
-                <li><a href="{% url 'project:charge-list' %}">Charges</a></li>
+                <li><a href="{% url 'project:charge-list' %}">Time Increments</a></li>
                 <li><span class="show-for-sr">Current: </span>
                     {% if not object %}
-                    Create Charge
+                    Create Time Increment
                     {% else %}
-                    Update Charge for "{{ object.project.name }}"
+                    Update Time Increment for "{{ object.project.name }}"
                     {% endif %}
                 </li>
             </ul>
@@ -26,7 +26,7 @@
     <main class="grid-container margin-top-1">
         <div class="card">
             <div class="card-divider">
-                <h4>Charge Form</h4>
+                <h4>Time Increment Form</h4>
             </div>
             <div class="card-section">
                 <form data-abide novalidate method="post">

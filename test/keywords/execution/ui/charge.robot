@@ -4,8 +4,8 @@ Resource          ../../navigation/ui.robot
 
 *** Keywords ***
 The site displays the charges list
-    Title Should Be    ProjectTime | Charges
-    Page Should Contain    Charges
+    Title Should Be    ProjectTime | Time Increments
+    Page Should Contain    Time Increments
 
 The site displays "${charge name}" in the charges list
     Element Should Contain    tag:table    ${charge name}
@@ -22,7 +22,7 @@ The user creates a charge for "${name}" with start date "${start_date}" and star
     Input Text                  start_time_0    ${start_date}
     Input Text                  start_time_1    ${start_time}
     Click Button                Submit
-    Title Should Be             ProjectTime | Charges
+    Title Should Be             ProjectTime | Time Increments
 
 The user creates a charge for "${name}" with start date "${start_date}", a start time of "${start_time}", and an end time of "${end_time}"
     Navigate To The Add Charge Page
@@ -32,4 +32,4 @@ The user creates a charge for "${name}" with start date "${start_date}", a start
     Input Text                  end_time_0      ${start_date}
     Input Text                  end_time_1      ${end_time}
     Click Button                Submit
-    Title Should Be             ProjectTime | Charges
+    Title Should Be             ProjectTime | Time Increments
