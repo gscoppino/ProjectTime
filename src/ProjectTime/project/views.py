@@ -116,7 +116,7 @@ class ChargeCreateView(LoginRequiredMixin, CreateView):
     def get_initial(self):
         initial = super().get_initial()
 
-        now = timezone.localtime()
+        now = timezone.localtime().replace(second=0, microsecond=0)
         initial['start_time'] = now
 
         return initial
