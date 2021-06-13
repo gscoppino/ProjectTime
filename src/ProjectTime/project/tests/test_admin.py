@@ -26,23 +26,23 @@ class ProjectModelAdminTestCase(TestCase):
             self.assertTrue(hasattr(project, 'db_latest_charge'))
 
     def test_project_admin_list_display_contains_latest_charge(self):
-        self.assertTrue('latest_charge' in self.model_admin.list_display)
+        self.assertTrue('last_time_increment' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
         obj.db_latest_charge = timezone.now()
-        self.assertEqual(self.model_admin.latest_charge(obj),
+        self.assertEqual(self.model_admin.last_time_increment(obj),
                          obj.db_latest_charge.date())
 
     def test_project_admin_list_display_when_no_charge(self):
-        self.assertTrue('latest_charge' in self.model_admin.list_display)
+        self.assertTrue('last_time_increment' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
         obj.db_latest_charge = None
-        self.assertIsNone(self.model_admin.latest_charge(obj))
+        self.assertIsNone(self.model_admin.last_time_increment(obj))
 
     def test_project_admin_latest_charge_field_is_sortable_in_list(self):
-        self.assertTrue(hasattr(self.model_admin.latest_charge,
+        self.assertTrue(hasattr(self.model_admin.last_time_increment,
                                 'admin_order_field'))
         self.assertEqual(
-            self.model_admin.latest_charge.admin_order_field,
+            self.model_admin.last_time_increment.admin_order_field,
             'db_latest_charge'
         )
 
@@ -87,16 +87,16 @@ class ChargeModelAdminTestCase(TestCase):
             self.assertTrue(hasattr(charge, 'db_time_charged'))
 
     def test_charge_admin_list_display_contains_time_charged(self):
-        self.assertTrue('time_charged' in self.model_admin.list_display)
+        self.assertTrue('time_spent' in self.model_admin.list_display)
         obj = types.SimpleNamespace()
         obj.db_time_charged = 'Test'
-        self.assertEqual(self.model_admin.time_charged(obj), 'Test')
+        self.assertEqual(self.model_admin.time_spent(obj), 'Test')
 
     def test_charge_admin_time_charged_field_is_sortable_in_list(self):
-        self.assertTrue(hasattr(self.model_admin.time_charged,
+        self.assertTrue(hasattr(self.model_admin.time_spent,
                                 'admin_order_field'))
         self.assertEqual(
-            self.model_admin.time_charged.admin_order_field, 'db_time_charged'
+            self.model_admin.time_spent.admin_order_field, 'db_time_charged'
         )
 
     def test_charge_admin_has_all_fields_editable_when_creating_new_charge(self):

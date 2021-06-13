@@ -46,7 +46,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Last Charge</th>
+                                    <th>Last Time Increment</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -69,9 +69,9 @@
             </section>
             <section class="card">
                 <header class="card-divider flex-container flex-dir-row align-middle">
-                    <h4 class="margin-0">Open Charges</h4>
+                    <h4 class="margin-0">Open Time Increments</h4>
                     <div class="flex-child-grow"></div>
-                    <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Charge</a>
+                    <a class="margin-left-4 button" href="{% url 'project:charge-create' %}">+ Create Time Increment</a>
                 </header>
                 <div class="card-section padding-0">
                     <div class="table-height table-scroll">
@@ -81,7 +81,7 @@
                                     <th>Project</th>
                                     <th>Start</th>
                                     <th>End</th>
-                                    <th>Time Charged</th>
+                                    <th>Time Spent</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -107,11 +107,11 @@
                                 </tr>
                             {% empty %}
                                 <tr>
-                                    <td colspan="4">There are no open charges.</td>
+                                    <td colspan="4">There are no open time increments.</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <caption class="caption-bottom text-right">Total Time Charged: {{ open_charges.aggregate_time_charged }}</caption>
+                            <caption class="caption-bottom text-right">Total Time Spent: {{ open_charges.aggregate_time_charged }}</caption>
                         </table>
                     </div>
                 </div>

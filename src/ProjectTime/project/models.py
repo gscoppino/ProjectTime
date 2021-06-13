@@ -61,6 +61,7 @@ class Charge(models.Model, ValidateModelMixin):
     objects = ChargeQuerySet.as_manager()
 
     class Meta:  # pylint: disable=too-few-public-methods
+        verbose_name = 'time increment'
         get_latest_by = ('start_time',)
         constraints = (
             models.CheckConstraint(
@@ -77,15 +78,15 @@ class Charge(models.Model, ValidateModelMixin):
     project = models.ForeignKey(
         Project,
         on_delete=models.PROTECT,
-        help_text='*Required: Select the project this charge will be associated with.')
+        help_text='*Required: Select the project this time increment will be associated with.')
 
     start_time = models.DateTimeField(
-        help_text='*Required: Enter the date and time that chargeable work began on.')
+        help_text='*Required: Enter the date and time that work began on.')
 
     end_time = models.DateTimeField(
         null=True,
         blank=True,
-        help_text='Enter the date and time that chargeable work ended on.')
+        help_text='Enter the date and time that work ended on.')
 
     closed = models.BooleanField(
         blank=True,

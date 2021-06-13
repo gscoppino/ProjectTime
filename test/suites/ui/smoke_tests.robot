@@ -30,7 +30,7 @@ User Logs In To Site
     The site displays the "Log In" button
     The user logs in to the site with username "admin" and password "admin"
     The site displays the text "Active Projects"
-    The site displays the text "Open Charges"
+    The site displays the text "Open Time Increments"
     The site displays the text "Current Month Summary"
     The site displays the "Log Out" link
 
@@ -57,15 +57,15 @@ User Can View The Add Project Page
 
 User Can View The Charge List
     The user logs in to the site with username "admin" and password "admin"
-    The site displays the "Charges" link
-    The user clicks the "Charges" link
-    The site displays the text "Charges"
+    The site displays the "Time Increments" link
+    The user clicks the "Time Increments" link
+    The site displays the text "Time Increments"
 
 User Can View The Add Charge Page
     The user logs in to the site with username "admin" and password "admin"
     The user goes to the charges list
     The user clicks the "Create" link
-    The site displays the text "Create Charge"
+    The site displays the text "Create Time Increment"
     The site displays the "project" selection field
     The site displays the "start_time_0" text field
     The site displays the "start_time_1" text field
@@ -80,7 +80,7 @@ User Can Navigate To And From The UI And Admin Site
     The site displays the text "ProjectTime Administration"
     The user clicks the "View site" link
     The site displays the text "Active Projects"
-    The site displays the text "Open Charges"
+    The site displays the text "Open Time Increments"
     The site displays the text "Current Month Summary"
 
 User Can Access The Add Project Page From The Dashboard
@@ -93,8 +93,8 @@ User Can Access The Add Project Page From The Dashboard
 
 User Can Access The Add Charge Page From The Dashboard
     The user logs in to the site with username "admin" and password "admin"
-    The user clicks the "+ Create Charge" link
-    The site displays the text "Create Charge"
+    The user clicks the "+ Create Time Increment" link
+    The site displays the text "Create Time Increment"
     The site displays the "project" selection field
     The site displays the "start_time_0" text field
     The site displays the "start_time_1" text field

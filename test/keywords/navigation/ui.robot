@@ -22,7 +22,7 @@ Navigate To The Add Project Page
 
 Navigate To The Charges List
     Navigate To The Home Page
-    Click Link    Charges
+    Click Link    Time Increments
 
 Navigate To The Add Charge Page
     Navigate To The Charges List

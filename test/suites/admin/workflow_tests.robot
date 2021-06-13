@@ -57,7 +57,7 @@ Admin Can Create A Charge
     The user uses the timezone prompt to set their timezone to "America/New_York"
     The user creates a project named "${RANDOM_NAME}"
     The user goes to the charges list
-    The user clicks the "Add charge" link
+    The user clicks the "Add time increment" link
     The user selects "${RANDOM_NAME}" from the "project" selection field
     The user types "1970-01-01" into the "start_time_0" text field
     The user types "09:00:00" into the "start_time_1" text field
@@ -72,7 +72,7 @@ Admin Adds An End Time To An Existing Charge
     The user creates a charge for "${RANDOM_NAME}" with start date "1970-01-01" and start time "09:00:00"
     The user goes to the charges list
     The user clicks the "${RANDOM_NAME}" link in the charges list
-    The site displays the text "Change charge"
+    The site displays the text "Change time increment"
     The user types "1970-01-01" into the "end_time_0" text field
     The user types "17:00:00" into the "end_time_1" text field
     The user clicks the "Save" button

@@ -1,16 +1,16 @@
 {% extends 'project/base_nav.html' %}
 
-{% block title %}ProjectTime | Charges{% endblock %}
+{% block title %}ProjectTime | Time Increments{% endblock %}
 {% block content %}
 {{ block.super }}
 <main class="grid-container fluid margin-top-1">
     <div class="card">
         <header class="card-divider flex-container flex-dir-row align-middle">
-            <h4 class="margin-0">Charges</h4>
+            <h4 class="margin-0">Time Increments</h4>
             <div class="flex-child-grow"></div>
             <form method="get" class="margin-left-1">
                 <div class="input-group margin-0">
-                    <input type="search" name="project__name__icontains" class="input-group-field" placeholder="Search Charges by Project">
+                    <input type="search" name="project__name__icontains" class="input-group-field" placeholder="Search Time Increments by Project">
                     <div class="input-group-button">
                         <button type="submit" class="button">Go</button>
                     </div>

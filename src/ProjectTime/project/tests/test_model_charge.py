@@ -21,6 +21,9 @@ class SimpleChargeModelTestCase(ValidationMixin, SimpleTestCase):
         super().setUpClass()
         cls.project = Project(name='Test')
 
+    def test_charge_model_has_explicit_domain_name(self):
+        self.assertEqual(Charge._meta.verbose_name, 'time increment')
+
     def test_charge_project_field_has_explicit_domain_name(self):
         field = get_model_field(Charge, 'project')
         self.assertEqual(field.verbose_name, 'project')

@@ -11,6 +11,9 @@ from ProjectTime.project.tests.utils.general import (ValidationMixin,
 
 
 class SimpleProjectModelTestCase(ValidationMixin, SimpleTestCase):
+    def test_project_model_has_explicit_domain_name(self):
+        self.assertEqual(Project._meta.verbose_name, 'project')
+
     def test_project_name_field_has_explicit_domain_name(self):
         field = get_model_field(Project, 'name')
         self.assertEqual(field.verbose_name, 'name')
