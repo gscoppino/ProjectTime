@@ -2,28 +2,27 @@
 Library           Process
 Library           SeleniumLibrary
 Library           chromedriver_binary
-
-Resource          ../variables/execution.robot
-Resource          ../keywords/setup/application.robot
-Resource          ../keywords/setup/browser.robot
-Resource          ../keywords/navigation/navigation.robot
-Resource          ../keywords/execution/login.robot
-Resource          ../keywords/execution/logout.robot
-Resource          ../keywords/execution/timezone.robot
-Resource          ../keywords/execution/general.robot
-Resource          ../keywords/execution/project.robot
-Resource          ../keywords/execution/charge.robot
-Resource          ../keywords/execution/dashboard.robot
-
+Resource          ../../variables/execution.robot
+Resource          ../../keywords/setup/application.robot
+Resource          ../../keywords/setup/browser.robot
+Resource          ../../keywords/navigation/general.robot
+Resource          ../../keywords/navigation/admin.robot
+Resource          ../../keywords/execution/general.robot
+Resource          ../../keywords/execution/admin/login.robot
+Resource          ../../keywords/execution/admin/logout.robot
+Resource          ../../keywords/execution/admin/timezone.robot
+Resource          ../../keywords/execution/admin/project.robot
+Resource          ../../keywords/execution/admin/charge.robot
+Resource          ../../keywords/execution/admin/dashboard.robot
 Suite Setup       Run Keywords
-...                   Check Application Status
-...                   Start The Browser
+...               Check Application Status
+...               Start The Browser
 Test Setup        Navigate To The Site Root
 Test Teardown     Run Keywords
-...                   Log Out Of Site
-...                   Navigate To A Blank Page
+...               Log Out Of Site
+...               Navigate To A Blank Page
 Suite Teardown    Run Keywords
-...                   Close All Browsers
+...               Close All Browsers
 
 *** Test Cases ***
 Admin Logs In To Site

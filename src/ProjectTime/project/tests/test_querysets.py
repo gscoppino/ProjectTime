@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 import pandas as pd
 from datetime import timedelta
 

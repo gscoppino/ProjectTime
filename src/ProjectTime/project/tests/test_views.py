@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from datetime import timedelta
 from django.urls import reverse
 from django.utils import timezone
@@ -86,6 +88,14 @@ class ChargeCreateViewTestCase(AdminUserTestCase):
         self.performLogin()
         response = self.client.get(reverse('project:charge-create'))
         self.assertEqual(response.status_code, 200)
+
+    def test_charge_create_view_time_resolution_defaults_to_minutes(self):
+        self.performLogin()
+        response = self.client.get(reverse('project:charge-create'))
+        form = response.context['form']
+        default_charge_start_time = form['start_time'].value()
+        self.assertEqual(default_charge_start_time.second, 0)
+        self.assertEqual(default_charge_start_time.microsecond, 0)
 
 
 class ChargeUpdateViewTestCase(AdminUserTestCase):

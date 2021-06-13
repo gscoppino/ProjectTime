@@ -1,3 +1,5 @@
+# pylint: disable=missing-function-docstring
+
 from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.test import SimpleTestCase, TestCase

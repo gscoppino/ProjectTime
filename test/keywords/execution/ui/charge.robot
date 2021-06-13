@@ -1,15 +1,14 @@
 *** Settings ***
-Library             SeleniumLibrary
-
-Resource            ../navigation/navigation.robot
+Library           SeleniumLibrary
+Resource          ../../navigation/ui.robot
 
 *** Keywords ***
 The site displays the charges list
-    Title Should Be       Select charge to change | ProjectTime
-    Page Should Contain         Select charge to change
+    Title Should Be    ProjectTime | Charges
+    Page Should Contain    Charges
 
 The site displays "${charge name}" in the charges list
-    Element Should Contain    css:#result_list    ${charge name}
+    Element Should Contain    tag:table    ${charge name}
 
 The user goes to the charges list
     Navigate To The Charges List
@@ -22,8 +21,8 @@ The user creates a charge for "${name}" with start date "${start_date}" and star
     Select From List By Label   project         ${name}
     Input Text                  start_time_0    ${start_date}
     Input Text                  start_time_1    ${start_time}
-    Click Button                Save
-    Title Should Be             Select charge to change | ProjectTime
+    Click Button                Submit
+    Title Should Be             ProjectTime | Charges
 
 The user creates a charge for "${name}" with start date "${start_date}", a start time of "${start_time}", and an end time of "${end_time}"
     Navigate To The Add Charge Page
@@ -32,6 +31,5 @@ The user creates a charge for "${name}" with start date "${start_date}", a start
     Input Text                  start_time_1    ${start_time}
     Input Text                  end_time_0      ${start_date}
     Input Text                  end_time_1      ${end_time}
-    Click Button                Save
-    Title Should Be             Select charge to change | ProjectTime
-
+    Click Button                Submit
+    Title Should Be             ProjectTime | Charges
